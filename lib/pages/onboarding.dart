@@ -1,7 +1,7 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -10,17 +10,17 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key? key}) : super(key: key);
+  const Onboarding({Key key}) : super(key: key);
 
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
 
 class _OnboardingState extends State<Onboarding> {
-  List? dbOnboarding;
+  List dbOnboarding;
   PageController pageController = new PageController();
   int currentPage = 0, prevPage = 0;
-  int? totRec;
+  int totRec;
 
   Future getOnboarding() async {
     var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_onboarding.php');
@@ -38,7 +38,7 @@ class _OnboardingState extends State<Onboarding> {
       prevPage = currentPage;
 
       if (totRec != null) {
-        if (currentPage < (totRec! - 1)) {
+        if (currentPage < (totRec - 1)) {
           currentPage++;
         } else {
           currentPage = 0;
@@ -86,7 +86,7 @@ class _OnboardingState extends State<Onboarding> {
                           width: 100.0.w,
                           height: 86.0.h,
                           child: Center(
-                              child: SpinKitPulse(
+                              child: SpinKitDoubleBounce(
                                 color: Colors.white,
                               )
                           )
@@ -115,7 +115,7 @@ class _OnboardingState extends State<Onboarding> {
                               });
                             },
                             itemBuilder: (context, index) {
-                              return SlideItem(imageUrl: dbOnboarding![index]['image']);
+                              return SlideItem(imageUrl: dbOnboarding[index]['image']);
                             },
                           ),
                         ),
@@ -139,7 +139,7 @@ class _OnboardingState extends State<Onboarding> {
                             firstChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.0.w),
                               child: Html(
-                                data: dbOnboarding![currentPage]['title'],
+                                data: dbOnboarding[currentPage]['title'],
                                 style: {
                                   'body': Style(
                                     color: Theme.of(context).backgroundColor,
@@ -155,7 +155,7 @@ class _OnboardingState extends State<Onboarding> {
                             secondChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.0.w),
                               child: Html(
-                                data: dbOnboarding![currentPage]['title'],
+                                data: dbOnboarding[currentPage]['title'],
                                 style: {
                                   'body': Style(
                                     color: Theme.of(context).backgroundColor,
@@ -178,7 +178,7 @@ class _OnboardingState extends State<Onboarding> {
                             firstChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14.0.w),
                               child: Html(
-                                data: dbOnboarding![currentPage]['description'],
+                                data: dbOnboarding[currentPage]['description'],
                                 style: {
                                   'body': Style(
                                     color: Theme.of(context).backgroundColor,
@@ -194,7 +194,7 @@ class _OnboardingState extends State<Onboarding> {
                             secondChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14.0.w),
                               child: Html(
-                                data: dbOnboarding![currentPage]['description'],
+                                data: dbOnboarding[currentPage]['description'],
                                 style: {
                                   'body': Style(
                                     color: Theme.of(context).backgroundColor,
@@ -216,7 +216,7 @@ class _OnboardingState extends State<Onboarding> {
                         top: 77.0.h,
                         child: SmoothPageIndicator(
                           controller: pageController,
-                          count: totRec!.toInt(),
+                          count: totRec.toInt(),
                           effect: WormEffect(
                             type: WormType.thin,
                             dotHeight: 1.5.w,
@@ -258,17 +258,18 @@ class _OnboardingState extends State<Onboarding> {
   }
 }
 
+// ignore: must_be_immutable
 class SlideItem extends StatelessWidget {
   String imageUrl = '';
 
-  SlideItem({required this.imageUrl});
+  SlideItem({this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
       imageUrl,
       fit: BoxFit.cover,
-      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
         if (loadingProgress == null) return child;
         return Stack(
           alignment: AlignmentDirectional.bottomCenter,

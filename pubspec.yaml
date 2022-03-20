@@ -42,6 +42,8 @@ dependencies:
   http:
   google_fonts:
   flutter_html:
+  move_to_background:
+  intl:
 
 dev_dependencies:
   flutter_test:

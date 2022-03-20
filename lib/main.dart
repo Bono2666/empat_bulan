@@ -1,8 +1,11 @@
+// @dart=2.9
 import 'dart:convert';
+import 'package:empat_bulan/pages/features.dart';
 import 'package:empat_bulan/pages/home.dart';
 import 'package:empat_bulan/pages/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -11,11 +14,16 @@ import 'package:google_fonts/google_fonts.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await prefs.init();
-  runApp(MyApp());
+  await initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  List? dbOnboarding;
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List dbOnboarding;
 
   Future getOnboarding() async {
     var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_onboarding.php');
@@ -53,6 +61,10 @@ class MyApp extends StatelessWidget {
 
                 primaryColor: Color(0xffC09AC7),
                 backgroundColor: Color(0xffA34C88),
+                primaryColorDark: Color(0xff484848),
+                shadowColor: Color(0x32000000),
+                highlightColor: Color(0xffEBE1DD),
+                unselectedWidgetColor: Color(0xff757575),
               ),
 
               initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
@@ -63,7 +75,10 @@ class MyApp extends StatelessWidget {
                     return SlideLeftRoute(page: Onboarding());
                   case '/home':
                     return SlideUpRoute(page: Home());
+                  case '/features':
+                    return SlideDownRoute(page: Features());
                 }
+                return null;
               },
             );
           },
@@ -85,16 +100,16 @@ class SharedPrefs {
   }
 
   bool get getFirstlaunch => _prefs.getBool('firstlaunch') ?? true;
-  int? get getTotOnboard => _prefs.getInt('totOnboard') ?? 0;
+  int get getTotOnboard => _prefs.getInt('totOnboard') ?? 0;
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
-  setTotOnboard(int? value) => _prefs.setInt('totOnboard', value);
+  setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideUpRoute({required this.page}) :super(
+  SlideUpRoute({this.page}) :super(
       transitionDuration: Duration(seconds: 1),
       transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
         animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
@@ -115,13 +130,34 @@ class SlideUpRoute extends PageRouteBuilder {
 class SlideLeftRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideLeftRoute({required this.page}) :super(
+  SlideLeftRoute({this.page}) :super(
       transitionDuration: Duration(seconds: 1),
       transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
         animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
         return SlideTransition(
           position: Tween(
             begin: const Offset(1.2,0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation) {
+        return page;
+      }
+  );
+}
+
+class SlideDownRoute extends PageRouteBuilder {
+  final Widget page;
+
+  SlideDownRoute({this.page}) :super(
+      transitionDuration: Duration(seconds: 1),
+      transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
+        animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0,-1.2),
             end: Offset.zero,
           ).animate(animation),
           child: child,
