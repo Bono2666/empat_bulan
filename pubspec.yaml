@@ -44,6 +44,12 @@ dependencies:
   flutter_html:
   move_to_background:
   intl:
+  keyboard_dismisser:
+  intl_phone_number_input:
+  firebase_core:
+  firebase_auth:
+  phone_number:
+  image_picker:
 
 dev_dependencies:
   flutter_test:

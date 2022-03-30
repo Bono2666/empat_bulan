@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
               return
                 SizedBox(
                     width: 100.0.w,
-                    height: 86.0.h,
+                    height: 100.0.h,
                     child: Center(
                         child: SpinKitDoubleBounce(
                           color: Colors.white,
@@ -226,42 +226,47 @@ class _HomeState extends State<Home> {
                               padding: EdgeInsets.symmetric(horizontal: 11.8.w,),
                               child: Row(
                                 children: [
-                                  SizedBox(
-                                    width: 16.7.w,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          alignment: AlignmentDirectional.center,
-                                          children: [
-                                            Container(
-                                              width: 11.1.w,
-                                              height: 11.1.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(30)),
-                                                color: Theme.of(context).backgroundColor,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 5.6.w,
-                                              height: 5.6.w,
-                                              child: FittedBox(
-                                                child: Image.asset(
-                                                  'images/ic_forum.png',
+                                  InkWell(
+                                    onTap: () {
+                                      prefs.setIsSignIn(false);
+                                    },
+                                    child: SizedBox(
+                                      width: 16.7.w,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Stack(
+                                            alignment: AlignmentDirectional.center,
+                                            children: [
+                                              Container(
+                                                width: 11.1.w,
+                                                height: 11.1.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                                                  color: Theme.of(context).backgroundColor,
                                                 ),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(height: 2.5.w,),
-                                        Text(
-                                          'Forum',
-                                          style: TextStyle(
-                                            fontSize: 10.0.sp,
-                                            color: Colors.black,
+                                              Container(
+                                                width: 5.6.w,
+                                                height: 5.6.w,
+                                                child: FittedBox(
+                                                  child: Image.asset(
+                                                    'images/ic_forum.png',
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(height: 2.5.w,),
+                                          Text(
+                                            'Forum',
+                                            style: TextStyle(
+                                              fontSize: 10.0.sp,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Spacer(),
@@ -343,42 +348,50 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   Spacer(),
-                                  SizedBox(
-                                    width: 16.7.w,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          alignment: AlignmentDirectional.center,
-                                          children: [
-                                            Container(
-                                              width: 11.1.w,
-                                              height: 11.1.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(30)),
-                                                color: Theme.of(context).backgroundColor,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 5.6.w,
-                                              height: 5.6.w,
-                                              child: FittedBox(
-                                                child: Image.asset(
-                                                  'images/ic_profile.png',
+                                  InkWell(
+                                    onTap: () {
+                                      if (!prefs.getIsSignIn) {
+                                        prefs.setGoRoute('/profile');
+                                        Navigator.pushNamed(context, '/register');
+                                      } else Navigator.pushNamed(context, '/profile');
+                                    },
+                                    child: SizedBox(
+                                      width: 16.7.w,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Stack(
+                                            alignment: AlignmentDirectional.center,
+                                            children: [
+                                              Container(
+                                                width: 11.1.w,
+                                                height: 11.1.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                                                  color: Theme.of(context).backgroundColor,
                                                 ),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(height: 2.5.w,),
-                                        Text(
-                                          'Profil',
-                                          style: TextStyle(
-                                            fontSize: 10.0.sp,
-                                            color: Colors.black,
+                                              Container(
+                                                width: 5.6.w,
+                                                height: 5.6.w,
+                                                child: FittedBox(
+                                                  child: Image.asset(
+                                                    'images/ic_profile.png',
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(height: 2.5.w,),
+                                          Text(
+                                            'Profil',
+                                            style: TextStyle(
+                                              fontSize: 10.0.sp,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -671,38 +684,82 @@ class _HomeState extends State<Home> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: 6.6.w, top: 5.6.h,),
-                      child: InkWell(
-                        onTap: () => Navigator.pushNamed(context, '/features'),
-                        child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Opacity(
-                              opacity: .8,
-                              child: Container(
-                                width: 12.5.w,
-                                height: 12.5.w,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Theme.of(context).shadowColor,
-                                      blurRadius: 6.0,
-                                      offset: Offset(0,3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Visibility(
+                            visible: prefs.getIsSignIn ? true : false,
+                            child: InkWell(
+                              onTap: () {
+
+                              },
+                              child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Opacity(
+                                    opacity: .8,
+                                    child: Container(
+                                      width: 12.5.w,
+                                      height: 12.5.w,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context).shadowColor,
+                                            blurRadius: 6.0,
+                                            offset: Offset(0,3),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
+                                  ),
+                                  Container(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset('images/ic_forum_small.png'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 2.2.w,),
+                          InkWell(
+                            onTap: () => Navigator.pushNamed(context, '/features'),
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Opacity(
+                                  opacity: .8,
+                                  child: Container(
+                                    width: 12.5.w,
+                                    height: 12.5.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Theme.of(context).shadowColor,
+                                          blurRadius: 6.0,
+                                          offset: Offset(0,3),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Container(
+                                  width: 5.6.w,
+                                  height: 5.6.w,
+                                  child: FittedBox(
+                                    child: Image.asset('images/ic_menu.png'),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Container(
-                              width: 5.6.w,
-                              height: 5.6.w,
-                              child: FittedBox(
-                                child: Image.asset('images/ic_menu.png'),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

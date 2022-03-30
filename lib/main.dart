@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'package:empat_bulan/pages/features.dart';
 import 'package:empat_bulan/pages/home.dart';
 import 'package:empat_bulan/pages/onboarding.dart';
+import 'package:empat_bulan/pages/profile/profile.dart';
+import 'package:empat_bulan/pages/register.dart';
+import 'package:empat_bulan/pages/verification.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -13,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await prefs.init();
   await initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
 }
@@ -65,6 +70,34 @@ class _MyAppState extends State<MyApp> {
                 shadowColor: Color(0x32000000),
                 highlightColor: Color(0xffEBE1DD),
                 unselectedWidgetColor: Color(0xff757575),
+                dividerColor: Color(0xffD1D3D4),
+                hintColor: Color(0xffCDCDCD),
+                errorColor: Color(0xffE4572E),
+
+                inputDecorationTheme: InputDecorationTheme(
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xffC09AC7),
+                      width: 3,
+                    ),
+                  ),
+                ),
+
+                textSelectionTheme: TextSelectionThemeData(
+                  cursorColor: Color(0xff9B9B9B),
+                  selectionColor: Color(0xffC09AC7),
+                  selectionHandleColor: Color(0xffA34C88),
+                ),
               ),
 
               initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
@@ -77,6 +110,12 @@ class _MyAppState extends State<MyApp> {
                     return SlideUpRoute(page: Home());
                   case '/features':
                     return SlideDownRoute(page: Features());
+                  case '/register':
+                    return SlideUpRoute(page: Register());
+                  case '/verification':
+                    return SlideLeftRoute(page: Verification());
+                  case '/profile':
+                    return SlideUpRoute(page: Profile());
                 }
                 return null;
               },
@@ -101,9 +140,21 @@ class SharedPrefs {
 
   bool get getFirstlaunch => _prefs.getBool('firstlaunch') ?? true;
   int get getTotOnboard => _prefs.getInt('totOnboard') ?? 0;
+  bool get getIsSignIn => _prefs.getBool('isSignIn') ?? false;
+  String get getName => _prefs.getString('name') ?? '';
+  String get getIsoCode => _prefs.getString('isoCode') ?? '';
+  String get getDialCode => _prefs.getString('dialCode') ?? '';
+  String get getPhone => _prefs.getString('phone') ?? '';
+  String get getGoRoute => _prefs.getString('goroute') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
+  setIsSignIn(bool value) => _prefs.setBool('isSignIn', value);
+  setName(String value) => _prefs.setString('name', value);
+  setIsoCode(String value) => _prefs.setString('isoCode', value);
+  setDialCode(String value) => _prefs.setString('dialCode', value);
+  setPhone(String value) => _prefs.setString('phone', value);
+  setGoRoute(String value) => _prefs.setString('goroute', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

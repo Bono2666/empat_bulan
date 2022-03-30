@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -293,42 +294,44 @@ class _FeaturesState extends State<Features> {
                         ),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_contraction.png',
+                      InkWell(
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.5.w,),
-                            Text(
-                              'Kontraksi',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
+                                  Container(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_contraction.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 2.5.w,),
+                              Text(
+                                'Kontraksi',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -463,42 +466,48 @@ class _FeaturesState extends State<Features> {
                         ),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_profile.png',
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn)
+                            return Navigator.pushNamed(context, '/register');
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.5.w,),
-                            Text(
-                              'Profil',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
+                                  Container(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_profile.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 2.5.w,),
+                              Text(
+                                'Profil',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -507,28 +516,31 @@ class _FeaturesState extends State<Features> {
               ],
             ),
           ),
-          Container(
-            width: 19.0.w,
-            height: 15.0.h,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(40),
-              ),
-            ),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomCenter,
-              children: [
-                SizedBox(
-                  width: 19.0.w,
-                  height: 19.0.w,
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 5.2.w,
-                    color: Colors.white,
-                  ),
+          InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 19.0.w,
+              height: 15.0.h,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(40),
                 ),
-              ],
+              ),
+              child: Stack(
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  SizedBox(
+                    width: 19.0.w,
+                    height: 19.0.w,
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 5.2.w,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
