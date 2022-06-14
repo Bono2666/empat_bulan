@@ -51,65 +51,6 @@ class _RegisterState extends State<Register> {
                       Padding(
                         padding: EdgeInsets.only(top: 0.8.w),
                         child: Text(
-                          'Nama Lengkap',
-                          style: TextStyle(
-                            fontSize: 13.0.sp,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 1.1.w,),
-                      Container(
-                        width: 1.7.w,
-                        height: 1.7.w,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  TextField(
-                    controller: name,
-                    style: TextStyle(
-                      fontSize: 15.0.sp,
-                    ),
-                    onChanged: (str) {
-                      if (isNameError) {
-                        setState(() {
-                          isNameError = false;
-                        });
-                      }
-                    },
-                  ),
-                  isNameError ? SizedBox(height: 1.0.h,) : Container(),
-                  isNameError ? Row(
-                    children: [
-                      Container(
-                        width: 4.0.w,
-                        height: 4.0.w,
-                        child: Image.asset(
-                          'images/ic_error.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 1.0.w,),
-                      Text(
-                        'Silahkan masukkan nama untuk melanjutkan',
-                        style: TextStyle(
-                          color: Theme.of(context).errorColor,
-                          fontSize: 10.0.sp,
-                        ),
-                      ),
-                    ],
-                  ) : Container(),
-                  SizedBox(height: 3.0.h,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 0.8.w),
-                        child: Text(
                           'Nomor Ponsel',
                           style: TextStyle(
                             fontSize: 13.0.sp,
@@ -250,8 +191,8 @@ class _RegisterState extends State<Register> {
                         width: 19.0.w,
                         height: 19.0.w,
                         child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 5.2.w,
+                          Icons.close,
+                          size: 7.0.w,
                           color: Colors.white,
                         ),
                       ),
@@ -265,9 +206,8 @@ class _RegisterState extends State<Register> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (name.text == '' || phone.length < 12) {
+                      if (phone.length < 12) {
                         setState(() {
-                          if (name.text == '') isNameError = true;
                           if (phone.length < 12) isPhoneError = true;
                         });
                       } else {

@@ -50,8 +50,11 @@ dependencies:
   firebase_auth:
   phone_number:
   image_picker:
+  table_calendar:
+  flutter_datetime_picker:
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
 

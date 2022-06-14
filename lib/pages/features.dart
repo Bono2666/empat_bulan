@@ -74,83 +74,98 @@ class _FeaturesState extends State<Features> {
                         ),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_schedule.png',
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn) {
+                            prefs.setGoRoute('/schedule');
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else Navigator.pushReplacementNamed(context, '/schedule');
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'Jadwal Kontrol',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
+                                  Container(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_schedule.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'Jadwal Kontrol',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_checklist.png',
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn) {
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else Navigator.pushReplacementNamed(context, '/todo');
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.5.w,),
-                            Text(
-                              'To Do List',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
+                                  Container(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_checklist.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 2.5.w,),
+                              Text(
+                                'To Do List',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Spacer(flex: 7),
@@ -468,8 +483,10 @@ class _FeaturesState extends State<Features> {
                       Spacer(),
                       InkWell(
                         onTap: () {
-                          if (!prefs.getIsSignIn)
-                            return Navigator.pushNamed(context, '/register');
+                          if (!prefs.getIsSignIn) {
+                            prefs.setGoRoute('/profile');
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else Navigator.pushReplacementNamed(context, '/profile');
                         },
                         child: SizedBox(
                           width: 16.7.w,

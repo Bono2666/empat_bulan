@@ -727,7 +727,10 @@ class _HomeState extends State<Home> {
                           ),
                           SizedBox(width: 2.2.w,),
                           InkWell(
-                            onTap: () => Navigator.pushNamed(context, '/features'),
+                            onTap: () {
+                              prefs.setBackRoute('/home');
+                              Navigator.pushNamed(context, '/features');
+                            },
                             child: Stack(
                               alignment: AlignmentDirectional.center,
                               children: [
