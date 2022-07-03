@@ -2,6 +2,7 @@
 // import 'dart:math';
 // import 'package:empat_bulan/main.dart';
 import 'package:empat_bulan/main.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
@@ -9,6 +10,8 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Register extends StatefulWidget {
+  const Register({Key key}) : super(key: key);
+
   @override
   State<Register> createState() => _RegisterState();
 }
@@ -21,7 +24,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) => KeyboardDismisser(
-    gestures: [
+    gestures: const [
       GestureType.onTap,
       GestureType.onVerticalDragDown,
     ],
@@ -29,7 +32,7 @@ class _RegisterState extends State<Register> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
               child: Column(
@@ -64,7 +67,7 @@ class _RegisterState extends State<Register> {
                         height: 1.7.w,
                         decoration: BoxDecoration(
                           color: Theme.of(context).backgroundColor,
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          borderRadius: const BorderRadius.all(Radius.circular(30)),
                         ),
                       ),
                     ],
@@ -81,7 +84,7 @@ class _RegisterState extends State<Register> {
                         });
                       }
                     },
-                    selectorConfig: SelectorConfig(
+                    selectorConfig: const SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                       trailingSpace: false,
                     ),
@@ -105,7 +108,7 @@ class _RegisterState extends State<Register> {
                   isPhoneError ? SizedBox(height: 1.0.h,) : Container(),
                   isPhoneError ? Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 4.0.w,
                         height: 4.0.w,
                         child: Image.asset(
@@ -132,7 +135,7 @@ class _RegisterState extends State<Register> {
                         height: 1.6,
                       ),
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'Dengan mendaftar, Bunda telah menyetujui ',
                           style: TextStyle(
                             color: Colors.black,
@@ -143,8 +146,11 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                           ),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            Navigator.pushNamed(context, '/rules');
+                          },
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: ' dan ',
                           style: TextStyle(
                             color: Colors.black,
@@ -155,8 +161,11 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                           ),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            Navigator.pushNamed(context, '/privacy');
+                          },
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: ' Aplikasi EmpatBulan.',
                           style: TextStyle(
                             color: Colors.black,
@@ -180,7 +189,7 @@ class _RegisterState extends State<Register> {
                   height: 15.0.h,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(40),
                     ),
                   ),
@@ -200,7 +209,7 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-              Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -223,7 +232,7 @@ class _RegisterState extends State<Register> {
                       height: 12.0.h,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(40),
                         ),
                       ),

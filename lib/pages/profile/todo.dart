@@ -9,6 +9,8 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class ToDo extends StatefulWidget {
+  const ToDo({Key key}) : super(key: key);
+
   @override
   State<ToDo> createState() => _ToDoState();
 }
@@ -16,18 +18,16 @@ class ToDo extends StatefulWidget {
 class _ToDoState extends State<ToDo> {
   List dbTodo;
   String _id = '';
-  int is_done = 0;
+  int isDone = 0;
 
   Future getTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_todo.php?phone=' +
-        prefs.getPhone);
+    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_todo.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_check_todo.php?id=' +
-        _id + '&is_done=' + is_done.toString());
+    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_check_todo.php?id=$_id&is_done=$isDone');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -45,7 +45,7 @@ class _ToDoState extends State<ToDo> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
               child: Column(
@@ -66,10 +66,12 @@ class _ToDoState extends State<ToDo> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                         return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SpinKitPulse(
+                            SizedBox(height: 28.0.h,),
+                            SpinKitThreeBounce(
                               color: Theme.of(context).primaryColor,
+                              size: 20,
                             ),
                           ],
                         );
@@ -77,18 +79,31 @@ class _ToDoState extends State<ToDo> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         dbTodo = snapshot.data;
                       }
-                      return dbTodo.length > 0
+                      return dbTodo.isNotEmpty
                           ? SizedBox(
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: dbTodo.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.only(top: 0),
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.only(top: 0),
                           itemBuilder: (context, index) {
                             return Dismissible(
+                              key: Key(dbTodo[index].toString()),
+                              onDismissed: (direction) {
+                                delTodo(index);
+                                dbTodo.removeAt(index);
+                                // setState(() {});
+                              },
                               child: Column(
                                 children: [
                                   Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ),
                                     child: Padding(
                                       padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 3.3.w),
                                       child: Row(
@@ -100,7 +115,7 @@ class _ToDoState extends State<ToDo> {
                                               fontSize: 13.0.sp,
                                             ),
                                           ),
-                                          Expanded(child: SizedBox()),
+                                          const Expanded(child: SizedBox()),
                                           InkWell(
                                             onTap: () {
                                               prefs.setIsUpdTodo(true);
@@ -108,7 +123,7 @@ class _ToDoState extends State<ToDo> {
                                               prefs.setTodoTitle(dbTodo[index]['title']);
                                               Navigator.pushReplacementNamed(context, '/updTodo');
                                             },
-                                            child: Container(
+                                            child: SizedBox(
                                               width: 4.4.w,
                                               height: 4.4.w,
                                               child: FittedBox(
@@ -119,16 +134,17 @@ class _ToDoState extends State<ToDo> {
                                           SizedBox(width: 4.4.w,),
                                           InkWell(
                                             onTap: () {
-                                              if (dbTodo[index]['is_done'] == '0')
-                                                is_done = 1;
-                                              else
-                                                is_done = 0;
+                                              if (dbTodo[index]['is_done'] == '0') {
+                                                isDone = 1;
+                                              } else {
+                                                isDone = 0;
+                                              }
                                               setState(() {
                                                 _id = dbTodo[index]['id'];
                                                 updTodo();
                                               });
                                             },
-                                            child: Container(
+                                            child: SizedBox(
                                               width: 6.7.w,
                                               child: FittedBox(
                                                 child: dbTodo[index]['is_done'] == '0'
@@ -140,23 +156,10 @@ class _ToDoState extends State<ToDo> {
                                         ],
                                       ),
                                     ),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    ),
                                   ),
                                   SizedBox(height: 4.4.w),
                                 ],
                               ),
-                              key: Key(dbTodo[index].toString()),
-                              onDismissed: (direction) {
-                                delTodo(index);
-                                dbTodo.removeAt(index);
-                                // setState(() {});
-                              },
                             );
                           },
                         ),
@@ -229,7 +232,7 @@ class _ToDoState extends State<ToDo> {
                   height: 15.0.h,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(40),
                     ),
                   ),
@@ -249,7 +252,7 @@ class _ToDoState extends State<ToDo> {
                   ),
                 ),
               ),
-              Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
               Padding(
                 padding: EdgeInsets.only(top: 5.6.w, right: 6.6.w,),
                 child: InkWell(
@@ -267,18 +270,18 @@ class _ToDoState extends State<ToDo> {
                           height: 12.5.w,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderRadius: const BorderRadius.all(Radius.circular(30)),
                             boxShadow: [
                               BoxShadow(
                                 color: Theme.of(context).shadowColor,
                                 blurRadius: 6.0,
-                                offset: Offset(0,3),
+                                offset: const Offset(0,3),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 5.6.w,
                         height: 5.6.w,
                         child: FittedBox(

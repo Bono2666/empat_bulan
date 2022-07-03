@@ -158,10 +158,11 @@ class _ScheduleState extends State<Schedule> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                         return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SpinKitPulse(
+                            SpinKitThreeBounce(
                               color: Theme.of(context).primaryColor,
+                              size: 20,
                             ),
                           ],
                         );

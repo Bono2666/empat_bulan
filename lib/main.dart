@@ -8,6 +8,11 @@ import 'package:empat_bulan/pages/profile/profile.dart';
 import 'package:empat_bulan/pages/profile/schedule.dart';
 import 'package:empat_bulan/pages/profile/todo.dart';
 import 'package:empat_bulan/pages/profile/upd_todo.dart';
+import 'package:empat_bulan/pages/profile/upd_profile.dart';
+import 'package:empat_bulan/pages/profile/upd_pregnancy.dart';
+import 'package:empat_bulan/pages/profile/privacy.dart';
+import 'package:empat_bulan/pages/profile/rules.dart';
+import 'package:empat_bulan/pages/profile/about.dart';
 import 'package:empat_bulan/pages/register.dart';
 import 'package:empat_bulan/pages/verification.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,10 +28,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await prefs.init();
-  await initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
+  await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -48,8 +55,8 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
           return Container(
-            color: Color(0xffC09AC7),
-            child: SpinKitPulse(
+            color: const Color(0xffC09AC7),
+            child: const SpinKitPulse(
               color: Colors.white,
             ),
           );
@@ -65,17 +72,17 @@ class _MyAppState extends State<MyApp> {
               theme: ThemeData(
                 fontFamily: GoogleFonts.josefinSans().fontFamily,
                 colorScheme: ColorScheme.fromSwatch().copyWith(
-                  secondary: Color(0xffC09AC7),
+                  secondary: const Color(0xffC09AC7),
                 ),
-                primaryColor: Color(0xffC09AC7),
-                backgroundColor: Color(0xffA34C88),
-                primaryColorDark: Color(0xff484848),
-                shadowColor: Color(0x32000000),
-                highlightColor: Color(0xffEBE1DD),
-                unselectedWidgetColor: Color(0xff757575),
-                dividerColor: Color(0xffD1D3D4),
-                hintColor: Color(0xffCDCDCD),
-                errorColor: Color(0xffE4572E),
+                primaryColor: const Color(0xffC09AC7),
+                backgroundColor: const Color(0xffA34C88),
+                primaryColorDark: const Color(0xff484848),
+                shadowColor: const Color(0x32000000),
+                highlightColor: const Color(0xffEBE1DD),
+                unselectedWidgetColor: const Color(0xff757575),
+                dividerColor: const Color(0xffD1D3D4),
+                hintColor: const Color(0xffCDCDCD),
+                errorColor: const Color(0xffE4572E),
                 inputDecorationTheme: InputDecorationTheme(
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -87,14 +94,14 @@ class _MyAppState extends State<MyApp> {
                       color: Theme.of(context).dividerColor,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Color(0xffC09AC7),
                       width: 3,
                     ),
                   ),
                 ),
-                textSelectionTheme: TextSelectionThemeData(
+                textSelectionTheme: const TextSelectionThemeData(
                   cursorColor: Color(0xff9B9B9B),
                   selectionColor: Color(0xffC09AC7),
                   selectionHandleColor: Color(0xffA34C88),
@@ -106,25 +113,35 @@ class _MyAppState extends State<MyApp> {
               onGenerateRoute: (RouteSettings settings) {
                 switch (settings.name) {
                   case '/':
-                    return SlideLeftRoute(page: Onboarding());
+                    return SlideLeftRoute(page: const Onboarding());
                   case '/home':
-                    return SlideUpRoute(page: Home());
+                    return SlideUpRoute(page: const Home());
                   case '/features':
                     return SlideDownRoute(page: Features());
                   case '/register':
-                    return SlideUpRoute(page: Register());
+                    return SlideUpRoute(page: const Register());
                   case '/verification':
-                    return SlideLeftRoute(page: Verification());
+                    return SlideLeftRoute(page: const Verification());
                   case '/profile':
-                    return SlideUpRoute(page: Profile());
+                    return SlideUpRoute(page: const Profile());
                   case '/schedule':
-                    return SlideLeftRoute(page: Schedule());
+                    return SlideLeftRoute(page: const Schedule());
                   case '/updSchedule':
-                    return SlideLeftRoute(page: UpdSched());
+                    return SlideLeftRoute(page: const UpdSched());
                   case '/todo':
-                    return SlideLeftRoute(page: ToDo());
+                    return SlideLeftRoute(page: const ToDo());
                   case '/updTodo':
-                    return SlideLeftRoute(page: UpdTodo());
+                    return SlideLeftRoute(page: const UpdTodo());
+                  case '/updProfile':
+                    return SlideLeftRoute(page: const UpdProfile());
+                  case '/updPregnancy':
+                    return SlideLeftRoute(page: const UpdPregnancy());
+                  case '/privacy':
+                    return SlideLeftRoute(page: const Privacy());
+                  case '/rules':
+                    return SlideLeftRoute(page: const Rules());
+                  case '/about':
+                    return SlideLeftRoute(page: const About());
                 }
                 return null;
               },
@@ -139,12 +156,11 @@ class _MyAppState extends State<MyApp> {
 final prefs = SharedPrefs();
 
 class SharedPrefs {
+  // ignore: prefer_typing_uninitialized_variables
   var _prefs;
 
   init() async {
-    if (_prefs == null) {
-      _prefs = await SharedPreferences.getInstance();
-    }
+    _prefs ??= await SharedPreferences.getInstance();
   }
 
   bool get getFirstlaunch => _prefs.getBool('firstlaunch') ?? true;
@@ -164,6 +180,8 @@ class SharedPrefs {
   bool get getIsUpdTodo => _prefs.getBool('isUpdTodo') ?? true;
   String get getTodoId => _prefs.getString('todoId') ?? '';
   String get getTodoTitle => _prefs.getString('todoTitle') ?? '';
+  String get getFmtPhone => _prefs.getString('fmtPhone') ?? '';
+  String get getEmail => _prefs.getString('email') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -182,6 +200,8 @@ class SharedPrefs {
   setIsUpdTodo(bool value) => _prefs.setBool('isUpdTodo', value);
   setTodoId(String value) => _prefs.setString('todoId', value);
   setTodoTitle(String value) => _prefs.setString('todoTitle', value);
+  setFmtPhone(String value) => _prefs.setString('fmtPhone', value);
+  setEmail(String value) => _prefs.setString('email', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
@@ -189,7 +209,7 @@ class SlideUpRoute extends PageRouteBuilder {
 
   SlideUpRoute({this.page})
       : super(
-            transitionDuration: Duration(seconds: 1),
+            transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
                 Animation<double> animation,
                 Animation<double> secAnimation,
@@ -215,7 +235,7 @@ class SlideLeftRoute extends PageRouteBuilder {
 
   SlideLeftRoute({this.page})
       : super(
-            transitionDuration: Duration(seconds: 1),
+            transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
                 Animation<double> animation,
                 Animation<double> secAnimation,
@@ -241,7 +261,7 @@ class SlideDownRoute extends PageRouteBuilder {
 
   SlideDownRoute({this.page})
       : super(
-            transitionDuration: Duration(seconds: 1),
+            transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
                 Animation<double> animation,
                 Animation<double> secAnimation,

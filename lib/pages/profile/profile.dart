@@ -11,6 +11,8 @@ import 'package:phone_number/phone_number.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
+  const Profile({Key key}) : super(key: key);
+
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -28,7 +30,7 @@ class _ProfileState extends State<Profile> {
   final picker = ImagePicker();
 
   Future getUser() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_user.php?phone=' + prefs.getPhone);
+    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_user.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     phone = await PhoneNumberUtil().format(prefs.getPhone, region.code);
     return json.decode(response.body);
@@ -85,7 +87,7 @@ class _ProfileState extends State<Profile> {
             return Stack(
               children: [
                 SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
                     child: Column(
@@ -104,13 +106,13 @@ class _ProfileState extends State<Profile> {
                                       width: 21.7.w,
                                       height: 21.7.w,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                                        borderRadius: const BorderRadius.all(Radius.circular(50)),
                                         color: Theme.of(context).primaryColor,
                                       ),
                                       child: Visibility(
                                         visible: dbUser[0]['avatar'] == '' ? false : true,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                                          borderRadius: const BorderRadius.all(Radius.circular(50)),
                                           child: Image.network(
                                             dbUser[0]['avatar'],
                                             fit: BoxFit.cover,
@@ -118,7 +120,7 @@ class _ProfileState extends State<Profile> {
                                               if (loadingProgress == null) return child;
                                               return SizedBox(
                                                 height: 21.7.w,
-                                                child: Center(
+                                                child: const Center(
                                                   child: SpinKitDoubleBounce(
                                                     color: Colors.white,
                                                   ),
@@ -131,7 +133,7 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     Visibility(
                                       visible: dbUser[0]['avatar'] == '' ? true : false,
-                                      child: Container(
+                                      child: SizedBox(
                                         width: 11.1.w,
                                         height: 11.1.w,
                                         child: FittedBox(
@@ -153,12 +155,12 @@ class _ProfileState extends State<Profile> {
                                       Container(
                                         width: 6.7.w,
                                         height: 6.7.w,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(50)),
                                           color: Colors.black,
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 2.8.w,
                                         height: 2.8.w,
                                         child: FittedBox(
@@ -178,6 +180,7 @@ class _ProfileState extends State<Profile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Visibility(
+                                    visible: dbUser[0]['name'].toString().isEmpty ? false : true,
                                     child: Text(
                                       dbUser[0]['name'],
                                       style: TextStyle(
@@ -187,7 +190,6 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    visible: dbUser[0]['name'].toString().isEmpty ? false : true,
                                   ),
                                   Visibility(
                                     visible: dbUser[0]['name'].toString().isEmpty ? false : true,
@@ -232,11 +234,11 @@ class _ProfileState extends State<Profile> {
                                           width: 11.1.w,
                                           height: 11.1.w,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                                            borderRadius: const BorderRadius.all(Radius.circular(30)),
                                             color: Theme.of(context).backgroundColor,
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           width: 5.6.w,
                                           height: 5.6.w,
                                           child: FittedBox(
@@ -260,7 +262,7 @@ class _ProfileState extends State<Profile> {
                                   ],
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               InkWell(
                                 onTap: () {
                                   prefs.setBackRoute('/profile');
@@ -278,11 +280,11 @@ class _ProfileState extends State<Profile> {
                                             width: 11.1.w,
                                             height: 11.1.w,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(30)),
                                               color: Theme.of(context).backgroundColor,
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 5.6.w,
                                             height: 5.6.w,
                                             child: FittedBox(
@@ -307,7 +309,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(context, '/todo');
@@ -324,11 +326,11 @@ class _ProfileState extends State<Profile> {
                                             width: 11.1.w,
                                             height: 11.1.w,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(30)),
                                               color: Theme.of(context).backgroundColor,
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 5.6.w,
                                             height: 5.6.w,
                                             child: FittedBox(
@@ -351,7 +353,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 ),
                               ),
-                              Spacer(flex: 7),
+                              const Spacer(flex: 7),
                             ],
                           ),
                         ),
@@ -364,26 +366,32 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(height: 2.5.h,),
-                        Row(
-                          children: [
-                            Text(
-                              'Profil Bunda',
-                              style: TextStyle(
-                                fontSize: 13.0.sp,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                              width: 6.7.w,
-                              height: 6.7.w,
-                              child: FittedBox(
-                                child: Image.asset(
-                                  'images/ic_profile_color.png',
+                        InkWell(
+                          onTap: () {
+                            prefs.setFmtPhone(phone);
+                            Navigator.pushNamed(context, '/updProfile');
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Profil Bunda',
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ],
+                              const Expanded(child: SizedBox()),
+                              SizedBox(
+                                width: 6.7.w,
+                                height: 6.7.w,
+                                child: FittedBox(
+                                  child: Image.asset(
+                                    'images/ic_profile_color.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           height: 2.5.h,
@@ -396,26 +404,31 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(height: 2.5.h,),
-                        Row(
-                          children: [
-                            Text(
-                              'Profil Kehamilan',
-                              style: TextStyle(
-                                fontSize: 13.0.sp,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                              width: 6.7.w,
-                              height: 6.7.w,
-                              child: FittedBox(
-                                child: Image.asset(
-                                  'images/ic_pregnant.png',
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/updPregnancy');
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Profil Kehamilan',
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ],
+                              const Expanded(child: SizedBox()),
+                              SizedBox(
+                                width: 6.7.w,
+                                height: 6.7.w,
+                                child: FittedBox(
+                                  child: Image.asset(
+                                    'images/ic_pregnant.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           height: 2.5.h,
@@ -436,26 +449,31 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(height: 2.5.h,),
-                        Row(
-                          children: [
-                            Text(
-                              'Kebijakan Privasi',
-                              style: TextStyle(
-                                fontSize: 13.0.sp,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                              width: 6.7.w,
-                              height: 6.7.w,
-                              child: FittedBox(
-                                child: Image.asset(
-                                  'images/ic_letter.png',
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/privacy');
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Kebijakan Privasi',
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ],
+                              const Expanded(child: SizedBox()),
+                              SizedBox(
+                                width: 6.7.w,
+                                height: 6.7.w,
+                                child: FittedBox(
+                                  child: Image.asset(
+                                    'images/ic_letter.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           height: 2.5.h,
@@ -468,26 +486,31 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(height: 2.5.h,),
-                        Row(
-                          children: [
-                            Text(
-                              'Aturan Penggunaan',
-                              style: TextStyle(
-                                fontSize: 13.0.sp,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                              width: 6.7.w,
-                              height: 6.7.w,
-                              child: FittedBox(
-                                child: Image.asset(
-                                  'images/ic_rules.png',
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/rules');
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Aturan Penggunaan',
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ],
+                              const Expanded(child: SizedBox()),
+                              SizedBox(
+                                width: 6.7.w,
+                                height: 6.7.w,
+                                child: FittedBox(
+                                  child: Image.asset(
+                                    'images/ic_rules.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           height: 2.5.h,
@@ -500,26 +523,31 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(height: 2.5.h,),
-                        Row(
-                          children: [
-                            Text(
-                              'Tentang Kami',
-                              style: TextStyle(
-                                fontSize: 13.0.sp,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                              width: 6.7.w,
-                              height: 6.7.w,
-                              child: FittedBox(
-                                child: Image.asset(
-                                  'images/ic_about.png',
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/about');
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Tentang Kami',
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ],
+                              const Expanded(child: SizedBox()),
+                              SizedBox(
+                                width: 6.7.w,
+                                height: 6.7.w,
+                                child: FittedBox(
+                                  child: Image.asset(
+                                    'images/ic_about.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           height: 2.5.h,
@@ -536,7 +564,7 @@ class _ProfileState extends State<Profile> {
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40),
@@ -554,7 +582,7 @@ class _ProfileState extends State<Profile> {
                                         height: 14.6.h,
                                         decoration: BoxDecoration(
                                           color: Theme.of(context).primaryColor,
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(40),
                                             bottomRight: Radius.circular(40),
                                           ),
@@ -597,6 +625,7 @@ class _ProfileState extends State<Profile> {
                                           onTap: () async {
                                             prefs.setIsSignIn(false);
                                             await auth.signOut();
+                                            // ignore: use_build_context_synchronously
                                             Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                                           },
                                           child: Container(
@@ -604,7 +633,7 @@ class _ProfileState extends State<Profile> {
                                             height: 20.8.w,
                                             decoration: BoxDecoration(
                                               color: Theme.of(context).backgroundColor,
-                                              borderRadius: BorderRadius.only(
+                                              borderRadius: const BorderRadius.only(
                                                 topLeft: Radius.circular(40),
                                               ),
                                             ),
@@ -636,7 +665,7 @@ class _ProfileState extends State<Profile> {
                                   color: Theme.of(context).backgroundColor,
                                 ),
                               ),
-                              Expanded(child: SizedBox(),),
+                              const Expanded(child: SizedBox(),),
                             ],
                           ),
                         ),
@@ -685,7 +714,7 @@ class _ProfileState extends State<Profile> {
                         height: 15.0.h,
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomRight: Radius.circular(40),
                           ),
                         ),
@@ -705,7 +734,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    Expanded(child: SizedBox()),
+                    const Expanded(child: SizedBox()),
                     Padding(
                       padding: EdgeInsets.only(right: 6.6.w, top: 5.6.h,),
                       child: Row(
@@ -724,18 +753,18 @@ class _ProfileState extends State<Profile> {
                                     height: 12.5.w,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Theme.of(context).shadowColor,
                                           blurRadius: 6.0,
-                                          offset: Offset(0,3),
+                                          offset: const Offset(0,3),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -761,18 +790,18 @@ class _ProfileState extends State<Profile> {
                                     height: 12.5.w,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Theme.of(context).shadowColor,
                                           blurRadius: 6.0,
-                                          offset: Offset(0,3),
+                                          offset: const Offset(0,3),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(

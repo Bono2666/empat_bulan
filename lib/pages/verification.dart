@@ -1,12 +1,15 @@
 // @dart=2.9
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sizer/sizer.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class Verification extends StatefulWidget {
+  const Verification({Key key}) : super(key: key);
+
   @override
   State<Verification> createState() => _VerificationState();
 }
@@ -30,11 +33,10 @@ class _VerificationState extends State<Verification> {
           Navigator.pushReplacementNamed(context, prefs.getGoRoute);
         });
       },
-      verificationFailed: (e) {
-        // print(e.message);
-      },
+      verificationFailed: (e) {},
       codeSent: (verificationID, resendToken) {
         verificationIDReceived = verificationID;
+        setState(() {});
       },
       codeAutoRetrievalTimeout: (verificationID) {},
     );
@@ -51,7 +53,7 @@ class _VerificationState extends State<Verification> {
 
   @override
   Widget build(BuildContext context) => KeyboardDismisser(
-        gestures: [
+        gestures: const [
           GestureType.onTap,
           GestureType.onVerticalDragDown,
         ],
@@ -59,17 +61,13 @@ class _VerificationState extends State<Verification> {
           body: Stack(
             children: [
               SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 7.0.w,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 19.0.h,
-                      ),
+                      SizedBox(height: 19.0.h,),
                       Text(
                         'Masukkan Kode',
                         style: TextStyle(
@@ -78,9 +76,7 @@ class _VerificationState extends State<Verification> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(
-                        height: 1.9.h,
-                      ),
+                      SizedBox(height: 1.9.h,),
                       Text(
                         'Masukkan Kode yang dikirim melalui SMS.',
                         style: TextStyle(
@@ -89,9 +85,7 @@ class _VerificationState extends State<Verification> {
                           height: 1.2,
                         ),
                       ),
-                      SizedBox(
-                        width: 1.6.h,
-                      ),
+                      SizedBox(width: 1.6.h,),
                       TextField(
                         controller: code,
                         onChanged: (str) {
@@ -110,7 +104,7 @@ class _VerificationState extends State<Verification> {
                       isInvalid
                           ? Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 4.0.w,
                                   height: 4.0.w,
                                   child: Image.asset(
@@ -118,9 +112,7 @@ class _VerificationState extends State<Verification> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 1.0.w,
-                                ),
+                                SizedBox(width: 1.0.w,),
                                 Text(
                                   'Kode OTP tidak valid',
                                   style: TextStyle(
@@ -131,9 +123,7 @@ class _VerificationState extends State<Verification> {
                               ],
                             )
                           : Container(),
-                      SizedBox(
-                        height: 5.0.h,
-                      ),
+                      SizedBox(height: 5.0.h,),
                       InkWell(
                         onTap: () {
                           auth.verifyPhoneNumber(
@@ -144,8 +134,7 @@ class _VerificationState extends State<Verification> {
                                   .then((value) {
                                 prefs.setIsSignIn(true);
                                 addUser();
-                                Navigator.pushReplacementNamed(
-                                    context, prefs.getGoRoute);
+                                Navigator.pushReplacementNamed(context, prefs.getGoRoute);
                               });
                             },
                             verificationFailed: (e) {
@@ -165,9 +154,7 @@ class _VerificationState extends State<Verification> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 2.2.h,
-                      ),
+                      SizedBox(height: 2.2.h,),
                       InkWell(
                         onTap: () => Navigator.pop(context),
                         child: Text(
@@ -175,6 +162,21 @@ class _VerificationState extends State<Verification> {
                           style: TextStyle(
                             fontSize: 15.0.sp,
                             color: Theme.of(context).backgroundColor,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0.h),
+                        child: Visibility(
+                          visible: verificationIDReceived == '' ? true : false,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SpinKitThreeBounce(
+                                color: Theme.of(context).primaryColor,
+                                size: 32,
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -195,7 +197,7 @@ class _VerificationState extends State<Verification> {
                       height: 15.0.h,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(40),
                         ),
                       ),
@@ -215,22 +217,20 @@ class _VerificationState extends State<Verification> {
                       ),
                     ),
                   ),
-                  Expanded(child: SizedBox()),
+                  const Expanded(child: SizedBox()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
                         onTap: () async {
-                          PhoneAuthCredential creds =
-                              PhoneAuthProvider.credential(
+                          PhoneAuthCredential creds = PhoneAuthProvider.credential(
                             verificationId: verificationIDReceived,
                             smsCode: code.text,
                           );
                           await auth.signInWithCredential(creds).then((value) {
                             prefs.setIsSignIn(true);
                             addUser();
-                            Navigator.pushReplacementNamed(
-                                context, prefs.getGoRoute);
+                            Navigator.pushReplacementNamed(context, prefs.getGoRoute);
                           }).catchError((onError) {
                             setState(() {
                               isInvalid = true;
@@ -242,7 +242,7 @@ class _VerificationState extends State<Verification> {
                           height: 12.0.h,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(40),
                             ),
                           ),
