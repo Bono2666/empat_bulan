@@ -5,6 +5,7 @@ import 'package:empat_bulan/pages/home.dart';
 import 'package:empat_bulan/pages/onboarding.dart';
 import 'package:empat_bulan/pages/profile/upd_sched.dart';
 import 'package:empat_bulan/pages/profile/profile.dart';
+import 'package:empat_bulan/pages/hpl.dart';
 import 'package:empat_bulan/pages/profile/schedule.dart';
 import 'package:empat_bulan/pages/profile/todo.dart';
 import 'package:empat_bulan/pages/profile/upd_todo.dart';
@@ -142,6 +143,8 @@ class _MyAppState extends State<MyApp> {
                     return SlideLeftRoute(page: const Rules());
                   case '/about':
                     return SlideLeftRoute(page: const About());
+                  case '/hpl':
+                    return SlideUpRoute(page: const Hpl());
                 }
                 return null;
               },

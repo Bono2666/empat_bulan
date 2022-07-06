@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';

@@ -12,14 +12,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import '../../main.dart';
 
-class UpdPregnancy extends StatefulWidget {
-  const UpdPregnancy({Key key}) : super(key: key);
+class Hpl extends StatefulWidget {
+  const Hpl({Key key}) : super(key: key);
 
   @override
-  State<UpdPregnancy> createState() => _UpdPregnancyState();
+  State<Hpl> createState() => _HplState();
 }
 
-class _UpdPregnancyState extends State<UpdPregnancy> {
+class _HplState extends State<Hpl> {
   final name = TextEditingController();
   final hplText = TextEditingController();
   final hphtText = TextEditingController();
@@ -105,7 +105,7 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                         children: [
                           SizedBox(height: 19.0.h,),
                           Text(
-                            'Profil Kehamilan',
+                            'HPL',
                             style: TextStyle(
                               fontSize: 24.0.sp,
                               color: Colors.black,
@@ -113,163 +113,6 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                             ),
                           ),
                           SizedBox(height: 5.3.h,),
-                          Text(
-                            'Nama Calon Bayi (Insya Allah)',
-                            style: TextStyle(
-                              fontSize: 13.0.sp,
-                              color: Theme.of(context).unselectedWidgetColor,
-                            ),
-                          ),
-                          TextField(
-                            controller: name,
-                            style: TextStyle(
-                              fontSize: 15.0.sp,
-                            ),
-                          ),
-                          SizedBox(height: 3.8.h,),
-                          Text(
-                            'Jenis Kelamin (Insya Allah)',
-                            style: TextStyle(
-                              fontSize: 13.0.sp,
-                              color: Theme.of(context).unselectedWidgetColor,
-                            ),
-                          ),
-                          SizedBox(height: 1.0.h,),
-                          InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Theme.of(context).shadowColor,
-                                              blurRadius: 8,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(8.8.w, 4.4.w, 8.8.w, 5.2.w),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'images/ic_gender.png',
-                                                width: 4.2.w,
-                                              ),
-                                              SizedBox(width: 6.0.w,),
-                                              Text(
-                                                'Jenis Kelamin',
-                                                style: TextStyle(
-                                                  fontSize: 17.0.sp,
-                                                  color: Theme.of(context).backgroundColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 3.0.h,),
-                                      Column(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                top: BorderSide(
-                                                  color: Theme.of(context).dividerColor,
-                                                ),
-                                              ),
-                                            ),
-                                            child: ListTile(
-                                              title: Text(
-                                                'Laki-laki',
-                                                style: TextStyle(
-                                                  fontSize: 13.0.sp,
-                                                ),
-                                              ),
-                                              contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
-                                              onTap: () {
-                                                setState(() {
-                                                  sextype = 'Laki-laki';
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                top: BorderSide(
-                                                  color: Theme.of(context).dividerColor,
-                                                ),
-                                                bottom: BorderSide(
-                                                  color: Theme.of(context).dividerColor,
-                                                ),
-                                              ),
-                                            ),
-                                            child: ListTile(
-                                              title: Text(
-                                                'Perempuan',
-                                                style: TextStyle(
-                                                  fontSize: 13.0.sp,
-                                                ),
-                                              ),
-                                              contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
-                                              onTap: () {
-                                                setState(() {
-                                                  sextype = 'Perempuan';
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 4.4.h,)
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              height: 4.8.h,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Theme.of(context).dividerColor,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      sextype,
-                                      style: TextStyle(
-                                        fontSize: 15.0.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 2.2.w,
-                                    child: Image.asset(
-                                      'images/ic_down.png',
-                                    ),
-                                  ),
-                                  SizedBox(width: 2.2.w,)
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 3.8.h,),
                           Text(
                             'Sudah tahu kapan HPL Bunda?',
                             style: TextStyle(
@@ -586,7 +429,7 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                   InkWell(
                     onTap: () async {
                       updPregnancy();
-                      Navigator.pop(context);
+                      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                     },
                     child: Container(
                       width: 74.0.w,
