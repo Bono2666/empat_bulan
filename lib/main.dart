@@ -16,6 +16,8 @@ import 'package:empat_bulan/pages/profile/rules.dart';
 import 'package:empat_bulan/pages/profile/about.dart';
 import 'package:empat_bulan/pages/register.dart';
 import 'package:empat_bulan/pages/verification.dart';
+import 'package:empat_bulan/pages/articles.dart';
+import 'package:empat_bulan/pages/viewarticle.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -23,7 +25,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +72,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialApp(
               title: 'EmpatBulan',
               theme: ThemeData(
-                fontFamily: GoogleFonts.josefinSans().fontFamily,
+                fontFamily: 'Josefin Sans',
                 colorScheme: ColorScheme.fromSwatch().copyWith(
                   secondary: const Color(0xffC09AC7),
                 ),
@@ -84,6 +85,7 @@ class _MyAppState extends State<MyApp> {
                 dividerColor: const Color(0xffD1D3D4),
                 hintColor: const Color(0xffCDCDCD),
                 errorColor: const Color(0xffE4572E),
+                toggleableActiveColor: const Color(0x38000000),
                 inputDecorationTheme: InputDecorationTheme(
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -118,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                   case '/home':
                     return SlideUpRoute(page: const Home());
                   case '/features':
-                    return SlideDownRoute(page: Features());
+                    return SlideDownRoute(page: const Features());
                   case '/register':
                     return SlideUpRoute(page: const Register());
                   case '/verification':
@@ -145,6 +147,10 @@ class _MyAppState extends State<MyApp> {
                     return SlideLeftRoute(page: const About());
                   case '/hpl':
                     return SlideUpRoute(page: const Hpl());
+                  case '/articles':
+                    return SlideUpRoute(page: const Articles());
+                  case '/viewarticle':
+                    return SlideLeftRoute(page: const ViewArticle());
                 }
                 return null;
               },
@@ -185,6 +191,7 @@ class SharedPrefs {
   String get getTodoTitle => _prefs.getString('todoTitle') ?? '';
   String get getFmtPhone => _prefs.getString('fmtPhone') ?? '';
   String get getEmail => _prefs.getString('email') ?? '';
+  String get getArticleId => _prefs.getString('articleid') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -205,6 +212,7 @@ class SharedPrefs {
   setTodoTitle(String value) => _prefs.setString('todoTitle', value);
   setFmtPhone(String value) => _prefs.setString('fmtPhone', value);
   setEmail(String value) => _prefs.setString('email', value);
+  setArticleId(String value) => _prefs.setString('articleid', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

@@ -55,6 +55,7 @@ dependencies:
   email_validator:
   email_auth:
   url_launcher:
+  share_plus:
 
 dev_dependencies:
   flutter_lints: ^2.0.1

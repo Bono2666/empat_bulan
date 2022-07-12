@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -77,6 +75,7 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                     );
 
                     if (basecount == 'hpl') {
+                      hpht = hpl.subtract(const Duration(days: 280));
                       hplText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpl);
                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                     } else {
@@ -89,6 +88,9 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                       hphtText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpht);
                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                     }
+
+                    hplStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpl);
+                    hphtStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpht);
                   }
 
                   firstLoad = false;

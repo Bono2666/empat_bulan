@@ -1,8 +1,5 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -147,13 +144,13 @@ class _UpdTodoState extends State<UpdTodo> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (prefs.getIsUpdTodo) {
                           updTodo();
                         } else {
                           addTodo();
                         }
-                        Navigator.pushReplacementNamed(context, '/todo');
+                        await Navigator.pushReplacementNamed(context, '/todo');
                       },
                       child: Container(
                         width: 74.0.w,

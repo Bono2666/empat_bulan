@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class Features extends StatefulWidget {
+  const Features({Key key}) : super(key: key);
+
   @override
   State<Features> createState() => _FeaturesState();
 }
@@ -45,11 +47,11 @@ class _FeaturesState extends State<Features> {
                                   width: 11.1.w,
                                   height: 11.1.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -73,13 +75,15 @@ class _FeaturesState extends State<Features> {
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         onTap: () {
                           if (!prefs.getIsSignIn) {
                             prefs.setGoRoute('/schedule');
                             Navigator.pushReplacementNamed(context, '/register');
-                          } else Navigator.pushReplacementNamed(context, '/schedule');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/schedule');
+                          }
                         },
                         child: SizedBox(
                           width: 16.7.w,
@@ -93,11 +97,11 @@ class _FeaturesState extends State<Features> {
                                     width: 11.1.w,
                                     height: 11.1.w,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: 5.6.w,
                                     height: 5.6.w,
                                     child: FittedBox(
@@ -122,12 +126,14 @@ class _FeaturesState extends State<Features> {
                           ),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         onTap: () {
                           if (!prefs.getIsSignIn) {
                             Navigator.pushReplacementNamed(context, '/register');
-                          } else Navigator.pushReplacementNamed(context, '/todo');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/todo');
+                          }
                         },
                         child: SizedBox(
                           width: 16.7.w,
@@ -141,11 +147,11 @@ class _FeaturesState extends State<Features> {
                                     width: 11.1.w,
                                     height: 11.1.w,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: 5.6.w,
                                     height: 5.6.w,
                                     child: FittedBox(
@@ -168,7 +174,7 @@ class _FeaturesState extends State<Features> {
                           ),
                         ),
                       ),
-                      Spacer(flex: 7),
+                      const Spacer(flex: 7),
                     ],
                   ),
                 ),
@@ -198,11 +204,11 @@ class _FeaturesState extends State<Features> {
                                   width: 11.1.w,
                                   height: 11.1.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -226,7 +232,7 @@ class _FeaturesState extends State<Features> {
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SizedBox(
                         width: 16.7.w,
                         child: Column(
@@ -239,11 +245,11 @@ class _FeaturesState extends State<Features> {
                                   width: 11.1.w,
                                   height: 11.1.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -267,7 +273,7 @@ class _FeaturesState extends State<Features> {
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SizedBox(
                         width: 16.7.w,
                         child: Column(
@@ -280,11 +286,11 @@ class _FeaturesState extends State<Features> {
                                   width: 11.1.w,
                                   height: 11.1.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -308,7 +314,7 @@ class _FeaturesState extends State<Features> {
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         child: SizedBox(
                           width: 16.7.w,
@@ -322,11 +328,11 @@ class _FeaturesState extends State<Features> {
                                     width: 11.1.w,
                                     height: 11.1.w,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: 5.6.w,
                                     height: 5.6.w,
                                     child: FittedBox(
@@ -370,11 +376,11 @@ class _FeaturesState extends State<Features> {
                                   width: 11.1.w,
                                   height: 11.1.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 5.6.w,
                                   height: 5.6.w,
                                   child: FittedBox(
@@ -398,95 +404,10 @@ class _FeaturesState extends State<Features> {
                           ],
                         ),
                       ),
-                      Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_article.png',
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'Artikel',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_hpl.png',
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'HPL',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         onTap: () {
-                          if (!prefs.getIsSignIn) {
-                            prefs.setGoRoute('/profile');
-                            Navigator.pushReplacementNamed(context, '/register');
-                          } else Navigator.pushReplacementNamed(context, '/profile');
+                          Navigator.pushNamed(context, '/articles');
                         },
                         child: SizedBox(
                           width: 16.7.w,
@@ -500,11 +421,113 @@ class _FeaturesState extends State<Features> {
                                     width: 11.1.w,
                                     height: 11.1.w,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_article.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'Artikel',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn) {
+                            prefs.setGoRoute('/hpl');
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/hpl');
+                          }
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
+                                  SizedBox(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_hpl.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'HPL',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn) {
+                            prefs.setGoRoute('/profile');
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/profile');
+                          }
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
                                   Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
+                                    ),
+                                  ),
+                                  SizedBox(
                                     width: 5.6.w,
                                     height: 5.6.w,
                                     child: FittedBox(
@@ -540,7 +563,7 @@ class _FeaturesState extends State<Features> {
               height: 15.0.h,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(40),
                 ),
               ),

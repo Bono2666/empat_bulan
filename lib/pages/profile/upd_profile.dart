@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,8 +54,6 @@ class _UpdProfileState extends State<UpdProfile> {
       _verified = 1;
       updVerified();
       auth.signOut();
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
 
@@ -214,17 +210,66 @@ class _UpdProfileState extends State<UpdProfile> {
                         ),
                       ),
                       Visibility(
+                        visible: emailOk && _email.text != '' && dbProfile[0]['verified'] == '1' ? true : false,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 1.0.h,),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 4.0.w,
+                                  height: 4.0.w,
+                                  child: Image.asset(
+                                    'images/ic_check.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(width: 1.0.w,),
+                                Text(
+                                  'Email terverifikasi.',
+                                  style: TextStyle(
+                                    color: Theme.of(context).backgroundColor,
+                                    fontSize: 10.0.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
                         visible: dbProfile[0]['verified'] == '0' ? true : false,
                         child: Column(
                           children: [
                             SizedBox(height: 5.0.h,),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 if (_email.text != '') {
                                   if (EmailValidator.validate(_email.text)) {
-                                    updProfile();
-                                    prefs.setEmail(_email.text);
-                                    Navigator.pushNamed(context, '/emailAuth');
+                                    try {
+                                      await auth.signInWithEmailAndPassword(
+                                          email: _email.text, password: '123456');
+                                    } catch(e) {
+                                      auth.createUserWithEmailAndPassword(email: _email
+                                          .text, password: '123456').then((value) {
+                                        updProfile();
+                                        user = auth.currentUser;
+                                        user.sendEmailVerification();
+                                        timer = Timer.periodic(
+                                            const Duration(seconds: 5), (timer) {
+                                          checkEmailVerified();
+                                        });
+                                      });
+                                    }
+
+                                    if (auth.currentUser.uid != null) {
+                                      auth.signOut();
+                                      updProfile();
+                                      _verified = 1;
+                                      updVerified();
+                                      // ignore: use_build_context_synchronously
+                                      await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const UpdProfile(),));
+                                    }
                                   } else {
                                     setState(() {
                                       isInvalid = true;
@@ -307,7 +352,7 @@ class _UpdProfileState extends State<UpdProfile> {
                 children: [
                   InkWell(
                     onTap: () async {
-                      if (_email.text == '' || EmailValidator.validate(_email.text)) {
+                      if (_email.text != '' && EmailValidator.validate(_email.text)) {
                         try {
                           await auth.signInWithEmailAndPassword(
                               email: _email.text, password: '123456');
@@ -317,26 +362,35 @@ class _UpdProfileState extends State<UpdProfile> {
                             updProfile();
                             user = auth.currentUser;
                             user.sendEmailVerification();
-                            timer = Timer.periodic(
-                                const Duration(seconds: 5), (timer) {
+                            timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
                               checkEmailVerified();
+                              // ignore: use_build_context_synchronously
+                              await Navigator.pushReplacementNamed(context, '/profile');
                             });
                           });
                         }
 
                         if (auth.currentUser.uid != null) {
-                            auth.signOut();
-                            updProfile();
-                            _verified = 1;
-                            updVerified();
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushReplacementNamed(context, '/profile');
+                          auth.signOut();
+                          updProfile();
+                          _verified = 1;
+                          updVerified();
+                          // ignore: use_build_context_synchronously
+                          await Navigator.pushReplacementNamed(context, '/profile');
                         }
                       } else {
-                        setState(() {
-                          isInvalid = true;
-                          emailOk = false;
-                        });
+                        if (_email.text == '') {
+                          updProfile();
+                          _verified = 0;
+                          updVerified();
+                          // ignore: use_build_context_synchronously
+                          await Navigator.pushReplacementNamed(context, '/profile');
+                        } else {
+                          setState(() {
+                            isInvalid = true;
+                            emailOk = false;
+                          });
+                        }
                       }
                     },
                     child: Container(

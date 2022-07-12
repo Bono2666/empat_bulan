@@ -77,6 +77,7 @@ class _HplState extends State<Hpl> {
                     );
 
                     if (basecount == 'hpl') {
+                      hpht = hpl.subtract(const Duration(days: 280));
                       hplText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpl);
                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                     } else {
@@ -89,6 +90,9 @@ class _HplState extends State<Hpl> {
                       hphtText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpht);
                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                     }
+
+                    hplStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpl);
+                    hphtStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpht);
                   }
 
                   firstLoad = false;
@@ -429,7 +433,7 @@ class _HplState extends State<Hpl> {
                   InkWell(
                     onTap: () async {
                       updPregnancy();
-                      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true);
                     },
                     child: Container(
                       width: 74.0.w,

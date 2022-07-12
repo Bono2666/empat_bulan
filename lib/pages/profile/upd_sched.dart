@@ -1,8 +1,5 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -37,12 +34,6 @@ class _UpdSchedState extends State<UpdSched> {
       'notes' : _notes.text,
       'reminder' : _reminderInMin.toString(),
     });
-  }
-
-  Future getSchedule() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_single_sched.php?phone=${prefs.getPhone}&time=${prefs.getSchedTime}&title=${prefs.getSchedTitle}&date=${prefs.getSchedDate}');
-    var response = await http.get(url);
-    return json.decode(response.body);
   }
 
   Future updSchedule() async {
@@ -470,13 +461,13 @@ class _UpdSchedState extends State<UpdSched> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (prefs.getIsUpdSched) {
                           updSchedule();
                         } else {
                           addSchedule();
                         }
-                        Navigator.pushReplacementNamed(context, '/schedule');
+                        await Navigator.pushReplacementNamed(context, '/schedule');
                       },
                       child: Container(
                         width: 74.0.w,
