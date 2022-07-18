@@ -2,7 +2,6 @@
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -104,7 +103,8 @@ class _RegisterState extends State<Register> {
 
                   ),
                   isPhoneError ? SizedBox(height: 1.0.h,) : Container(),
-                  isPhoneError ? Row(
+                  isPhoneError
+                      ? Row(
                     children: [
                       SizedBox(
                         width: 4.0.w,
@@ -123,13 +123,14 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  ) : Container(),
+                  )
+                      : Container(),
                   SizedBox(height: 3.2.h,),
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
                         fontSize: 10.0.sp,
-                        fontFamily: GoogleFonts.josefinSans().fontFamily,
+                        fontFamily: 'Josefin Sans',
                         height: 1.6,
                       ),
                       children: [

@@ -35,44 +35,49 @@ class _FeaturesState extends State<Features> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_forum.png',
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/questionsList');
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'Forum Saya',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
+                                  SizedBox(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_forum.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'Forum Saya',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -316,6 +321,17 @@ class _FeaturesState extends State<Features> {
                       ),
                       const Spacer(),
                       InkWell(
+                        onTap: () {
+                          if (prefs.getWarning) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const Warning(),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/contractions');
+                          }
+                        },
                         child: SizedBox(
                           width: 16.7.w,
                           child: Column(
@@ -364,44 +380,54 @@ class _FeaturesState extends State<Features> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_forum.png',
+                      InkWell(
+                        onTap: () {
+                          if (!prefs.getIsSignIn) {
+                            prefs.setGoRoute('/newquestion');
+                            Navigator.pushReplacementNamed(context, '/register');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/newquestion');
+                          }
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'Forum',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
+                                  SizedBox(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_forum.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'Forum',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -584,6 +610,140 @@ class _FeaturesState extends State<Features> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class Warning extends StatefulWidget {
+  const Warning({Key key}) : super(key: key);
+
+  @override
+  State<Warning> createState() => _WarningState();
+}
+
+class _WarningState extends State<Warning>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+
+    scaleAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.elasticInOut,
+    );
+
+    controller.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: scaleAnimation,
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 84.0.w,
+              constraints: BoxConstraints(
+                minHeight: 24.4.w,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(40),
+                ),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor,
+                    blurRadius: 24,
+                    offset: const Offset(0, 24),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.8.w,),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 8.8.w,),
+                        Image.asset(
+                          'images/baby_button.png',
+                          height: 28.0.w,
+                        ),
+                        SizedBox(height: 6.7.w,),
+                        Text(
+                          'Kontraksi Bunda sekarang berjarak kurang dari 5 menit. '
+                              'Pertimbangkan untuk pergi ke rumah sakit atau menghubungi '
+                              'dokter/bidan Bunda.',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 11.0.sp,
+                            height: 1.2,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 6.7.w,),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/contractions');
+                            },
+                            child: Container(
+                              width: 28.0.w,
+                              height: 20.0.w,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(40),
+                                  bottomRight: Radius.circular(40),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Ok',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13.0.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -365,7 +365,7 @@ class _UpdProfileState extends State<UpdProfile> {
                             timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
                               checkEmailVerified();
                               // ignore: use_build_context_synchronously
-                              await Navigator.pushReplacementNamed(context, '/profile');
+                              await Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => true);
                             });
                           });
                         }
@@ -376,7 +376,7 @@ class _UpdProfileState extends State<UpdProfile> {
                           _verified = 1;
                           updVerified();
                           // ignore: use_build_context_synchronously
-                          await Navigator.pushReplacementNamed(context, '/profile');
+                          await Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => true);
                         }
                       } else {
                         if (_email.text == '') {
@@ -384,7 +384,7 @@ class _UpdProfileState extends State<UpdProfile> {
                           _verified = 0;
                           updVerified();
                           // ignore: use_build_context_synchronously
-                          await Navigator.pushReplacementNamed(context, '/profile');
+                          await Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => true);
                         } else {
                           setState(() {
                             isInvalid = true;

@@ -40,7 +40,6 @@ dependencies:
   flutter_spinkit:
   smooth_page_indicator:
   http:
-  google_fonts:
   flutter_html:
   move_to_background:
   intl:
@@ -56,6 +55,8 @@ dependencies:
   email_auth:
   url_launcher:
   share_plus:
+  path_provider:
+  sqflite:
 
 dev_dependencies:
   flutter_lints: ^2.0.1

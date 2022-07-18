@@ -6,6 +6,7 @@ import 'package:empat_bulan/pages/onboarding.dart';
 import 'package:empat_bulan/pages/profile/upd_sched.dart';
 import 'package:empat_bulan/pages/profile/profile.dart';
 import 'package:empat_bulan/pages/hpl.dart';
+import 'package:empat_bulan/pages/contractions.dart';
 import 'package:empat_bulan/pages/profile/schedule.dart';
 import 'package:empat_bulan/pages/profile/todo.dart';
 import 'package:empat_bulan/pages/profile/upd_todo.dart';
@@ -14,6 +15,10 @@ import 'package:empat_bulan/pages/profile/upd_pregnancy.dart';
 import 'package:empat_bulan/pages/profile/privacy.dart';
 import 'package:empat_bulan/pages/profile/rules.dart';
 import 'package:empat_bulan/pages/profile/about.dart';
+import 'package:empat_bulan/pages/forum/new.dart';
+import 'package:empat_bulan/pages/forum/list.dart';
+import 'package:empat_bulan/pages/forum/view.dart';
+import 'package:empat_bulan/pages/forum/notif.dart';
 import 'package:empat_bulan/pages/register.dart';
 import 'package:empat_bulan/pages/verification.dart';
 import 'package:empat_bulan/pages/articles.dart';
@@ -79,6 +84,7 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: const Color(0xffC09AC7),
                 backgroundColor: const Color(0xffA34C88),
                 primaryColorDark: const Color(0xff484848),
+                primaryColorLight: const Color(0xffF2F2F2),
                 shadowColor: const Color(0x32000000),
                 highlightColor: const Color(0xffEBE1DD),
                 unselectedWidgetColor: const Color(0xff757575),
@@ -94,7 +100,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: Theme.of(context).dividerColor,
+                       color: Theme.of(context).dividerColor,
                     ),
                   ),
                   focusedBorder: const UnderlineInputBorder(
@@ -121,6 +127,8 @@ class _MyAppState extends State<MyApp> {
                     return SlideUpRoute(page: const Home());
                   case '/features':
                     return SlideDownRoute(page: const Features());
+                  case '/notifications':
+                    return SlideDownRoute(page: const Notifications());
                   case '/register':
                     return SlideUpRoute(page: const Register());
                   case '/verification':
@@ -151,6 +159,14 @@ class _MyAppState extends State<MyApp> {
                     return SlideUpRoute(page: const Articles());
                   case '/viewarticle':
                     return SlideLeftRoute(page: const ViewArticle());
+                  case '/newquestion':
+                    return SlideUpRoute(page: const NewQuestions());
+                  case '/questionsList':
+                    return SlideUpRoute(page: const QuestionsList());
+                  case '/questionView':
+                    return SlideLeftRoute(page: const QuestionView());
+                  case '/contractions':
+                    return SlideUpRoute(page: const Contractions());
                 }
                 return null;
               },
@@ -192,6 +208,13 @@ class SharedPrefs {
   String get getFmtPhone => _prefs.getString('fmtPhone') ?? '';
   String get getEmail => _prefs.getString('email') ?? '';
   String get getArticleId => _prefs.getString('articleid') ?? '';
+  String get getQuestionId => _prefs.getString('questionid') ?? '';
+  String get getLastContraction => _prefs.getString('lastContraction') ?? '';
+  int get getTotalInterval => _prefs.getInt('totalInterval') ?? 0;
+  int get getCountInterval => _prefs.getInt('countInterval') ?? 0;
+  int get getTotalDuration => _prefs.getInt('totalDuration') ?? 0;
+  int get getCountDuration => _prefs.getInt('countDuration') ?? 0;
+  bool get getWarning => _prefs.getBool('warning') ?? false;
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -213,6 +236,13 @@ class SharedPrefs {
   setFmtPhone(String value) => _prefs.setString('fmtPhone', value);
   setEmail(String value) => _prefs.setString('email', value);
   setArticleId(String value) => _prefs.setString('articleid', value);
+  setQuestionId(String value) => _prefs.setString('questionid', value);
+  setLastContraction(String value) => _prefs.setString('lastContraction', value);
+  setTotalInterval(int value) => _prefs.setInt('totalInterval', value);
+  setCountInterval(int value) => _prefs.setInt('countInterval', value);
+  setTotalDuration(int value) => _prefs.setInt('totalDuration', value);
+  setCountDuration(int value) => _prefs.setInt('countDuration', value);
+  setWarning(bool value) => _prefs.setBool('warning', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

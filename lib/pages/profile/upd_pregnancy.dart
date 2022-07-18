@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -301,16 +300,16 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                                 },
                                 theme: DatePickerTheme(
                                   itemStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                    fontFamily: 'Josefin Sans',
                                     fontSize: 15.0.sp,
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   doneStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                    fontFamily: 'Josefin Sans',
                                     color: Theme.of(context).backgroundColor,
                                   ),
-                                  cancelStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                  cancelStyle: const TextStyle(
+                                    fontFamily: 'Josefin Sans',
                                     color: Colors.black,
                                   ),
                                 ),
@@ -386,16 +385,16 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                                 context,
                                 theme: DatePickerTheme(
                                   itemStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                    fontFamily: 'Josefin Sans',
                                     fontSize: 15.0.sp,
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   doneStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                    fontFamily: 'Josefin Sans',
                                     color: Theme.of(context).backgroundColor,
                                   ),
-                                  cancelStyle: TextStyle(
-                                    fontFamily: GoogleFonts.josefinSans().fontFamily,
+                                  cancelStyle: const TextStyle(
+                                    fontFamily: 'Josefin Sans',
                                     color: Colors.black,
                                   ),
                                 ),

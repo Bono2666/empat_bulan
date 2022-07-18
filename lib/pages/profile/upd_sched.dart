@@ -1,7 +1,6 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -122,16 +121,16 @@ class _UpdSchedState extends State<UpdSched> {
                           },
                           theme: DatePickerTheme(
                             itemStyle: TextStyle(
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                              fontFamily: 'Josefin Sans',
                               fontSize: 15.0.sp,
                               color: Theme.of(context).backgroundColor,
                             ),
                             doneStyle: TextStyle(
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                              fontFamily: 'Josefin Sans',
                               color: Theme.of(context).backgroundColor,
                             ),
-                            cancelStyle: TextStyle(
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                            cancelStyle: const TextStyle(
+                              fontFamily: 'Josefin Sans',
                               color: Colors.black,
                             ),
                           ),
@@ -182,15 +181,15 @@ class _UpdSchedState extends State<UpdSched> {
                             itemStyle: TextStyle(
                               fontSize: 15.0.sp,
                               color: Theme.of(context).backgroundColor,
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                              fontFamily: 'Josefin Sans',
                             ),
-                            cancelStyle: TextStyle(
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                            cancelStyle: const TextStyle(
+                              fontFamily: 'Josefin Sans',
                               color: Colors.black,
                             ),
                             doneStyle: TextStyle(
                               color: Theme.of(context).backgroundColor,
-                              fontFamily: GoogleFonts.josefinSans().fontFamily,
+                              fontFamily: 'Josefin Sans',
                             ),
                           ),
                         );
