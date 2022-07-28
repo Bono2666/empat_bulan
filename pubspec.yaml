@@ -40,7 +40,7 @@ dependencies:
   flutter_spinkit:
   smooth_page_indicator:
   http:
-  flutter_html:
+  flutter_html: ^2.2.1
   move_to_background:
   intl:
   keyboard_dismisser:

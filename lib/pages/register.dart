@@ -223,7 +223,7 @@ class _RegisterState extends State<Register> {
                         prefs.setIsoCode(isoCode);
                         prefs.setDialCode(dialCode);
                         prefs.setPhone(phone);
-                        Navigator.pushNamed(context, '/verification');
+                        Navigator.pushReplacementNamed(context, '/verification');
                       }
                     },
                     child: Container(

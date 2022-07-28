@@ -432,6 +432,93 @@ class _HomeState extends State<Home> {
                                                         ],
                                                       ),
                                                       SizedBox(height: 6.3.h,),
+                                                      prefs.getIsSignIn ? dbProfile[0]['basecount'] == '' ? Container() : Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.symmetric(horizontal: 6.6.w,),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  children: [
+                                                                    Image.asset(
+                                                                      'images/ic_size.png',
+                                                                      width: 3.2.w,
+                                                                    ),
+                                                                    SizedBox(width: 1.4.w,),
+                                                                    Column(
+                                                                      children: [
+                                                                        SizedBox(height: 0.8.w,),
+                                                                        Text(
+                                                                          'Ukuran Bayi',
+                                                                          style: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 10.0.sp,
+                                                                            fontWeight: FontWeight.w700,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 1.3.h,),
+                                                                Container(
+                                                                  width: 100.0.w,
+                                                                  constraints: BoxConstraints(minHeight: 10.0.h,),
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors.white,
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: Theme.of(context).shadowColor,
+                                                                        blurRadius: 6,
+                                                                        offset: const Offset(0, 3),
+                                                                      ),
+                                                                    ],
+                                                                    borderRadius: const BorderRadius.all(
+                                                                      Radius.circular(12),
+                                                                    ),
+                                                                  ),
+                                                                  padding: EdgeInsets.symmetric(vertical: 5.6.w),
+                                                                  child: Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: EdgeInsets.symmetric(horizontal: 4.4.w),
+                                                                        child: Text(
+                                                                          'Ukuran Bayi di Pekan ke ${dbTimeline[0]['week']}',
+                                                                          style: TextStyle(
+                                                                            fontSize: 13.0.sp,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            color: Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(height: 1.2.w,),
+                                                                      Padding(
+                                                                        padding: EdgeInsets.symmetric(horizontal: 2.35.w),
+                                                                        child: Html(
+                                                                          data: dbTimeline[0]['size_desc'],
+                                                                          style: {
+                                                                            'body': Style(
+                                                                              fontSize: FontSize.percent(112),
+                                                                              fontWeight: FontWeight.w400,
+                                                                              color: Colors.black,
+                                                                              padding: const EdgeInsets.all(0),
+                                                                              lineHeight: LineHeight.percent(112),
+                                                                            ),
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 3.8.h,),
+                                                        ],
+                                                      )
+                                                          : Container(),
                                                       Padding(
                                                         padding: EdgeInsets.symmetric(horizontal: 10.6.w,),
                                                         child: InkWell(
@@ -666,94 +753,7 @@ class _HomeState extends State<Home> {
                                                           ],
                                                         ),
                                                       ),
-                                                      SizedBox(height: 4.1.h,),
-                                                      prefs.getIsSignIn ? dbProfile[0]['basecount'] == '' ? Container() : Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding: EdgeInsets.symmetric(horizontal: 6.6.w,),
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                  children: [
-                                                                    Image.asset(
-                                                                      'images/ic_size.png',
-                                                                      width: 3.2.w,
-                                                                    ),
-                                                                    SizedBox(width: 1.4.w,),
-                                                                    Column(
-                                                                      children: [
-                                                                        SizedBox(height: 0.8.w,),
-                                                                        Text(
-                                                                          'Ukuran Bayi',
-                                                                          style: TextStyle(
-                                                                            color: Colors.black,
-                                                                            fontSize: 10.0.sp,
-                                                                            fontWeight: FontWeight.w700,
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(height: 1.3.h,),
-                                                                Container(
-                                                                  width: 100.0.w,
-                                                                  constraints: BoxConstraints(minHeight: 10.0.h,),
-                                                                  decoration: BoxDecoration(
-                                                                    color: Colors.white,
-                                                                    boxShadow: [
-                                                                      BoxShadow(
-                                                                        color: Theme.of(context).shadowColor,
-                                                                        blurRadius: 6,
-                                                                        offset: const Offset(0, 3),
-                                                                      ),
-                                                                    ],
-                                                                    borderRadius: const BorderRadius.all(
-                                                                      Radius.circular(12),
-                                                                    ),
-                                                                  ),
-                                                                  padding: EdgeInsets.symmetric(vertical: 5.6.w),
-                                                                  child: Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: EdgeInsets.symmetric(horizontal: 4.4.w),
-                                                                        child: Text(
-                                                                          'Ukuran Bayi di Pekan ke ${dbTimeline[0]['week']}',
-                                                                          style: TextStyle(
-                                                                            fontSize: 13.0.sp,
-                                                                            fontWeight: FontWeight.w700,
-                                                                            color: Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(height: 1.2.w,),
-                                                                      Padding(
-                                                                        padding: EdgeInsets.symmetric(horizontal: 2.35.w),
-                                                                        child: Html(
-                                                                          data: dbTimeline[0]['size_desc'],
-                                                                          style: {
-                                                                            'body': Style(
-                                                                              fontSize: FontSize.percent(112),
-                                                                              fontWeight: FontWeight.w400,
-                                                                              color: Colors.black,
-                                                                              padding: const EdgeInsets.all(0),
-                                                                              lineHeight: LineHeight.percent(112),
-                                                                            ),
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 2.0.h,),
-                                                        ],
-                                                      )
-                                                          : Container(),
+                                                      SizedBox(height: 3.8.h,),
                                                       Padding(
                                                         padding: EdgeInsets.symmetric(horizontal: 6.6.w,),
                                                         child: Column(
@@ -1226,42 +1226,47 @@ class _HomeState extends State<Home> {
                                                         ),
                                                       ),
                                                       const Spacer(),
-                                                      SizedBox(
-                                                        width: 16.7.w,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: [
-                                                            Stack(
-                                                              alignment: AlignmentDirectional.center,
-                                                              children: [
-                                                                Container(
-                                                                  width: 11.1.w,
-                                                                  height: 11.1.w,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                                    color: Theme.of(context).primaryColor,
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 5.6.w,
-                                                                  height: 5.6.w,
-                                                                  child: FittedBox(
-                                                                    child: Image.asset(
-                                                                      'images/ic_kick.png',
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.pushNamed(context, '/kickcounter');
+                                                        },
+                                                        child: SizedBox(
+                                                          width: 16.7.w,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            children: [
+                                                              Stack(
+                                                                alignment: AlignmentDirectional.center,
+                                                                children: [
+                                                                  Container(
+                                                                    width: 11.1.w,
+                                                                    height: 11.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                                                      color: Theme.of(context).primaryColor,
                                                                     ),
                                                                   ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 2.5.w,),
-                                                            Text(
-                                                              'Kick Counter',
-                                                              style: TextStyle(
-                                                                fontSize: 8.0.sp,
-                                                                color: Colors.black,
+                                                                  SizedBox(
+                                                                    width: 5.6.w,
+                                                                    height: 5.6.w,
+                                                                    child: FittedBox(
+                                                                      child: Image.asset(
+                                                                        'images/ic_kick.png',
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
                                                               ),
-                                                            ),
-                                                          ],
+                                                              SizedBox(height: 2.5.w,),
+                                                              Text(
+                                                                'Kick Counter',
+                                                                style: TextStyle(
+                                                                  fontSize: 8.0.sp,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                       const Spacer(),

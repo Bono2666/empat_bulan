@@ -279,44 +279,49 @@ class _FeaturesState extends State<Features> {
                         ),
                       ),
                       const Spacer(),
-                      SizedBox(
-                        width: 16.7.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 11.1.w,
-                                  height: 11.1.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5.6.w,
-                                  height: 5.6.w,
-                                  child: FittedBox(
-                                    child: Image.asset(
-                                      'images/ic_kick.png',
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/kickcounter');
+                        },
+                        child: SizedBox(
+                          width: 16.7.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    width: 11.1.w,
+                                    height: 11.1.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 2.0.w,),
-                            Text(
-                              'Kick Counter',
-                              style: TextStyle(
-                                fontSize: 10.0.sp,
-                                color: Colors.black,
-                                height: 1.2,
+                                  SizedBox(
+                                    width: 5.6.w,
+                                    height: 5.6.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_kick.png',
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                              SizedBox(height: 2.0.w,),
+                              Text(
+                                'Kick Counter',
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Spacer(),

@@ -7,6 +7,8 @@ import 'package:empat_bulan/pages/profile/upd_sched.dart';
 import 'package:empat_bulan/pages/profile/profile.dart';
 import 'package:empat_bulan/pages/hpl.dart';
 import 'package:empat_bulan/pages/contractions.dart';
+import 'package:empat_bulan/pages/kickcounter.dart';
+import 'package:empat_bulan/pages/kickdetail.dart';
 import 'package:empat_bulan/pages/profile/schedule.dart';
 import 'package:empat_bulan/pages/profile/todo.dart';
 import 'package:empat_bulan/pages/profile/upd_todo.dart';
@@ -92,6 +94,9 @@ class _MyAppState extends State<MyApp> {
                 hintColor: const Color(0xffCDCDCD),
                 errorColor: const Color(0xffE4572E),
                 toggleableActiveColor: const Color(0x38000000),
+                bottomAppBarColor: const Color(0xff5299D3),
+                indicatorColor: const Color(0xffFCB800),
+
                 inputDecorationTheme: InputDecorationTheme(
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -167,6 +172,10 @@ class _MyAppState extends State<MyApp> {
                     return SlideLeftRoute(page: const QuestionView());
                   case '/contractions':
                     return SlideUpRoute(page: const Contractions());
+                  case '/kickcounter':
+                    return SlideUpRoute(page: const KickCounter());
+                  case '/kickDetail':
+                    return SlideLeftRoute(page: const KickDetail());
                 }
                 return null;
               },
@@ -215,6 +224,7 @@ class SharedPrefs {
   int get getTotalDuration => _prefs.getInt('totalDuration') ?? 0;
   int get getCountDuration => _prefs.getInt('countDuration') ?? 0;
   bool get getWarning => _prefs.getBool('warning') ?? false;
+  String get getKickDay => _prefs.getString('kickDay') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -243,6 +253,7 @@ class SharedPrefs {
   setTotalDuration(int value) => _prefs.setInt('totalDuration', value);
   setCountDuration(int value) => _prefs.setInt('countDuration', value);
   setWarning(bool value) => _prefs.setBool('warning', value);
+  setKickDay(String value) => _prefs.setString('kickDay', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
