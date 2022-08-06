@@ -1,5 +1,8 @@
 // @dart=2.9
 import 'dart:convert';
+import 'package:empat_bulan/pages/childbook/add_childbook.dart';
+import 'package:empat_bulan/pages/childbook/child_chart.dart';
+import 'package:empat_bulan/pages/childbook/child_profile.dart';
 import 'package:empat_bulan/pages/features.dart';
 import 'package:empat_bulan/pages/home.dart';
 import 'package:empat_bulan/pages/onboarding.dart';
@@ -52,7 +55,7 @@ class _MyAppState extends State<MyApp> {
 
   Future getOnboarding() async {
     var url =
-        Uri.parse('https://empatbulan.bonoworks.id/api/get_onboarding.php');
+        Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -96,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                 toggleableActiveColor: const Color(0x38000000),
                 bottomAppBarColor: const Color(0xff5299D3),
                 indicatorColor: const Color(0xffFCB800),
+                focusColor: const Color(0xff669900),
 
                 inputDecorationTheme: InputDecorationTheme(
                   border: UnderlineInputBorder(
@@ -176,6 +180,12 @@ class _MyAppState extends State<MyApp> {
                     return SlideUpRoute(page: const KickCounter());
                   case '/kickDetail':
                     return SlideLeftRoute(page: const KickDetail());
+                  case '/childProfile':
+                    return SlideUpRoute(page: const ChildProfile());
+                  case '/childChart':
+                    return SlideUpRoute(page: const ChildChart());
+                  case '/addChildBook':
+                    return SlideLeftRoute(page: const AddChildBook());
                 }
                 return null;
               },

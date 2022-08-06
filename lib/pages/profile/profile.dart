@@ -30,7 +30,7 @@ class _ProfileState extends State<Profile> {
   final picker = ImagePicker();
 
   Future getUser() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_user.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_user.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     phone = await PhoneNumberUtil().format(prefs.getPhone, region.code);
     return json.decode(response.body);
@@ -50,7 +50,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future upload() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upload_avatar.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/upload_avatar.php');
     var req = http.MultipartRequest('POST', url);
     req.fields['phone'] = prefs.getPhone;
     var pic = await http.MultipartFile.fromPath('image', img.path);
@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future getNotifications() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_notifications.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -454,6 +454,44 @@ class _ProfileState extends State<Profile> {
                                     child: FittedBox(
                                       child: Image.asset(
                                         'images/ic_pregnant.png',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 2.5.h,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2.5.h,),
+                            InkWell(
+                              onTap: () {
+                                prefs.setBackRoute('/profile');
+                                Navigator.pushNamed(context, '/childProfile');
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Profil Anak',
+                                    style: TextStyle(
+                                      fontSize: 13.0.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  SizedBox(
+                                    width: 6.7.w,
+                                    height: 6.7.w,
+                                    child: FittedBox(
+                                      child: Image.asset(
+                                        'images/ic_child.png',
                                       ),
                                     ),
                                   ),

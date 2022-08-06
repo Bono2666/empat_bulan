@@ -57,6 +57,7 @@ dependencies:
   share_plus:
   path_provider:
   sqflite:
+  syncfusion_flutter_charts:
 
 dev_dependencies:
   flutter_lints: ^2.0.1

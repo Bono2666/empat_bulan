@@ -27,13 +27,13 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
   DateTime hpl, hpht;
 
   Future getProfile() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_profile.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updPregnancy() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_pregnancy.php?phone=${prefs.getPhone}'
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_pregnancy.php?phone=${prefs.getPhone}'
         '&babys_name=${name.text}&sex=$sextype&hpl=$hplStr&hpht=$hphtStr&basecount=$basecount');
     var response = await http.get(url);
     return json.decode(response.body);

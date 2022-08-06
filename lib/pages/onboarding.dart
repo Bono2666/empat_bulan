@@ -23,7 +23,7 @@ class _OnboardingState extends State<Onboarding> {
   int totRec;
 
   Future getOnboarding() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_onboarding.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }

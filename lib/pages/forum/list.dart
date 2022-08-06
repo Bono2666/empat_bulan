@@ -17,13 +17,13 @@ class _QuestionsListState extends State<QuestionsList> {
   List dbQuestions, dbReply;
 
   Future getQuestion() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_questions.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_questions.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future getReply(String id) async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_reply.php?id=$id');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_reply.php?id=$id');
     var response = await http.get(url);
     return json.decode(response.body);
   }

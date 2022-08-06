@@ -16,7 +16,7 @@ class _UpdTodoState extends State<UpdTodo> {
   final _title = TextEditingController();
 
   Future addTodo() async {
-    var url = 'https://empatbulan.bonoworks.id/api/add_todo.php';
+    var url = 'https://app.empatbulan.com/api/add_todo.php';
     await http.post(Uri.parse(url), body: {
       'phone' : prefs.getPhone,
       'title' : _title.text,
@@ -24,13 +24,13 @@ class _UpdTodoState extends State<UpdTodo> {
   }
 
   Future getTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_single_todo.php?id=${prefs.getTodoId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_single_todo.php?id=${prefs.getTodoId}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_single_todo.php?id=${prefs.getTodoId}&new_title=${_title.text}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_single_todo.php?id=${prefs.getTodoId}&new_title=${_title.text}');
     var response = await http.get(url);
     return json.decode(response.body);
   }

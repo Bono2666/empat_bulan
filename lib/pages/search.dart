@@ -22,13 +22,13 @@ class _SearchState extends State<Search> {
   int forumNotEmpty = 0;
 
   Future getSearch() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_search_article.php?keyword=$keySearch');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_search_article.php?keyword=$keySearch');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future getForum() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_search_forum.php?keyword=$keySearch');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_search_forum.php?keyword=$keySearch');
     var response = await http.get(url);
     return json.decode(response.body);
   }

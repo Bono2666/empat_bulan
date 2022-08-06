@@ -21,13 +21,13 @@ class _ViewArticleState extends State<ViewArticle> {
   List dbArticle, dbRelated;
 
   Future getArticle() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_single_article.php?id=${prefs.getArticleId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_single_article.php?id=${prefs.getArticleId}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future getRelated() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_related_article.php?id=${prefs.getArticleId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_related_article.php?id=${prefs.getArticleId}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -55,9 +55,7 @@ class _ViewArticleState extends State<ViewArticle> {
           return FutureBuilder(
               future: getRelated(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData ||
-                    snapshot.data == null ||
-                    snapshot.hasError) {
+                if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [

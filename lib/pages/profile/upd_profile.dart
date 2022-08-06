@@ -30,19 +30,19 @@ class _UpdProfileState extends State<UpdProfile> {
   int _verified;
 
   Future getProfile() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_profile.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updProfile() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_profile.php?phone=${prefs.getPhone}&name=${_name.text}&email=${_email.text}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_profile.php?phone=${prefs.getPhone}&name=${_name.text}&email=${_email.text}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updVerified() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_verified.php?phone=${prefs.getPhone}&verified=$_verified');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_verified.php?phone=${prefs.getPhone}&verified=$_verified');
     var response = await http.get(url);
     return json.decode(response.body);
   }

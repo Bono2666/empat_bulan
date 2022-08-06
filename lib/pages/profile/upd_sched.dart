@@ -24,7 +24,7 @@ class _UpdSchedState extends State<UpdSched> {
   final int _reminderInMin = 0;
 
   Future addSchedule() async {
-    var url = 'https://empatbulan.bonoworks.id/api/add_schedule.php';
+    var url = 'https://app.empatbulan.com/api/add_schedule.php';
     await http.post(Uri.parse(url), body: {
       'phone' : prefs.getPhone,
       'date' : _scheduleDate,
@@ -36,7 +36,7 @@ class _UpdSchedState extends State<UpdSched> {
   }
 
   Future updSchedule() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_single_sched.php?phone=${prefs.getPhone}&time=${prefs.getSchedTime}&title=${prefs.getSchedTitle}&date=${prefs.getSchedDate}&new_title=${_title.text}&new_date=$_scheduleDate&new_time=${_time.text}&new_notes=${_notes.text}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_single_sched.php?phone=${prefs.getPhone}&time=${prefs.getSchedTime}&title=${prefs.getSchedTitle}&date=${prefs.getSchedDate}&new_title=${_title.text}&new_date=$_scheduleDate&new_time=${_time.text}&new_notes=${_notes.text}');
     var response = await http.get(url);
     return json.decode(response.body);
   }

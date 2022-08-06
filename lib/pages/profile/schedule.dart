@@ -24,19 +24,19 @@ class _ScheduleState extends State<Schedule> {
   int isDone = 0;
 
   Future getSchedule() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_schedule.php?phone=${prefs.getPhone}&date=${DateFormat('yyyy-MM-dd').format(_focusedDay)}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_schedule.php?phone=${prefs.getPhone}&date=${DateFormat('yyyy-MM-dd').format(_focusedDay)}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updSchedule() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_check_sched.php?phone=${prefs.getPhone}&time=$_time&title=$_title&is_done=$isDone&date=${DateFormat('yyyy-MM-dd').format(_focusedDay)}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_check_sched.php?phone=${prefs.getPhone}&time=$_time&title=$_title&is_done=$isDone&date=${DateFormat('yyyy-MM-dd').format(_focusedDay)}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future delSchedule(int index) async {
-    var url = 'https://empatbulan.bonoworks.id/api/del_schedule.php';
+    var url = 'https://app.empatbulan.com/api/del_schedule.php';
     await http.post(Uri.parse(url), body: {
       'phone' : dbSchedule[index]['phone'],
       'date' : dbSchedule[index]['date'],

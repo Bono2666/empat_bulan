@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
@@ -21,19 +19,19 @@ class _ToDoState extends State<ToDo> {
   int isDone = 0;
 
   Future getTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_todo.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_todo.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future updTodo() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_check_todo.php?id=$_id&is_done=$isDone');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_check_todo.php?id=$_id&is_done=$isDone');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future delTodo(int index) async {
-    var url = 'https://empatbulan.bonoworks.id/api/del_todo.php';
+    var url = 'https://app.empatbulan.com/api/del_todo.php';
     await http.post(Uri.parse(url), body: {
       'id' : dbTodo[index]['id'],
     });

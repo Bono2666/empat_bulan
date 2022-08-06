@@ -24,13 +24,13 @@ class _QuestionViewState extends State<QuestionView> {
   int numLines = 0;
 
   Future getQuestion() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_single_question.php?id=${prefs.getQuestionId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_single_question.php?id=${prefs.getQuestionId}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future getReply(String id) async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_reply.php?id=$id');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_reply.php?id=$id');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -48,7 +48,7 @@ class _QuestionViewState extends State<QuestionView> {
   }
 
   Future addReply(int readed) async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/add_reply.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/add_reply.php');
     var req = http.MultipartRequest('POST', url);
     req.fields['phone'] = prefs.getPhone;
     req.fields['question'] = prefs.getQuestionId;
@@ -71,7 +71,7 @@ class _QuestionViewState extends State<QuestionView> {
   }
 
   Future updRead() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/upd_read_notification.php?id=${prefs.getQuestionId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_read_notification.php?id=${prefs.getQuestionId}');
     var response = await http.get(url);
     return json.decode(response.body);
   }

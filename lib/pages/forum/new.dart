@@ -37,7 +37,7 @@ class _NewQuestionsState extends State<NewQuestions> {
   }
 
   Future addQuestion() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/add_question.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/add_question.php');
     var req = http.MultipartRequest('POST', url);
     req.fields['phone'] = prefs.getPhone;
     req.fields['title'] = title;
@@ -53,7 +53,7 @@ class _NewQuestionsState extends State<NewQuestions> {
   }
 
   Future getNotifications() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_notifications.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }

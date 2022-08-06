@@ -18,13 +18,13 @@ class _ArticlesState extends State<Articles> {
   List dbArticles, dbNotifications;
 
   Future getArticles() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_article.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_article.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   Future getNotifications() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_notifications.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }

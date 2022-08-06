@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -21,7 +19,7 @@ class _PrivacyState extends State<Privacy> {
   List dbPrivacy;
 
   Future getPrivacy() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_privacy.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_privacy.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }

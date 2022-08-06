@@ -43,7 +43,7 @@ class _VerificationState extends State<Verification> {
   }
 
   Future addUser() async {
-    var url = 'https://empatbulan.bonoworks.id/api/add_user.php';
+    var url = 'https://app.empatbulan.com/api/add_user.php';
     await http.post(Uri.parse(url), body: {
       'phone': prefs.getPhone,
       'isoCode': prefs.getIsoCode,

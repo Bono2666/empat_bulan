@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:math';
-// import 'package:empat_bulan/main.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
@@ -27,7 +25,7 @@ class _ContractionsState extends State<Contractions> {
   String selectedDay;
 
   Future getNotifications() async {
-    var url = Uri.parse('https://empatbulan.bonoworks.id/api/get_notifications.php?phone=${prefs.getPhone}');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
