@@ -27,9 +27,9 @@ class _NewQuestionsState extends State<NewQuestions> {
   Future pickImg() async {
     var picked = await picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 3000,
-      maxWidth: 3000,
-      imageQuality: 100,
+      maxHeight: 600,
+      maxWidth: 800,
+      imageQuality: 50,
     );
     setState(() {
       img = File(picked.path);

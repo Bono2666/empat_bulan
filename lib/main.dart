@@ -25,6 +25,11 @@ import 'package:empat_bulan/pages/forum/list.dart';
 import 'package:empat_bulan/pages/forum/view.dart';
 import 'package:empat_bulan/pages/forum/notif.dart';
 import 'package:empat_bulan/pages/register.dart';
+import 'package:empat_bulan/pages/services/cart.dart';
+import 'package:empat_bulan/pages/services/checkout.dart';
+import 'package:empat_bulan/pages/services/classes.dart';
+import 'package:empat_bulan/pages/services/confirm.dart';
+import 'package:empat_bulan/pages/services/homeservices.dart';
 import 'package:empat_bulan/pages/verification.dart';
 import 'package:empat_bulan/pages/articles.dart';
 import 'package:empat_bulan/pages/viewarticle.dart';
@@ -54,8 +59,7 @@ class _MyAppState extends State<MyApp> {
   List dbOnboarding;
 
   Future getOnboarding() async {
-    var url =
-        Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
+    var url = Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -186,6 +190,16 @@ class _MyAppState extends State<MyApp> {
                     return SlideUpRoute(page: const ChildChart());
                   case '/addChildBook':
                     return SlideLeftRoute(page: const AddChildBook());
+                  case '/homeServices':
+                    return SlideUpRoute(page: const HomeServices());
+                  case '/classes':
+                    return SlideLeftRoute(page: const Classes());
+                  case '/cart':
+                    return SlideLeftRoute(page: const Cart());
+                  case '/checkout':
+                    return SlideLeftRoute(page: const Checkout());
+                  case '/confirm':
+                    return SlideLeftRoute(page: const Confirm());
                 }
                 return null;
               },
@@ -235,6 +249,7 @@ class SharedPrefs {
   int get getCountDuration => _prefs.getInt('countDuration') ?? 0;
   bool get getWarning => _prefs.getBool('warning') ?? false;
   String get getKickDay => _prefs.getString('kickDay') ?? '';
+  String get getComplaint => _prefs.getString('complaint') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -264,6 +279,7 @@ class SharedPrefs {
   setCountDuration(int value) => _prefs.setInt('countDuration', value);
   setWarning(bool value) => _prefs.setBool('warning', value);
   setKickDay(String value) => _prefs.setString('kickDay', value);
+  setComplaint(String value) => _prefs.setString('complaint', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

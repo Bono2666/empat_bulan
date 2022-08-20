@@ -67,7 +67,7 @@ class _NotificationsState extends State<Notifications> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    dbNotifications.isNotEmpty ? SizedBox(
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: dbNotifications.length,
@@ -178,6 +178,39 @@ class _NotificationsState extends State<Notifications> {
                           );
                         },
                       ),
+                    ) : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 2.5.h,),
+                        Image.asset(
+                          'images/no_notification.png',
+                          height: 52.0.w,
+                        ),
+                        SizedBox(height: 3.4.h,),
+                        Text(
+                          "Tidak ada notifikasi saat ini",
+                          style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12.0.sp,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 1.3.h,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                          child: Text(
+                            'Notifikasi Bunda akan muncul ditandai dengan tanda merah '
+                                "pada ikon pesan di bagian atas layar",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10.0.sp,
+                              height: 1.2,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 11.3.h,),
                   ],

@@ -90,7 +90,7 @@ class _ToDoState extends State<ToDo> {
                               onDismissed: (direction) {
                                 delTodo(index);
                                 dbTodo.removeAt(index);
-                                // setState(() {});
+                                setState(() {});
                               },
                               child: Column(
                                 children: [
@@ -106,11 +106,14 @@ class _ToDoState extends State<ToDo> {
                                       padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 3.3.w),
                                       child: Row(
                                         children: [
-                                          Text(
-                                            dbTodo[index]['title'],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13.0.sp,
+                                          SizedBox(
+                                            width: 61.1.w,
+                                            child: Text(
+                                              dbTodo[index]['title'],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 13.0.sp,
+                                              ),
                                             ),
                                           ),
                                           const Expanded(child: SizedBox()),
@@ -164,12 +167,12 @@ class _ToDoState extends State<ToDo> {
                       )
                           : Column(
                         children: [
-                          SizedBox(height: 2.5.h,),
+                          SizedBox(height: 6.4.h,),
                           Image.asset(
                             'images/no_todo.png',
-                            height: 62.0.w,
+                            height: 44.0.w,
                           ),
-                          SizedBox(height: 3.4.h,),
+                          SizedBox(height: 6.4.h,),
                           Text(
                             "Buat 'to do list' pertama Bunda",
                             style: TextStyle(

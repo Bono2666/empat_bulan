@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
   List dbHome, dbTimeline, dbProfile, dbArticle, dbNotifications, dbQuestions, dbReply, dbChildBook;
   bool firstLoad = true;
   int currentAge = 0;
+  String basecount = '';
 
   @override
   void initState() {
@@ -73,6 +74,13 @@ class _HomeState extends State<Home> {
 
   Future getChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_childbook.php?phone=${prefs.getPhone}');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
+
+  Future resetPregnancy() async {
+    var url = Uri.parse("https://app.empatbulan.com/api/upd_pregnancy.php?phone=${prefs.getPhone}"
+        "&babys_name=${''}&sex=${''}&hpl=${''}&hpht=${''}&basecount=${''}");
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -161,12 +169,18 @@ class _HomeState extends State<Home> {
                           if (prefs.getIsSignIn) {
                             if (firstLoad) {
                               if (dbProfile[0]['basecount'] != '') {
+                                basecount = dbProfile[0]['basecount'];
                                 DateTime hpht = DateTime(
                                     int.parse(dbProfile[0]['hpht'].substring(0, 4)),
                                     int.parse(dbProfile[0]['hpht'].substring(5, 7)),
                                     int.parse(dbProfile[0]['hpht'].substring(8, 10))
                                 );
                                 currentAge = (DateTime.now().difference(hpht).inDays);
+                                if (currentAge > 286) {
+                                  resetPregnancy();
+                                  currentAge = 0;
+                                  basecount = '';
+                                }
                               }
                               firstLoad = false;
                             }
@@ -236,7 +250,7 @@ class _HomeState extends State<Home> {
                                                   width: 100.0.w,
                                                   height: 74.0.h,
                                                   child: Image.network(
-                                                    prefs.getIsSignIn ? dbProfile[0]['basecount'] == '' ? dbHome[0]['image'] : dbTimeline[0]['image'] : dbHome[0]['image'],
+                                                    prefs.getIsSignIn ? basecount == '' ? dbHome[0]['image'] : dbTimeline[0]['image'] : dbHome[0]['image'],
                                                     fit: BoxFit.cover,
                                                     loadingBuilder: (context, child, loadingProgress) {
                                                       if (loadingProgress == null) return child;
@@ -259,7 +273,7 @@ class _HomeState extends State<Home> {
                                                 ),
                                               ],
                                             ),
-                                            prefs.getIsSignIn ? dbProfile[0]['basecount'] == '' ? Container() : Container(
+                                            prefs.getIsSignIn ? basecount == '' ? Container() : Container(
                                               height: 45.6.h,
                                               padding: EdgeInsets.only(right: 7.2.w),
                                               child: Row(
@@ -453,7 +467,7 @@ class _HomeState extends State<Home> {
                                                             ],
                                                           ),
                                                           SizedBox(height: 6.3.h,),
-                                                          prefs.getIsSignIn ? dbProfile[0]['basecount'] == '' ? Container() : Column(
+                                                          prefs.getIsSignIn ? basecount == '' ? Container() : Column(
                                                             children: [
                                                               Padding(
                                                                 padding: EdgeInsets.symmetric(horizontal: 6.6.w,),
@@ -524,6 +538,13 @@ class _HomeState extends State<Home> {
                                                                                   fontSize: FontSize.percent(112),
                                                                                   fontWeight: FontWeight.w400,
                                                                                   color: Colors.black,
+                                                                                  padding: const EdgeInsets.all(0),
+                                                                                  lineHeight: LineHeight.percent(112),
+                                                                                ),
+                                                                                'span': Style(
+                                                                                  fontSize: FontSize.percent(112),
+                                                                                  fontWeight: FontWeight.w700,
+                                                                                  color: Theme.of(context).backgroundColor,
                                                                                   padding: const EdgeInsets.all(0),
                                                                                   lineHeight: LineHeight.percent(112),
                                                                                 ),
@@ -936,14 +957,12 @@ class _HomeState extends State<Home> {
                                                                           width: 86.6.w,
                                                                           decoration: BoxDecoration(
                                                                               color: Colors.white,
-                                                                              borderRadius:
-                                                                              const BorderRadius.all(
+                                                                              borderRadius: const BorderRadius.all(
                                                                                 Radius.circular(12),
                                                                               ),
                                                                               boxShadow: [
                                                                                 BoxShadow(
-                                                                                  color: Theme.of(context)
-                                                                                      .shadowColor,
+                                                                                  color: Theme.of(context).shadowColor,
                                                                                   blurRadius: 6.0,
                                                                                   offset: const Offset(0, 3),
                                                                                 ),
@@ -1169,47 +1188,58 @@ class _HomeState extends State<Home> {
                                                       padding: EdgeInsets.symmetric(horizontal: 6.6.w,),
                                                       child: Row(
                                                         children: [
-                                                          SizedBox(
-                                                            width: 16.7.w,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                Stack(
-                                                                  alignment: AlignmentDirectional.center,
-                                                                  children: [
-                                                                    Container(
-                                                                      width: 11.1.w,
-                                                                      height: 11.1.w,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                                        color: Theme.of(context).backgroundColor,
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 5.6.w,
-                                                                      height: 5.6.w,
-                                                                      child: FittedBox(
-                                                                        child: Image.asset(
-                                                                          'images/ic_service.png',
+                                                          InkWell(
+                                                            onTap: () {
+                                                              if (!prefs.getIsSignIn) {
+                                                                prefs.setGoRoute('/homeServices');
+                                                                Navigator.pushNamed(context, '/register');
+                                                              } else {
+                                                                Navigator.pushNamed(context, '/homeServices');
+                                                              }
+                                                            },
+                                                            child: SizedBox(
+                                                              width: 16.7.w,
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: [
+                                                                  Stack(
+                                                                    alignment: AlignmentDirectional.center,
+                                                                    children: [
+                                                                      Container(
+                                                                        width: 11.1.w,
+                                                                        height: 11.1.w,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                                                          color: Theme.of(context).backgroundColor,
                                                                         ),
                                                                       ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                SizedBox(height: 2.5.w,),
-                                                                Text(
-                                                                  'Layanan',
-                                                                  style: TextStyle(
-                                                                    fontSize: 8.0.sp,
-                                                                    color: Colors.black,
+                                                                      SizedBox(
+                                                                        width: 5.6.w,
+                                                                        height: 5.6.w,
+                                                                        child: FittedBox(
+                                                                          child: Image.asset(
+                                                                            'images/ic_service.png',
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ],
                                                                   ),
-                                                                ),
-                                                              ],
+                                                                  SizedBox(height: 2.5.w,),
+                                                                  Text(
+                                                                    'Layanan',
+                                                                    style: TextStyle(
+                                                                      fontSize: 8.0.sp,
+                                                                      color: Colors.black,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                           const Spacer(),
                                                           InkWell(
                                                             onTap: () {
+                                                              prefs.setBackRoute('/home');
                                                               if (!prefs.getIsSignIn) {
                                                                 if (dbChildBook.isEmpty) {
                                                                   prefs.setGoRoute('/childProfile');

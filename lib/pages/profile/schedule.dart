@@ -195,25 +195,28 @@ class _ScheduleState extends State<Schedule> {
                                       padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 3.3.w),
                                       child: Row(
                                         children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                dbSchedule[index]['title'],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0.sp,
+                                          SizedBox(
+                                            width: 61.1.w,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  dbSchedule[index]['title'],
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12.0.sp,
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(height: 0.6.w,),
-                                              Text(
-                                                'Jam ${dbSchedule[index]['time']} ${dbSchedule[index]['notes']}',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 8.0.sp,
+                                                SizedBox(height: 0.6.w,),
+                                                Text(
+                                                  'Jam ${dbSchedule[index]['time']} ${dbSchedule[index]['notes']}',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 8.0.sp,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                           const Expanded(child: SizedBox()),
                                           InkWell(

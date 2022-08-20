@@ -56,793 +56,795 @@ class _ContractionsState extends State<Contractions> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: getNotifications(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-            return
-              SizedBox(
-                  width: 100.0.w,
-                  height: 100.0.h,
-                  child: Center(
-                      child: SpinKitDoubleBounce(
-                        color: Theme.of(context).primaryColor,
-                      )
-                  )
-              );
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            dbNotifications = snapshot.data as List;
-          }
-          return Stack(
-            children: [
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 19.0.h,),
-                      Text(
-                        'Kontraksi',
-                        style: TextStyle(
-                          fontSize: 24.0.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true);
+        return false;
+      },
+      child: Scaffold(
+        body: FutureBuilder(
+          future: getNotifications(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+              return
+                SizedBox(
+                    width: 100.0.w,
+                    height: 100.0.h,
+                    child: Center(
+                        child: SpinKitDoubleBounce(
+                          color: Theme.of(context).primaryColor,
+                        )
+                    )
+                );
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              dbNotifications = snapshot.data as List;
+            }
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 19.0.h,),
+                        Text(
+                          'Kontraksi',
+                          style: TextStyle(
+                            fontSize: 24.0.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 2.5.h,),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedTab = 'catat';
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                  border: Border.all(
-                                      color: selectedTab == 'catat'
-                                          ? Colors.transparent : Theme.of(context).primaryColor
-                                  ),
-                                  color: selectedTab == 'catat'
-                                      ? Theme.of(context).primaryColor : Colors.transparent
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
-                                child: Text(
-                                  'Catat',
-                                  style: TextStyle(
-                                    fontSize: 12.0.sp,
-                                    color: selectedTab == 'catat'
-                                        ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 2.2.w,),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedTab = 'riwayat';
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                  border: Border.all(
-                                      color: selectedTab == 'riwayat'
-                                          ? Colors.transparent : Theme.of(context).primaryColor
-                                  ),
-                                  color: selectedTab == 'riwayat'
-                                      ? Theme.of(context).primaryColor : Colors.transparent
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
-                                child: Text(
-                                  'Riwayat',
-                                  style: TextStyle(
-                                    fontSize: 12.0.sp,
-                                    color: selectedTab == 'riwayat'
-                                        ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Visibility(
-                        visible: selectedTab == 'catat' ? true : false,
-                        child: Column(
+                        SizedBox(height: 2.5.h,),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 3.8.h,),
-                            Visibility(
-                              visible: prefs.getWarning ? true : false,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 32.0.w,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).errorColor,
-                                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context).shadowColor,
-                                          blurRadius: 6.0,
-                                          offset: const Offset(0,3),
-                                        ),
-                                      ],
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedTab = 'catat';
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                    border: Border.all(
+                                        color: selectedTab == 'catat'
+                                            ? Colors.transparent : Theme.of(context).primaryColor
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 4.4.w, vertical: 5.6.w),
-                                      child: Text(
-                                        'Kontraksi Bunda sekarang berjarak kurang dari 5 menit. '
-                                            'Pertimbangkan untuk pergi ke rumah sakit atau menghubungi dokter/bidan Bunda.',
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
-                                          color: Colors.white,
-                                          height: 1.16,
-                                        ),
-                                      ),
+                                    color: selectedTab == 'catat'
+                                        ? Theme.of(context).primaryColor : Colors.transparent
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                  child: Text(
+                                    'Catat',
+                                    style: TextStyle(
+                                      fontSize: 12.0.sp,
+                                      color: selectedTab == 'catat'
+                                          ? Colors.white : Colors.black,
                                     ),
                                   ),
-                                  SizedBox(height: 3.8.h,),
-                                ],
+                                ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'images/ic_contractions_small.png',
-                                  height: 3.3.w,
+                            SizedBox(width: 2.2.w,),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedTab = 'riwayat';
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                    border: Border.all(
+                                        color: selectedTab == 'riwayat'
+                                            ? Colors.transparent : Theme.of(context).primaryColor
+                                    ),
+                                    color: selectedTab == 'riwayat'
+                                        ? Theme.of(context).primaryColor : Colors.transparent
                                 ),
-                                SizedBox(width: 1.4.w,),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 1.6.w),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
                                   child: Text(
-                                    'Ketuk gambar untuk memulai kontraksi Bunda',
+                                    'Riwayat',
                                     style: TextStyle(
-                                      fontSize: 10.0.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
+                                      fontSize: 12.0.sp,
+                                      color: selectedTab == 'riwayat'
+                                          ? Colors.white : Colors.black,
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(height: 4.4.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  alignment: AlignmentDirectional.bottomStart,
+                          ],
+                        ),
+                        Visibility(
+                          visible: selectedTab == 'catat' ? true : false,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 3.8.h,),
+                              Visibility(
+                                visible: prefs.getWarning ? true : false,
+                                child: Column(
                                   children: [
                                     Container(
-                                      width: 53.3.w,
-                                      height: 53.3.w,
+                                      height: 32.0.w,
                                       decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1.0,
-                                          style: BorderStyle.solid,
-                                          color: Theme.of(context).backgroundColor,
-                                        ),
-                                        borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                        color: Theme.of(context).errorColor,
+                                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context).shadowColor,
+                                            blurRadius: 6.0,
+                                            offset: const Offset(0,3),
+                                          ),
+                                        ],
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.all(3.3.w),
-                                        child: InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => const TimeCounter(),
-                                              barrierDismissible: false,
-                                            );
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                width: 4.0,
-                                                style: BorderStyle.solid,
-                                                color: Theme.of(context).primaryColor,
-                                              ),
-                                              borderRadius: const BorderRadius.all(Radius.circular(100)),
-                                            ),
-                                            child: Center(
-                                              child: Image.asset(
-                                                'images/baby.png',
-                                                height: 18.3.w,
-                                              ),
-                                            ),
+                                        padding: EdgeInsets.symmetric(horizontal: 4.4.w, vertical: 5.6.w),
+                                        child: Text(
+                                          'Kontraksi Bunda sekarang berjarak kurang dari 5 menit. '
+                                              'Pertimbangkan untuk pergi ke rumah sakit atau menghubungi dokter/bidan Bunda.',
+                                          style: TextStyle(
+                                            fontSize: 13.0.sp,
+                                            color: Colors.white,
+                                            height: 1.16,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          dbContractions.del();
-                                          selectedIndex = 0;
-                                          prefs.setLastContraction('');
-                                          prefs.setTotalDuration(0);
-                                          prefs.setCountDuration(0);
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 11.1.w,
-                                        height: 11.1.w,
+                                    SizedBox(height: 3.8.h,),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/ic_contractions_small.png',
+                                    height: 3.3.w,
+                                  ),
+                                  SizedBox(width: 1.4.w,),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 1.6.w),
+                                    child: Text(
+                                      'Ketuk gambar untuk memulai kontraksi Bunda',
+                                      style: TextStyle(
+                                        fontSize: 10.0.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4.4.h,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: AlignmentDirectional.bottomStart,
+                                    children: [
+                                      Container(
+                                        width: 53.3.w,
+                                        height: 53.3.w,
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
                                           border: Border.all(
                                             width: 1.0,
                                             style: BorderStyle.solid,
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme.of(context).backgroundColor,
                                           ),
                                           borderRadius: const BorderRadius.all(Radius.circular(100)),
                                         ),
-                                        child: Center(
-                                          child: Image.asset(
-                                            'images/ic_reset.png',
-                                            width: 5.6.w,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(3.3.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) => const TimeCounter(),
+                                                barrierDismissible: false,
+                                              );
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  width: 4.0,
+                                                  style: BorderStyle.solid,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                              ),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  'images/baby.png',
+                                                  height: 18.3.w,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 4.4.h,),
-                            FutureBuilder(
-                              future: dbContractions.list(DateFormat('d MMM yyyy HH:mm:ss', 'id_ID')
-                                  .format(DateTime.now()).substring(0, 11)),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(height: 28.0.h,),
-                                      SpinKitThreeBounce(
-                                        color: Theme.of(context).primaryColor,
-                                        size: 20,
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            dbContractions.del();
+                                            selectedIndex = 0;
+                                            prefs.setLastContraction('');
+                                            prefs.setTotalDuration(0);
+                                            prefs.setCountDuration(0);
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 11.1.w,
+                                          height: 11.1.w,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              width: 1.0,
+                                              style: BorderStyle.solid,
+                                              color: Theme.of(context).primaryColor,
+                                            ),
+                                            borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(
+                                              'images/ic_reset.png',
+                                              width: 5.6.w,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
-                                  );
-                                }
-                                if (snapshot.connectionState == ConnectionState.done) {
-                                  dbList = snapshot.data;
-                                }
-                                return dbList.isNotEmpty
-                                    ? Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 3.0.w,),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 40.0.w,
-                                            child: Text(
-                                              'Mulai',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 10.0.sp,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 22.4.w,
-                                            child: Text(
-                                              'Durasi',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 10.0.sp,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            'Interval',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 10.0.sp,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 3.1.h,),
-                                    SizedBox(
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: dbList.length,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.only(top: 0),
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 4.4.w),
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 40.0.w,
-                                                        child: Text(
-                                                          dbList[index]['start'],
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12.0.sp,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 22.4.w,
-                                                        child: Text(
-                                                          dbList[index]['duration'],
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12.0.sp,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        dbList[index]['interval'],
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 12.0.sp,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 4.4.w),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                                    : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4.4.h,),
+                              FutureBuilder(
+                                future: dbContractions.list(DateFormat('d MMM yyyy HH:mm:ss', 'id_ID')
+                                    .format(DateTime.now()).substring(0, 11)),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        SizedBox(height: 2.5.h,),
-                                        Text(
-                                          "Belum Ada Data Kontraksi",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 12.0.sp,
-                                          ),
-                                        ),
-                                        SizedBox(height: 2.5.h,),
-                                        Image.asset(
-                                          'images/no_contractions.png',
-                                          width: 56.0.w,
+                                        SizedBox(height: 28.0.h,),
+                                        SpinKitThreeBounce(
+                                          color: Theme.of(context).primaryColor,
+                                          size: 20,
                                         ),
                                       ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Visibility(
-                        visible: selectedTab == 'riwayat' ? true : false,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FutureBuilder(
-                              future: dbContractions.group(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    );
+                                  }
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    dbList = snapshot.data;
+                                  }
+                                  return dbList.isNotEmpty ? Column(
                                     children: [
-                                      SizedBox(height: 28.0.h,),
-                                      SpinKitThreeBounce(
-                                        color: Theme.of(context).primaryColor,
-                                        size: 20,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 3.0.w,),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40.0.w,
+                                              child: Text(
+                                                'Mulai',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 10.0.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 22.4.w,
+                                              child: Text(
+                                                'Durasi',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 10.0.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              'Interval',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 10.0.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  );
-                                }
-                                if (snapshot.connectionState == ConnectionState.done) {
-                                  dbDay = snapshot.data;
-                                  selectedDay = dbDay[selectedIndex]['contractionDay'].substring(0, 11);
-                                }
-                                return dbDay.isNotEmpty
-                                    ? Column(
-                                  children: [
-                                    SizedBox(height: 2.0.h,),
-                                    SizedBox(
-                                      height: 11.7.w,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        shrinkWrap: true,
-                                        itemCount: dbDay.length,
-                                        physics: const BouncingScrollPhysics(),
-                                        padding: const EdgeInsets.only(top: 0),
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedIndex = index;
-                                                selectedDay = dbDay[index]['contractionDay'];
-                                              });
-                                            },
-                                            child: Row(
+                                      SizedBox(height: 3.1.h,),
+                                      SizedBox(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: dbList.length,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          padding: const EdgeInsets.only(top: 0),
+                                          itemBuilder: (context, index) {
+                                            return Column(
                                               children: [
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                                      border: Border.all(
-                                                          color: selectedIndex == index
-                                                              ? Colors.transparent : Theme.of(context).backgroundColor
-                                                      ),
-                                                      color: selectedIndex == index
-                                                          ? Theme.of(context).backgroundColor : Colors.transparent
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
-                                                    child: Text(
-                                                      dbDay[index]['contractionDay'].toString().substring(0, 6),
-                                                      style: TextStyle(
-                                                        fontSize: 12.0.sp,
-                                                        color: selectedIndex == index
-                                                            ? Colors.white : Colors.black,
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Theme.of(context).primaryColor,
                                                       ),
                                                     ),
                                                   ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 4.4.w),
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 40.0.w,
+                                                          child: Text(
+                                                            dbList[index]['start'],
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 12.0.sp,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 22.4.w,
+                                                          child: Text(
+                                                            dbList[index]['duration'],
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 12.0.sp,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          dbList[index]['interval'],
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12.0.sp,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
-                                                SizedBox(width: 2.2.w,),
+                                                SizedBox(height: 4.4.w),
                                               ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                                    : Container();
-                              },
-                            ),
-                            FutureBuilder(
-                              future: dbContractions.list(selectedDay),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(height: 28.0.h,),
-                                      SpinKitThreeBounce(
-                                        color: Theme.of(context).primaryColor,
-                                        size: 20,
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ],
-                                  );
-                                }
-                                if (snapshot.connectionState == ConnectionState.done) {
-                                  dbList = snapshot.data;
-                                }
-                                return dbList.isNotEmpty
-                                    ? Column(
-                                  children: [
-                                    SizedBox(height: 6.7.h,),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 3.0.w,),
-                                      child: Row(
+                                  ) : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
                                         children: [
-                                          SizedBox(
-                                            width: 40.0.w,
-                                            child: Text(
-                                              'Mulai',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 10.0.sp,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 22.4.w,
-                                            child: Text(
-                                              'Durasi',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 10.0.sp,
-                                              ),
-                                            ),
-                                          ),
+                                          SizedBox(height: 5.6.h,),
                                           Text(
-                                            'Interval',
+                                            "Belum Ada Data Kontraksi",
                                             style: TextStyle(
+                                              color: Colors.black,
                                               fontWeight: FontWeight.w700,
-                                              fontSize: 10.0.sp,
+                                              fontSize: 12.0.sp,
                                             ),
+                                          ),
+                                          SizedBox(height: 4.0.h,),
+                                          Image.asset(
+                                            'images/no_contractions.png',
+                                            width: 40.0.w,
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    SizedBox(height: 3.1.h,),
-                                    SizedBox(
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: dbList.length,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.only(top: 0),
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Theme.of(context).primaryColor,
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: selectedTab == 'riwayat' ? true : false,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder(
+                                future: dbContractions.group(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(height: 28.0.h,),
+                                        SpinKitThreeBounce(
+                                          color: Theme.of(context).primaryColor,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    dbDay = snapshot.data;
+                                    if (dbDay.isNotEmpty) {
+                                      selectedDay = dbDay[selectedIndex]['contractionDay'].substring(0, 11);
+                                    }
+                                  }
+                                  return dbDay.isNotEmpty ? Column(
+                                    children: [
+                                      SizedBox(height: 2.0.h,),
+                                      SizedBox(
+                                        height: 11.7.w,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: dbDay.length,
+                                          physics: const BouncingScrollPhysics(),
+                                          padding: const EdgeInsets.only(top: 0),
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedIndex = index;
+                                                  selectedDay = dbDay[index]['contractionDay'];
+                                                });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                                        border: Border.all(
+                                                            color: selectedIndex == index
+                                                                ? Colors.transparent : Theme.of(context).backgroundColor
+                                                        ),
+                                                        color: selectedIndex == index
+                                                            ? Theme.of(context).backgroundColor : Colors.transparent
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                                      child: Text(
+                                                        dbDay[index]['contractionDay'].toString().substring(0, 6),
+                                                        style: TextStyle(
+                                                          fontSize: 12.0.sp,
+                                                          color: selectedIndex == index
+                                                              ? Colors.white : Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 2.2.w,),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ) : Container();
+                                },
+                              ),
+                              FutureBuilder(
+                                future: dbContractions.list(selectedDay),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(height: 28.0.h,),
+                                        SpinKitThreeBounce(
+                                          color: Theme.of(context).primaryColor,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    dbList = snapshot.data;
+                                  }
+                                  return dbList.isNotEmpty ? Column(
+                                    children: [
+                                      SizedBox(height: 6.7.h,),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 3.0.w,),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40.0.w,
+                                              child: Text(
+                                                'Mulai',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 10.0.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 22.4.w,
+                                              child: Text(
+                                                'Durasi',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 10.0.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              'Interval',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 10.0.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.1.h,),
+                                      SizedBox(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: dbList.length,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          padding: const EdgeInsets.only(top: 0),
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Theme.of(context).primaryColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 4.4.w),
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 40.0.w,
+                                                          child: Text(
+                                                            dbList[index]['start'],
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 12.0.sp,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 22.4.w,
+                                                          child: Text(
+                                                            dbList[index]['duration'],
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 12.0.sp,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          dbList[index]['interval'],
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12.0.sp,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(3.3.w, 0, 3.3.w, 4.4.w),
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 40.0.w,
-                                                        child: Text(
-                                                          dbList[index]['start'],
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12.0.sp,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 22.4.w,
-                                                        child: Text(
-                                                          dbList[index]['duration'],
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12.0.sp,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        dbList[index]['interval'],
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 12.0.sp,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 4.4.w),
-                                            ],
-                                          );
-                                        },
+                                                SizedBox(height: 4.4.w),
+                                              ],
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                                    : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        SizedBox(height: 2.5.h,),
-                                        Text(
-                                          "Belum Ada Data Kontraksi",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 12.0.sp,
+                                    ],
+                                  ) : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(height: 9.2.h,),
+                                          Text(
+                                            "Belum Ada Data Kontraksi",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 12.0.sp,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 2.5.h,),
-                                        Image.asset(
-                                          'images/no_contractions.png',
-                                          width: 56.0.w,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
+                                          SizedBox(height: 2.5.h,),
+                                          Image.asset(
+                                            'images/no_contractions.png',
+                                            width: 56.0.w,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 11.3.h,),
-                    ],
+                        SizedBox(height: 11.3.h,),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    height: 4.0.h,
-                    color: Colors.white,
-                  ),
-                  Container(
-                    height: 11.0.h,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.white, Colors.white.withOpacity(0.0),
-                          ],
-                        )
+                Column(
+                  children: [
+                    Container(
+                      height: 4.0.h,
+                      color: Colors.white,
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 19.0.w,
-                      height: 15.0.h,
+                    Container(
+                      height: 11.0.h,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(40),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white, Colors.white.withOpacity(0.0),
+                            ],
+                          )
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true),
+                      child: Container(
+                        width: 19.0.w,
+                        height: 15.0.h,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(40),
+                          ),
+                        ),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          children: [
+                            SizedBox(
+                              width: 19.0.w,
+                              height: 19.0.w,
+                              child: Icon(
+                                Icons.close,
+                                size: 7.0.w,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: [
-                          SizedBox(
-                            width: 19.0.w,
-                            height: 19.0.w,
-                            child: Icon(
-                              Icons.close,
-                              size: 7.0.w,
-                              color: Colors.white,
+                    ),
+                    const Expanded(child: SizedBox()),
+                    Column(
+                      children: [
+                        SizedBox(height: 5.6.h,),
+                        Padding(
+                          padding: EdgeInsets.only(right: 2.2.w,),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/notifications');
+                            },
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Opacity(
+                                  opacity: .8,
+                                  child: Container(
+                                    width: 12.5.w,
+                                    height: 12.5.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6.0,
+                                          color: Theme.of(context).shadowColor,
+                                          offset: const Offset(0, 3),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5.6.w,
+                                  height: 5.6.w,
+                                  child: FittedBox(
+                                    child: Image.asset(
+                                      'images/ic_forum_small.png',
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: dbNotifications.isNotEmpty ? true : false,
+                                  child: Positioned(
+                                    left: 7.8.w,
+                                    top: 2.2.w,
+                                    child: Container(
+                                      width: 2.2.w,
+                                      height: 2.2.w,
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context).errorColor,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(50),
+                                          )
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  Column(
-                    children: [
-                      SizedBox(height: 5.6.h,),
-                      Padding(
-                        padding: EdgeInsets.only(right: 2.2.w,),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/notifications');
-                          },
-                          child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              Opacity(
-                                opacity: .8,
-                                child: Container(
-                                  width: 12.5.w,
-                                  height: 12.5.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(30),
-                                    ),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6.0,
-                                        color: Theme.of(context).shadowColor,
-                                        offset: const Offset(0, 3),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5.6.w,
-                                height: 5.6.w,
-                                child: FittedBox(
-                                  child: Image.asset(
-                                    'images/ic_forum_small.png',
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: dbNotifications.isNotEmpty ? true : false,
-                                child: Positioned(
-                                  left: 7.8.w,
-                                  top: 2.2.w,
+                    Column(
+                      children: [
+                        SizedBox(height: 5.6.h,),
+                        Padding(
+                          padding: EdgeInsets.only(right: 6.6.w,),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/features');
+                            },
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Opacity(
+                                  opacity: .8,
                                   child: Container(
-                                    width: 2.2.w,
-                                    height: 2.2.w,
+                                    width: 12.5.w,
+                                    height: 12.5.w,
                                     decoration: BoxDecoration(
-                                        color: Theme.of(context).errorColor,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(50),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6.0,
+                                          color: Theme.of(context).shadowColor,
+                                          offset: const Offset(0, 3),
                                         )
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      SizedBox(height: 5.6.h,),
-                      Padding(
-                        padding: EdgeInsets.only(right: 6.6.w,),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/features');
-                          },
-                          child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              Opacity(
-                                opacity: .8,
-                                child: Container(
-                                  width: 12.5.w,
-                                  height: 12.5.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(30),
+                                SizedBox(
+                                  width: 5.6.w,
+                                  height: 5.6.w,
+                                  child: FittedBox(
+                                    child: Image.asset(
+                                      'images/ic_menu.png',
                                     ),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6.0,
-                                        color: Theme.of(context).shadowColor,
-                                        offset: const Offset(0, 3),
-                                      )
-                                    ],
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 5.6.w,
-                                height: 5.6.w,
-                                child: FittedBox(
-                                  child: Image.asset(
-                                    'images/ic_menu.png',
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

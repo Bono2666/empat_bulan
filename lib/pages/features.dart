@@ -229,49 +229,60 @@ class _FeaturesState extends State<Features> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: 16.7.w,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    Container(
-                                      width: 11.1.w,
-                                      height: 11.1.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                        color: Theme.of(context).backgroundColor,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 5.6.w,
-                                      height: 5.6.w,
-                                      child: FittedBox(
-                                        child: Image.asset(
-                                          'images/ic_service.png',
+                          InkWell(
+                            child: SizedBox(
+                              width: 16.7.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                          color: Theme.of(context).backgroundColor,
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 2.0.w,),
-                                Text(
-                                  'Layanan',
-                                  style: TextStyle(
-                                    fontSize: 10.0.sp,
-                                    color: Colors.black,
-                                    height: 1.2,
+                                      SizedBox(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_service.png',
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                                  SizedBox(height: 2.0.w,),
+                                  Text(
+                                    'Layanan',
+                                    style: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      color: Colors.black,
+                                      height: 1.2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
+                            onTap: () {
+                              if (!prefs.getIsSignIn) {
+                                prefs.setGoRoute('/homeServices');
+                                Navigator.pushReplacementNamed(context, '/register');
+                              } else {
+                                Navigator.pushReplacementNamed(context, '/homeServices');
+                              }
+                            },
                           ),
                           const Spacer(),
                           InkWell(
                             onTap: () {
+                              prefs.setBackRoute('/home');
                               if (!prefs.getIsSignIn) {
                                 if (dbChildBook.isEmpty) {
                                   prefs.setGoRoute('/childProfile');

@@ -45,8 +45,8 @@ dependencies:
   intl:
   keyboard_dismisser:
   intl_phone_number_input:
-  firebase_core:
-  firebase_auth:
+  firebase_core: 1.20.1
+  firebase_auth: 3.6.3
   phone_number:
   image_picker:
   table_calendar:
@@ -58,6 +58,8 @@ dependencies:
   path_provider:
   sqflite:
   syncfusion_flutter_charts:
+  mailer:
+  google_sign_in: ^5.4.1
 
 dev_dependencies:
   flutter_lints: ^2.0.1

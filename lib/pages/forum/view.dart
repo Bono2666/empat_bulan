@@ -38,9 +38,9 @@ class _QuestionViewState extends State<QuestionView> {
   Future pickImg() async {
     var picked = await picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 3000,
-      maxWidth: 3000,
-      imageQuality: 100,
+      maxHeight: 600,
+      maxWidth: 800,
+      imageQuality: 50,
     );
     setState(() {
       img = File(picked.path);
@@ -71,7 +71,7 @@ class _QuestionViewState extends State<QuestionView> {
   }
 
   Future updRead() async {
-    var url = Uri.parse('https://app.empatbulan.com/api/upd_read_notification.php?id=${prefs.getQuestionId}');
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_read_notification.php?id=${prefs.getQuestionId}&phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -765,13 +765,6 @@ class _QuestionViewState extends State<QuestionView> {
                                                   },
                                                   child: TextField(
                                                     controller: comment,
-                                                    onChanged: (String str) {
-                                                      if (str != '') {
-                                                        // setState(() {
-                                                        //   numLines = '\n'.allMatches(str).length + 1;
-                                                        // });
-                                                      }
-                                                    },
                                                     minLines: 1,
                                                     maxLines: 6,
                                                     keyboardType: TextInputType.multiline,
