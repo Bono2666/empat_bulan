@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,14 +5,14 @@ import 'package:sizer/sizer.dart';
 import 'package:empat_bulan/pages/db/kick_db.dart';
 
 class KickDetail extends StatefulWidget {
-  const KickDetail({Key key}) : super(key: key);
+  const KickDetail({Key? key}) : super(key: key);
 
   @override
   State<KickDetail> createState() => _KickDetailState();
 }
 
 class _KickDetailState extends State<KickDetail> {
-  List dbList;
+  late List dbList;
   var dbKick = KickDb();
 
   @override
@@ -84,7 +83,7 @@ class _KickDetailState extends State<KickDetail> {
                                   TextSpan(
                                     text: dbList[0]['kickdate'],
                                     style: TextStyle(
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                   ),
                                 ],

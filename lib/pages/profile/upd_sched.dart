@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../main.dart';
 
 class UpdSched extends StatefulWidget {
-  const UpdSched({Key key}) : super(key: key);
+  const UpdSched({Key? key}) : super(key: key);
 
   @override
   State<UpdSched> createState() => _UpdSchedState();
@@ -123,11 +122,11 @@ class _UpdSchedState extends State<UpdSched> {
                             itemStyle: TextStyle(
                               fontFamily: 'Josefin Sans',
                               fontSize: 15.0.sp,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                             doneStyle: TextStyle(
                               fontFamily: 'Josefin Sans',
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                             cancelStyle: const TextStyle(
                               fontFamily: 'Josefin Sans',
@@ -180,7 +179,7 @@ class _UpdSchedState extends State<UpdSched> {
                           theme: DatePickerTheme(
                             itemStyle: TextStyle(
                               fontSize: 15.0.sp,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontFamily: 'Josefin Sans',
                             ),
                             cancelStyle: const TextStyle(
@@ -188,7 +187,7 @@ class _UpdSchedState extends State<UpdSched> {
                               color: Colors.black,
                             ),
                             doneStyle: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontFamily: 'Josefin Sans',
                             ),
                           ),

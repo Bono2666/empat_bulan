@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:core';
 import 'package:email_validator/email_validator.dart';
@@ -9,7 +8,7 @@ import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
 
 class Checkout extends StatefulWidget {
-  const Checkout({Key key}) : super(key: key);
+  const Checkout({Key? key}) : super(key: key);
 
   @override
   State<Checkout> createState() => _CheckoutState();
@@ -24,8 +23,8 @@ class _CheckoutState extends State<Checkout> {
   bool isInvalid = false;
   bool error = false;
   bool firstLoad = true;
-  int currentAge;
-  List dbProfile, dbTimeline;
+  late int currentAge;
+  late List dbProfile, dbTimeline;
 
   Future getProfile() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
@@ -140,7 +139,7 @@ class _CheckoutState extends State<Checkout> {
                             decoration: BoxDecoration(
                               color: Theme
                                   .of(context)
-                                  .backgroundColor,
+                                  .colorScheme.background,
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 bottomRight: Radius.circular(40),
@@ -258,7 +257,7 @@ class _CheckoutState extends State<Checkout> {
                                           Container(
                                             width: 2.8.w,
                                             height: 15.6.w,
-                                            color: Theme.of(context).errorColor,
+                                            color: Theme.of(context).colorScheme.error,
                                           ),
                                           SizedBox(width: 4.0.w,),
                                           Expanded(
@@ -267,7 +266,7 @@ class _CheckoutState extends State<Checkout> {
                                                   'pemessan telah terisi dengan benar.',
                                               style: TextStyle(
                                                 fontSize: 13.0.sp,
-                                                color: Theme.of(context).errorColor,
+                                                color: Theme.of(context).colorScheme.error,
                                                 height: 1.16,
                                               ),
                                               maxLines: 3,
@@ -299,7 +298,7 @@ class _CheckoutState extends State<Checkout> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -339,7 +338,7 @@ class _CheckoutState extends State<Checkout> {
                                       child: Text(
                                         'Alamat email tidak benar',
                                         style: TextStyle(
-                                          color: Theme.of(context).errorColor,
+                                          color: Theme.of(context).colorScheme.error,
                                           fontSize: 10.0.sp,
                                         ),
                                       ),
@@ -646,7 +645,7 @@ class _CheckoutState extends State<Checkout> {
                                         decoration: BoxDecoration(
                                           color: Theme
                                               .of(context)
-                                              .backgroundColor,
+                                              .colorScheme.background,
                                           borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(40),
                                             bottomRight: Radius.circular(40),

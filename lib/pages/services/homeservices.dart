@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:empat_bulan/pages/search.dart';
@@ -9,20 +8,20 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
-int classId;
+late int classId;
 
 class HomeServices extends StatefulWidget {
-  const HomeServices({Key key}) : super(key: key);
+  const HomeServices({Key? key}) : super(key: key);
 
   @override
   State<HomeServices> createState() => _HomeServicesState();
 }
 
 class _HomeServicesState extends State<HomeServices> {
-  List dbHome, dbClass, dbNotifications, dbCart;
+  late List dbHome, dbClass, dbNotifications, dbCart;
   bool firstLoad = true;
   int currentAge = 0;
-  DateTime classDate;
+  late DateTime classDate;
 
   Future getHomeImage() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_home_services.php');
@@ -175,7 +174,7 @@ class _HomeServicesState extends State<HomeServices> {
                                           style: TextStyle(
                                             fontSize: 37.0.sp,
                                             fontWeight: FontWeight.w700,
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                           ),
                                         ),
                                         SizedBox(height: 2.2.w,),
@@ -184,7 +183,7 @@ class _HomeServicesState extends State<HomeServices> {
                                               'dengan instruktur & terapis terpercaya',
                                           style: TextStyle(
                                             fontSize: 10.0.sp,
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                             height: 1.2,
                                           ),
                                           textAlign: TextAlign.center,
@@ -487,7 +486,7 @@ class _HomeServicesState extends State<HomeServices> {
                                                                                 Text(
                                                                                   dbClass[index]['type'],
                                                                                   style: TextStyle(
-                                                                                    color: Theme.of(context).backgroundColor,
+                                                                                    color: Theme.of(context).colorScheme.background,
                                                                                     fontSize: 8.0.sp,
                                                                                     fontWeight: FontWeight.w500,
                                                                                   ),
@@ -557,7 +556,7 @@ class _HomeServicesState extends State<HomeServices> {
                                                   Text(
                                                     "Tidak ada kelas saat ini",
                                                     style: TextStyle(
-                                                      color: Theme.of(context).backgroundColor,
+                                                      color: Theme.of(context).colorScheme.background,
                                                       fontWeight: FontWeight.w700,
                                                       fontSize: 12.0.sp,
                                                     ),
@@ -672,7 +671,7 @@ class _HomeServicesState extends State<HomeServices> {
                                                   width: 2.2.w,
                                                   height: 2.2.w,
                                                   decoration: BoxDecoration(
-                                                      color: Theme.of(context).errorColor,
+                                                      color: Theme.of(context).colorScheme.error,
                                                       borderRadius: const BorderRadius.all(
                                                         Radius.circular(50),
                                                       )
@@ -736,7 +735,7 @@ class _HomeServicesState extends State<HomeServices> {
                                                   width: 2.2.w,
                                                   height: 2.2.w,
                                                   decoration: BoxDecoration(
-                                                      color: Theme.of(context).errorColor,
+                                                      color: Theme.of(context).colorScheme.error,
                                                       borderRadius: const BorderRadius.all(
                                                         Radius.circular(50),
                                                       )
@@ -815,15 +814,15 @@ class _HomeServicesState extends State<HomeServices> {
 }
 
 class ViewClass extends StatefulWidget {
-  const ViewClass({Key key}) : super(key: key);
+  const ViewClass({Key? key}) : super(key: key);
 
   @override
   State<ViewClass> createState() => _ViewClassState();
 }
 
 class _ViewClassState extends State<ViewClass> {
-  List dbSingle, dbSingleCart;
-  DateTime classDate;
+  late List dbSingle, dbSingleCart;
+  late DateTime classDate;
 
   Future getSingleClass() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_single_class.php?id=$classId');
@@ -967,7 +966,7 @@ class _ViewClassState extends State<ViewClass> {
                                 style: TextStyle(
                                   fontSize: 10.0.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                 ),
                               ),
                               SizedBox(height: 2.2.w,),
@@ -1015,7 +1014,7 @@ class _ViewClassState extends State<ViewClass> {
                                           style: TextStyle(
                                             fontFamily: 'Josefin Sans',
                                             color: Colors.black,
-                                            fontSize: 10.0.sp,
+                                            fontSize: 9.6.sp,
                                           ),
                                           children: [
                                             const TextSpan(
@@ -1077,7 +1076,7 @@ class _ViewClassState extends State<ViewClass> {
                                     height: 5.8.w,
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     child: Center(
                                       child: Text(
@@ -1150,7 +1149,7 @@ class _ViewClassState extends State<ViewClass> {
                                           fontFamily: 'Josefin Sans',
                                         ),
                                       ),
-                                      backgroundColor: Theme.of(context).backgroundColor,
+                                      backgroundColor: Theme.of(context).colorScheme.background,
                                     ),
                                   );
                                 }
@@ -1195,7 +1194,7 @@ class _ViewClassState extends State<ViewClass> {
                                             fontFamily: 'Josefin Sans',
                                           ),
                                         ),
-                                        backgroundColor: Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context).colorScheme.background,
                                       ),
                                     );
                                   }
@@ -1212,7 +1211,7 @@ class _ViewClassState extends State<ViewClass> {
                                   width: 55.6.w,
                                   height: 20.8.w,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       bottomRight: Radius.circular(40),
@@ -1249,7 +1248,7 @@ class _ViewClassState extends State<ViewClass> {
 class StrikeThrough extends StatelessWidget {
   final Widget _child;
 
-  const StrikeThrough({Key key, @required Widget child}) : _child = child, super(key: key);
+  const StrikeThrough({Key? key, required Widget child}) : _child = child, super(key: key);
 
   @override
   Widget build(BuildContext context) {

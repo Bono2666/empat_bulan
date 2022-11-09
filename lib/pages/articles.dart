@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:empat_bulan/pages/search.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +7,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Articles extends StatefulWidget {
-  const Articles({Key key}) : super(key: key);
+  const Articles({Key? key}) : super(key: key);
 
   @override
   State<Articles> createState() => _ArticlesState();
 }
 
 class _ArticlesState extends State<Articles> {
-  List dbArticles, dbNotifications;
+  late List dbArticles, dbNotifications;
 
   Future getArticles() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_article.php');
@@ -271,7 +270,7 @@ class _ArticlesState extends State<Articles> {
                               padding: EdgeInsets.only(right: 2.2.w,),
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Search(),));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Search(type: '',),));
                                 },
                                 child: Stack(
                                   alignment: AlignmentDirectional.center,
@@ -359,7 +358,7 @@ class _ArticlesState extends State<Articles> {
                                             width: 2.2.w,
                                             height: 2.2.w,
                                             decoration: BoxDecoration(
-                                                color: Theme.of(context).errorColor,
+                                                color: Theme.of(context).colorScheme.error,
                                                 borderRadius: const BorderRadius.all(
                                                   Radius.circular(50),
                                                 )

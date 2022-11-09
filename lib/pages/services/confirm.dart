@@ -1,27 +1,28 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:core';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:empat_bulan/api/google_auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:sizer/sizer.dart';
 import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
-import '../../api/google_auth_api.dart';
 
-String imgUrl, classTitle;
+late String imgUrl, classTitle;
 
 class Confirm extends StatefulWidget {
-  const Confirm({Key key}) : super(key: key);
+  const Confirm({Key? key}) : super(key: key);
 
   @override
   State<Confirm> createState() => _ConfirmState();
 }
 
 class _ConfirmState extends State<Confirm> {
-  List dbSelectedCart, dbProfile, dbGroupCart;
+  late List dbSelectedCart, dbProfile, dbGroupCart;
 
   Future getSelectedCart() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_selected_cart.php?phone=${prefs.getPhone}');
@@ -75,7 +76,8 @@ class _ConfirmState extends State<Confirm> {
   Future sendEmail(String mailTo) async {
     // GoogleAuthApi.signOut();
     // return;
-    final user = await GoogleAuthApi.signIn();
+    // ignore: unnecessary_nullable_for_final_variable_declarations
+    final GoogleSignInAccount? user = await GoogleAuthApi.signIn();
 
     if (user == null) return;
 
@@ -83,7 +85,7 @@ class _ConfirmState extends State<Confirm> {
     final auth = await user.authentication;
     final token = auth.accessToken;
 
-    final smtpServer = gmailSaslXoauth2(email, token);
+    final smtpServer = gmailSaslXoauth2(email, token!);
     final message = Message()
       ..from = Address(email, 'EmpatBulan')
       ..recipients = [mailTo]
@@ -222,7 +224,7 @@ class _ConfirmState extends State<Confirm> {
                             width: 40.0.w,
                             height: 20.8.w,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 bottomRight: Radius.circular(40),
@@ -362,7 +364,7 @@ class _ConfirmState extends State<Confirm> {
                                                             textAlign: TextAlign.right,
                                                             style: TextStyle(
                                                               fontSize: 8.0.sp,
-                                                              color: Theme.of(context).backgroundColor,
+                                                              color: Theme.of(context).colorScheme.background,
                                                             ),
                                                           ),
                                                           SizedBox(height: 5.6.w,),
@@ -446,7 +448,7 @@ class _ConfirmState extends State<Confirm> {
                                           'DATA PEMESAN',
                                           style: TextStyle(
                                             fontSize: 10.0.sp,
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                           ),
                                         ),
                                         const Expanded(child: SizedBox()),
@@ -537,7 +539,7 @@ class _ConfirmState extends State<Confirm> {
                                       'BIAYA',
                                       style: TextStyle(
                                         fontSize: 10.0.sp,
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
                                     SizedBox(height: 4.7.h,),
@@ -738,7 +740,7 @@ class _ConfirmState extends State<Confirm> {
                                                     width: 40.0.w,
                                                     height: 20.8.w,
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).backgroundColor,
+                                                      color: Theme.of(context).colorScheme.background,
                                                       borderRadius: const BorderRadius.only(
                                                         topLeft: Radius.circular(40),
                                                         bottomRight: Radius.circular(40),
@@ -835,7 +837,7 @@ class _ConfirmState extends State<Confirm> {
                                       width: 74.4.w,
                                       height: 12.0.h,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(40),
                                         ),
@@ -870,7 +872,7 @@ class _ConfirmState extends State<Confirm> {
 }
 
 class Info extends StatefulWidget {
-  const Info({Key key}) : super(key: key);
+  const Info({Key? key}) : super(key: key);
 
   @override
   State<Info> createState() => _InfoState();
@@ -878,8 +880,8 @@ class Info extends StatefulWidget {
 
 class _InfoState extends State<Info>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
 
   @override
   void initState() {

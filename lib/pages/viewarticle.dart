@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,14 +10,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
 class ViewArticle extends StatefulWidget {
-  const ViewArticle({Key key}) : super(key: key);
+  const ViewArticle({Key? key}) : super(key: key);
 
   @override
   State<ViewArticle> createState() => _ViewArticleState();
 }
 
 class _ViewArticleState extends State<ViewArticle> {
-  List dbArticle, dbRelated;
+  late List dbArticle, dbRelated;
 
   Future getArticle() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_single_article.php?id=${prefs.getArticleId}');
@@ -172,12 +171,12 @@ class _ViewArticleState extends State<ViewArticle> {
                                       ),
                                       'h1': Style(
                                         color:
-                                            Theme.of(context).backgroundColor,
+                                            Theme.of(context).colorScheme.background,
                                         fontSize: FontSize.rem(1.5),
                                         lineHeight: LineHeight.rem(1),
                                       ),
                                       'h2': Style(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         lineHeight: LineHeight.rem(1),
                                       ),
                                       'h3': Style(
@@ -188,13 +187,13 @@ class _ViewArticleState extends State<ViewArticle> {
                                         padding: const EdgeInsets.only(left: 0),
                                       ),
                                       'a': Style(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     },
                                     onLinkTap: (url, context, attributes,
                                         element) async {
                                       // ignore: deprecated_member_use
-                                      if (await canLaunch(url)) {
+                                      if (await canLaunch(url!)) {
                                         // ignore: deprecated_member_use
                                         await launch(
                                           url,

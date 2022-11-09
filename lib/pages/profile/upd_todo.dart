@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -6,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../main.dart';
 
 class UpdTodo extends StatefulWidget {
-  const UpdTodo({Key key}) : super(key: key);
+  const UpdTodo({Key? key}) : super(key: key);
 
   @override
   State<UpdTodo> createState() => _UpdTodoState();

@@ -1,5 +1,5 @@
-// @dart=2.9
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,11 +9,11 @@ import 'package:sizer/sizer.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:http/http.dart' as http;
 
-int classId;
+late int classId;
 
 class Search extends StatefulWidget {
   final String _type;
-  const Search({Key key, String type}) : _type = type, super(key: key);
+  const Search({Key? key, required String type}) : _type = type, super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
@@ -23,13 +23,13 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   var keyText = TextEditingController();
   String keySearch = '';
-  List dbArticle, dbForum, dbServices;
+  late List dbArticle, dbForum, dbServices;
   int isNotEmpty = 0;
   int forumNotEmpty = 0;
   int serviceNotEmpty = 0;
   final String _type;
 
-  _SearchState({String type}) : _type = type;
+  _SearchState({required String type}) : _type = type;
 
   Future getSearch() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_search_article.php?keyword=$keySearch');
@@ -279,23 +279,49 @@ class _SearchState extends State<Search> {
                                                         width: 13.3.w,
                                                         fit: BoxFit.cover,
                                                       )
-                                                          : Image.network(
-                                                        dbForum[index]['photo'],
-                                                        height: 13.3.w,
-                                                        width: 13.3.w,
-                                                        fit: BoxFit.cover,
-                                                        loadingBuilder: (context, child, loadingProgress) {
-                                                          if (loadingProgress == null) return child;
-                                                          return SizedBox(
+                                                          : SizedBox(
                                                             height: 13.3.w,
-                                                            child: const Center(
-                                                              child: SpinKitDoubleBounce(
-                                                                color: Colors.white,
-                                                              ),
+                                                            width: 13.3.w,
+                                                            child: Stack(
+                                                              fit: StackFit.expand,
+                                                              children: [
+                                                                Image.network(
+                                                                  dbForum[index]['photo'],
+                                                                  fit: BoxFit.cover,
+                                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                                      if (loadingProgress == null) return child;
+                                                                      return SizedBox(
+                                                                        height: 13.3.w,
+                                                                        child: const Center(
+                                                                          child: SpinKitDoubleBounce(
+                                                                            color: Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                  },
+                                                                ),
+                                                                dbForum[index]['sensitif'] == '0' ? Container() : BackdropFilter(
+                                                                  filter: ImageFilter.blur(
+                                                                    sigmaX: 10,
+                                                                    sigmaY: 10,
+                                                                  ),
+                                                                  child: Container(
+                                                                    color: Theme.of(context).colorScheme.background.withOpacity(0.8),
+                                                                    child: Center(
+                                                                      child: SizedBox(
+                                                                        width: 5.2.w,
+                                                                        child: FittedBox(
+                                                                          child: Image.asset(
+                                                                            'images/ic_sensitive.png',
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          );
-                                                        },
-                                                      ),
+                                                          ),
                                                     ),
                                                   ),
                                                   SizedBox(width: 4.4.w,),
@@ -526,6 +552,7 @@ class _SearchState extends State<Search> {
                                           focusedBorder: InputBorder.none,
                                           hintText: _type == 'layanan' ? 'Layanan yang dicari?' : 'Cari pertanyaan, artikel',
                                           hintStyle: TextStyle(
+                                            // ignore: deprecated_member_use
                                             color: Theme.of(context).toggleableActiveColor,
                                           ),
                                         ),
@@ -626,15 +653,15 @@ class _SearchState extends State<Search> {
 }
 
 class ViewClass extends StatefulWidget {
-  const ViewClass({Key key}) : super(key: key);
+  const ViewClass({Key? key}) : super(key: key);
 
   @override
   State<ViewClass> createState() => _ViewClassState();
 }
 
 class _ViewClassState extends State<ViewClass> {
-  List dbSingle, dbSingleCart;
-  DateTime classDate;
+  late List dbSingle, dbSingleCart;
+  late DateTime classDate;
 
   Future getSingleClass() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_single_class.php?id=$classId');
@@ -778,7 +805,7 @@ class _ViewClassState extends State<ViewClass> {
                                 style: TextStyle(
                                   fontSize: 10.0.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                 ),
                               ),
                               SizedBox(height: 2.2.w,),
@@ -888,7 +915,7 @@ class _ViewClassState extends State<ViewClass> {
                                     height: 5.8.w,
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     child: Center(
                                       child: Text(
@@ -961,7 +988,7 @@ class _ViewClassState extends State<ViewClass> {
                                           fontFamily: 'Josefin Sans',
                                         ),
                                       ),
-                                      backgroundColor: Theme.of(context).backgroundColor,
+                                      backgroundColor: Theme.of(context).colorScheme.background,
                                     ),
                                   );
                                 }
@@ -1006,7 +1033,7 @@ class _ViewClassState extends State<ViewClass> {
                                             fontFamily: 'Josefin Sans',
                                           ),
                                         ),
-                                        backgroundColor: Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context).colorScheme.background,
                                       ),
                                     );
                                   }
@@ -1016,7 +1043,7 @@ class _ViewClassState extends State<ViewClass> {
                                   width: 55.6.w,
                                   height: 20.8.w,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       bottomRight: Radius.circular(40),
@@ -1053,7 +1080,7 @@ class _ViewClassState extends State<ViewClass> {
 class StrikeThrough extends StatelessWidget {
   final Widget _child;
 
-  const StrikeThrough({Key key, @required Widget child}) : _child = child, super(key: key);
+  const StrikeThrough({Key? key, required Widget child}) : _child = child, super(key: key);
 
   @override
   Widget build(BuildContext context) {

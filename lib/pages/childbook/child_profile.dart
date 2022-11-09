@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
 
 class ChildProfile extends StatefulWidget {
-  const ChildProfile({Key key}) : super(key: key);
+  const ChildProfile({Key? key}) : super(key: key);
 
   @override
   State<ChildProfile> createState() => _ChildProfileState();
@@ -21,13 +20,13 @@ class _ChildProfileState extends State<ChildProfile> {
   final birthDate = TextEditingController();
   String sextype = '';
   String premature = '';
-  String formattedDate;
-  DateTime pickDate;
-  DateTime currentDate;
+  late String formattedDate;
+  late DateTime pickDate;
+  late DateTime currentDate;
   double weight = 3.0;
   double height = 50;
   double prematureWeek = 37;
-  List dbProfile, dbChildBook;
+  late List dbProfile, dbChildBook;
   bool firstLoad = true;
   bool error = false;
 
@@ -169,7 +168,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                           Container(
                                             width: 2.8.w,
                                             height: 15.6.w,
-                                            color: Theme.of(context).errorColor,
+                                            color: Theme.of(context).colorScheme.error,
                                           ),
                                           SizedBox(width: 4.0.w,),
                                           Expanded(
@@ -178,7 +177,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                                   'Profil Anak telah terisi dengan benar.',
                                               style: TextStyle(
                                                 fontSize: 13.0.sp,
-                                                color: Theme.of(context).errorColor,
+                                                color: Theme.of(context).colorScheme.error,
                                                 height: 1.16,
                                               ),
                                               maxLines: 3,
@@ -210,7 +209,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -246,7 +245,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -272,11 +271,11 @@ class _ChildProfileState extends State<ChildProfile> {
                                         itemStyle: TextStyle(
                                           fontFamily: 'Josefin Sans',
                                           fontSize: 15.0.sp,
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                         doneStyle: TextStyle(
                                           fontFamily: 'Josefin Sans',
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                         cancelStyle: const TextStyle(
                                           fontFamily: 'Josefin Sans',
@@ -319,7 +318,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -360,7 +359,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                                       'Jenis Kelamin',
                                                       style: TextStyle(
                                                         fontSize: 17.0.sp,
-                                                        color: Theme.of(context).backgroundColor,
+                                                        color: Theme.of(context).colorScheme.background,
                                                       ),
                                                     ),
                                                   ],
@@ -489,7 +488,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -525,7 +524,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                                       'Lahir Prematur?',
                                                       style: TextStyle(
                                                         fontSize: 16.0.sp,
-                                                        color: Theme.of(context).backgroundColor,
+                                                        color: Theme.of(context).colorScheme.background,
                                                       ),
                                                     ),
                                                   ],
@@ -652,7 +651,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                             width: 1.7.w,
                                             height: 1.7.w,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context).backgroundColor,
+                                              color: Theme.of(context).colorScheme.background,
                                               borderRadius: const BorderRadius.all(Radius.circular(30)),
                                             ),
                                           ),
@@ -720,7 +719,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),
@@ -785,7 +784,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                       width: 1.7.w,
                                       height: 1.7.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         borderRadius: const BorderRadius.all(Radius.circular(30)),
                                       ),
                                     ),

@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Features extends StatefulWidget {
-  const Features({Key key}) : super(key: key);
+  const Features({Key? key}) : super(key: key);
 
   @override
   State<Features> createState() => _FeaturesState();
 }
 
 class _FeaturesState extends State<Features> {
-  List dbChildBook;
+  late List dbChildBook;
 
   Future getChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_childbook.php?phone=${prefs.getPhone}');
@@ -84,7 +83,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -135,7 +134,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -185,7 +184,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -243,7 +242,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -311,7 +310,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -468,7 +467,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -565,7 +564,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -616,7 +615,7 @@ class _FeaturesState extends State<Features> {
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                       SizedBox(
@@ -684,7 +683,7 @@ class _FeaturesState extends State<Features> {
 }
 
 class Warning extends StatefulWidget {
-  const Warning({Key key}) : super(key: key);
+  const Warning({Key? key}) : super(key: key);
 
   @override
   State<Warning> createState() => _WarningState();
@@ -692,8 +691,8 @@ class Warning extends StatefulWidget {
 
 class _WarningState extends State<Warning>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
 
   @override
   void initState() {

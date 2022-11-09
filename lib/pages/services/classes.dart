@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -9,18 +8,18 @@ import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 
-int classId;
+late int classId;
 
 class Classes extends StatefulWidget {
-  const Classes({Key key}) : super(key: key);
+  const Classes({Key? key}) : super(key: key);
 
   @override
   State<Classes> createState() => _ClassesState();
 }
 
 class _ClassesState extends State<Classes> {
-  List dbClasses;
-  DateTime classDate;
+  late List dbClasses;
+  late DateTime classDate;
 
   Future getClasses() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_classes.php');
@@ -249,7 +248,7 @@ class _ClassesState extends State<Classes> {
                                                     Text(
                                                       dbClasses[index]['type'],
                                                       style: TextStyle(
-                                                        color: Theme.of(context).backgroundColor,
+                                                        color: Theme.of(context).colorScheme.background,
                                                         fontSize: 8.0.sp,
                                                         fontWeight: FontWeight.w500,
                                                       ),
@@ -290,7 +289,7 @@ class _ClassesState extends State<Classes> {
                           Text(
                             "Tidak ada kelas saat ini",
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontWeight: FontWeight.w700,
                               fontSize: 12.0.sp,
                             ),
@@ -385,15 +384,15 @@ class _ClassesState extends State<Classes> {
 }
 
 class ViewClass extends StatefulWidget {
-  const ViewClass({Key key}) : super(key: key);
+  const ViewClass({Key? key}) : super(key: key);
 
   @override
   State<ViewClass> createState() => _ViewClassState();
 }
 
 class _ViewClassState extends State<ViewClass> {
-  List dbSingle, dbSingleCart;
-  DateTime classDate;
+  late List dbSingle, dbSingleCart;
+  late DateTime classDate;
 
   Future getSingleClass() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_single_class.php?id=$classId');
@@ -537,7 +536,7 @@ class _ViewClassState extends State<ViewClass> {
                                 style: TextStyle(
                                   fontSize: 10.0.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                 ),
                               ),
                               SizedBox(height: 2.2.w,),
@@ -647,7 +646,7 @@ class _ViewClassState extends State<ViewClass> {
                                     height: 5.8.w,
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     child: Center(
                                       child: Text(
@@ -720,7 +719,7 @@ class _ViewClassState extends State<ViewClass> {
                                           fontFamily: 'Josefin Sans',
                                         ),
                                       ),
-                                      backgroundColor: Theme.of(context).backgroundColor,
+                                      backgroundColor: Theme.of(context).colorScheme.background,
                                     ),
                                   );
                                 }
@@ -765,7 +764,7 @@ class _ViewClassState extends State<ViewClass> {
                                             fontFamily: 'Josefin Sans',
                                           ),
                                         ),
-                                        backgroundColor: Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context).colorScheme.background,
                                       ),
                                     );
                                   }
@@ -775,7 +774,7 @@ class _ViewClassState extends State<ViewClass> {
                                   width: 55.6.w,
                                   height: 20.8.w,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       bottomRight: Radius.circular(40),
@@ -812,7 +811,7 @@ class _ViewClassState extends State<ViewClass> {
 class StrikeThrough extends StatelessWidget {
   final Widget _child;
 
-  const StrikeThrough({Key key, @required Widget child}) : _child = child, super(key: key);
+  const StrikeThrough({Key? key, required Widget child}) : _child = child, super(key: key);
 
   @override
   Widget build(BuildContext context) {

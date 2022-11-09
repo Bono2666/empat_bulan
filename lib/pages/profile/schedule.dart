@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 
 class Schedule extends StatefulWidget {
-  const Schedule({Key key}) : super(key: key);
+  const Schedule({Key? key}) : super(key: key);
 
   @override
   State<Schedule> createState() => _ScheduleState();
@@ -17,10 +16,10 @@ class Schedule extends StatefulWidget {
 
 class _ScheduleState extends State<Schedule> {
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
+  late DateTime _selectedDay;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  List dbSchedule;
-  String _time, _title = '';
+  late List dbSchedule;
+  late String _time, _title = '';
   int isDone = 0;
 
   Future getSchedule() async {
@@ -103,7 +102,7 @@ class _ScheduleState extends State<Schedule> {
                       ),
                       weekendTextStyle: TextStyle(
                         fontSize: 12.0.sp,
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                       selectedTextStyle: TextStyle(
                         fontSize: 12.0.sp,
@@ -112,7 +111,7 @@ class _ScheduleState extends State<Schedule> {
                       outsideDaysVisible: false,
                       todayDecoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                       selectedDecoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -124,7 +123,7 @@ class _ScheduleState extends State<Schedule> {
                       leftChevronVisible: false,
                       rightChevronVisible: false,
                       titleTextStyle: TextStyle(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         fontSize: 14.0.sp,
                         fontWeight: FontWeight.w500,
                       ),
@@ -166,7 +165,7 @@ class _ScheduleState extends State<Schedule> {
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.done) {
-                        dbSchedule = snapshot.data;
+                        dbSchedule = snapshot.data as List;
                       }
                       return SizedBox(
                         child: ListView.builder(

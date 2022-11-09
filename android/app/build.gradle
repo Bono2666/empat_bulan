@@ -33,7 +33,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -63,6 +63,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'com.empatbulan.empat_bulan'
 }
 
 flutter {

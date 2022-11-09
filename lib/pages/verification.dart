@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class Verification extends StatefulWidget {
-  const Verification({Key key}) : super(key: key);
+  const Verification({Key? key}) : super(key: key);
 
   @override
   State<Verification> createState() => _VerificationState();
@@ -30,7 +29,6 @@ class _VerificationState extends State<Verification> {
         await auth.signInWithCredential(creds).then((value) {
           prefs.setIsSignIn(true);
           addUser();
-          Navigator.pushReplacementNamed(context, prefs.getGoRoute);
         });
       },
       verificationFailed: (e) {},
@@ -49,6 +47,8 @@ class _VerificationState extends State<Verification> {
       'isoCode': prefs.getIsoCode,
       'dialCode': prefs.getDialCode,
     });
+    // ignore: use_build_context_synchronously
+    await Navigator.pushReplacementNamed(context, prefs.getGoRoute);
   }
 
   @override
@@ -118,11 +118,14 @@ class _VerificationState extends State<Verification> {
                               ),
                             ),
                             SizedBox(width: 1.0.w,),
-                            Text(
-                              'Kode OTP tidak valid',
-                              style: TextStyle(
-                                color: Theme.of(context).errorColor,
-                                fontSize: 10.0.sp,
+                            Padding(
+                              padding: EdgeInsets.only(top: 1.0.w,),
+                              child: Text(
+                                'Kode OTP tidak valid',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                  fontSize: 10.0.sp,
+                                ),
                               ),
                             ),
                           ],
@@ -139,7 +142,6 @@ class _VerificationState extends State<Verification> {
                                     .then((value) {
                                   prefs.setIsSignIn(true);
                                   addUser();
-                                  Navigator.pushReplacementNamed(context, prefs.getGoRoute);
                                 });
                               },
                               verificationFailed: (e) {
@@ -147,6 +149,7 @@ class _VerificationState extends State<Verification> {
                               },
                               codeSent: (verificationID, resendToken) {
                                 verificationIDReceived = verificationID;
+                                setState(() {});
                               },
                               codeAutoRetrievalTimeout: (verificationID) {},
                             );
@@ -155,7 +158,7 @@ class _VerificationState extends State<Verification> {
                             'Kirim Ulang Kode',
                             style: TextStyle(
                               fontSize: 15.0.sp,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                         ),
@@ -166,7 +169,7 @@ class _VerificationState extends State<Verification> {
                             'Ganti Nomor',
                             style: TextStyle(
                               fontSize: 15.0.sp,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                         ),
@@ -235,7 +238,6 @@ class _VerificationState extends State<Verification> {
                             await auth.signInWithCredential(creds).then((value) {
                               prefs.setIsSignIn(true);
                               addUser();
-                              Navigator.pushReplacementNamed(context, prefs.getGoRoute);
                             }).catchError((onError) {
                               setState(() {
                                 isInvalid = true;

@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
@@ -10,19 +9,20 @@ import 'package:http/http.dart' as http;
 import 'package:empat_bulan/pages/db/contractions_db.dart';
 
 class Contractions extends StatefulWidget {
-  const Contractions({Key key}) : super(key: key);
+  const Contractions({Key? key}) : super(key: key);
 
   @override
   State<Contractions> createState() => _ContractionsState();
 }
 
 class _ContractionsState extends State<Contractions> {
-  List dbNotifications, dbList, dbDay;
+  late List dbNotifications;
+  List? dbList, dbDay;
   String selectedTab = 'catat';
   var dbContractions = ContractionsDb();
-  int lastDay;
+  late int lastDay;
   int selectedIndex = 0;
-  String selectedDay;
+  late String selectedDay;
 
   Future getNotifications() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
@@ -175,7 +175,7 @@ class _ContractionsState extends State<Contractions> {
                                     Container(
                                       height: 32.0.w,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).errorColor,
+                                        color: Theme.of(context).colorScheme.error,
                                         borderRadius: const BorderRadius.all(Radius.circular(12)),
                                         boxShadow: [
                                           BoxShadow(
@@ -238,7 +238,7 @@ class _ContractionsState extends State<Contractions> {
                                           border: Border.all(
                                             width: 1.0,
                                             style: BorderStyle.solid,
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                           ),
                                           borderRadius: const BorderRadius.all(Radius.circular(100)),
                                         ),
@@ -323,9 +323,9 @@ class _ContractionsState extends State<Contractions> {
                                     );
                                   }
                                   if (snapshot.connectionState == ConnectionState.done) {
-                                    dbList = snapshot.data;
+                                    dbList = snapshot.data as List?;
                                   }
-                                  return dbList.isNotEmpty ? Column(
+                                  return dbList!.isNotEmpty ? Column(
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 3.0.w,),
@@ -365,7 +365,7 @@ class _ContractionsState extends State<Contractions> {
                                       SizedBox(
                                         child: ListView.builder(
                                           shrinkWrap: true,
-                                          itemCount: dbList.length,
+                                          itemCount: dbList!.length,
                                           physics: const NeverScrollableScrollPhysics(),
                                           padding: const EdgeInsets.only(top: 0),
                                           itemBuilder: (context, index) {
@@ -386,7 +386,7 @@ class _ContractionsState extends State<Contractions> {
                                                         SizedBox(
                                                           width: 40.0.w,
                                                           child: Text(
-                                                            dbList[index]['start'],
+                                                            dbList![index]['start'],
                                                             style: TextStyle(
                                                               color: Colors.black,
                                                               fontSize: 12.0.sp,
@@ -396,7 +396,7 @@ class _ContractionsState extends State<Contractions> {
                                                         SizedBox(
                                                           width: 22.4.w,
                                                           child: Text(
-                                                            dbList[index]['duration'],
+                                                            dbList![index]['duration'],
                                                             style: TextStyle(
                                                               color: Colors.black,
                                                               fontSize: 12.0.sp,
@@ -404,7 +404,7 @@ class _ContractionsState extends State<Contractions> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          dbList[index]['interval'],
+                                                          dbList![index]['interval'],
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 12.0.sp,
@@ -470,12 +470,12 @@ class _ContractionsState extends State<Contractions> {
                                     );
                                   }
                                   if (snapshot.connectionState == ConnectionState.done) {
-                                    dbDay = snapshot.data;
-                                    if (dbDay.isNotEmpty) {
-                                      selectedDay = dbDay[selectedIndex]['contractionDay'].substring(0, 11);
+                                    dbDay = snapshot.data as List?;
+                                    if (dbDay!.isNotEmpty) {
+                                      selectedDay = dbDay![selectedIndex]['contractionDay'].substring(0, 11);
                                     }
                                   }
-                                  return dbDay.isNotEmpty ? Column(
+                                  return dbDay!.isNotEmpty ? Column(
                                     children: [
                                       SizedBox(height: 2.0.h,),
                                       SizedBox(
@@ -483,7 +483,7 @@ class _ContractionsState extends State<Contractions> {
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           shrinkWrap: true,
-                                          itemCount: dbDay.length,
+                                          itemCount: dbDay!.length,
                                           physics: const BouncingScrollPhysics(),
                                           padding: const EdgeInsets.only(top: 0),
                                           itemBuilder: (context, index) {
@@ -491,7 +491,7 @@ class _ContractionsState extends State<Contractions> {
                                               onTap: () {
                                                 setState(() {
                                                   selectedIndex = index;
-                                                  selectedDay = dbDay[index]['contractionDay'];
+                                                  selectedDay = dbDay![index]['contractionDay'];
                                                 });
                                               },
                                               child: Row(
@@ -501,15 +501,15 @@ class _ContractionsState extends State<Contractions> {
                                                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                                                         border: Border.all(
                                                             color: selectedIndex == index
-                                                                ? Colors.transparent : Theme.of(context).backgroundColor
+                                                                ? Colors.transparent : Theme.of(context).colorScheme.background
                                                         ),
                                                         color: selectedIndex == index
-                                                            ? Theme.of(context).backgroundColor : Colors.transparent
+                                                            ? Theme.of(context).colorScheme.background : Colors.transparent
                                                     ),
                                                     child: Padding(
                                                       padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
                                                       child: Text(
-                                                        dbDay[index]['contractionDay'].toString().substring(0, 6),
+                                                        dbDay![index]['contractionDay'].toString().substring(0, 6),
                                                         style: TextStyle(
                                                           fontSize: 12.0.sp,
                                                           color: selectedIndex == index
@@ -545,9 +545,9 @@ class _ContractionsState extends State<Contractions> {
                                     );
                                   }
                                   if (snapshot.connectionState == ConnectionState.done) {
-                                    dbList = snapshot.data;
+                                    dbList = snapshot.data as List?;
                                   }
-                                  return dbList.isNotEmpty ? Column(
+                                  return dbList!.isNotEmpty ? Column(
                                     children: [
                                       SizedBox(height: 6.7.h,),
                                       Padding(
@@ -588,7 +588,7 @@ class _ContractionsState extends State<Contractions> {
                                       SizedBox(
                                         child: ListView.builder(
                                           shrinkWrap: true,
-                                          itemCount: dbList.length,
+                                          itemCount: dbList!.length,
                                           physics: const NeverScrollableScrollPhysics(),
                                           padding: const EdgeInsets.only(top: 0),
                                           itemBuilder: (context, index) {
@@ -609,7 +609,7 @@ class _ContractionsState extends State<Contractions> {
                                                         SizedBox(
                                                           width: 40.0.w,
                                                           child: Text(
-                                                            dbList[index]['start'],
+                                                            dbList![index]['start'],
                                                             style: TextStyle(
                                                               color: Colors.black,
                                                               fontSize: 12.0.sp,
@@ -619,7 +619,7 @@ class _ContractionsState extends State<Contractions> {
                                                         SizedBox(
                                                           width: 22.4.w,
                                                           child: Text(
-                                                            dbList[index]['duration'],
+                                                            dbList![index]['duration'],
                                                             style: TextStyle(
                                                               color: Colors.black,
                                                               fontSize: 12.0.sp,
@@ -627,7 +627,7 @@ class _ContractionsState extends State<Contractions> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          dbList[index]['interval'],
+                                                          dbList![index]['interval'],
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 12.0.sp,
@@ -778,7 +778,7 @@ class _ContractionsState extends State<Contractions> {
                                       width: 2.2.w,
                                       height: 2.2.w,
                                       decoration: BoxDecoration(
-                                          color: Theme.of(context).errorColor,
+                                          color: Theme.of(context).colorScheme.error,
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(50),
                                           )
@@ -851,7 +851,7 @@ class _ContractionsState extends State<Contractions> {
 }
 
 class TimeCounter extends StatefulWidget {
-  const TimeCounter({Key key}) : super(key: key);
+  const TimeCounter({Key? key}) : super(key: key);
 
   @override
   State<TimeCounter> createState() => _TimeCounterState();
@@ -859,18 +859,18 @@ class TimeCounter extends StatefulWidget {
 
 class _TimeCounterState extends State<TimeCounter>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
   int seconds = 0;
   int minutes = 0;
   int hours = 0;
   final f = NumberFormat('00');
   var dbContractions = ContractionsDb();
   bool stop = false;
-  Timer timeCount;
-  DateTime lastContraction;
-  String interval, start;
-  int hr, mn, sc;
+  late Timer timeCount;
+  late DateTime lastContraction;
+  late String interval, start;
+  late int hr, mn, sc;
 
   @override
   void initState() {

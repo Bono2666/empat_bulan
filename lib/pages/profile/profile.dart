@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:io';
 import 'package:empat_bulan/main.dart';
@@ -11,14 +10,14 @@ import 'package:phone_number/phone_number.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key key}) : super(key: key);
+  const Profile({Key? key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  List dbUser, dbNotifications;
+  late List dbUser, dbNotifications;
   RegionInfo region = RegionInfo(
     name: prefs.getIsoCode,
     code: prefs.getIsoCode,
@@ -26,7 +25,7 @@ class _ProfileState extends State<Profile> {
   );
   String phone = '';
   FirebaseAuth auth = FirebaseAuth.instance;
-  File img;
+  late File img;
   final picker = ImagePicker();
 
   Future getUser() async {
@@ -44,7 +43,7 @@ class _ProfileState extends State<Profile> {
       imageQuality: 100,
     );
     setState(() {
-      img = File(picked.path);
+      img = File(picked!.path);
     });
     upload();
   }
@@ -64,6 +63,13 @@ class _ProfileState extends State<Profile> {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
+  }
+
+  Future delAccount() async {
+    var url = 'https://app.empatbulan.com/api/del_account.php';
+    await http.post(Uri.parse(url), body: {
+      'phone' : prefs.getPhone,
+    });
   }
 
   @override
@@ -264,7 +270,7 @@ class _ProfileState extends State<Profile> {
                                                 height: 11.1.w,
                                                 decoration: BoxDecoration(
                                                   borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                  color: Theme.of(context).backgroundColor,
+                                                  color: Theme.of(context).colorScheme.background,
                                                 ),
                                               ),
                                               SizedBox(
@@ -311,7 +317,7 @@ class _ProfileState extends State<Profile> {
                                                 height: 11.1.w,
                                                 decoration: BoxDecoration(
                                                   borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                  color: Theme.of(context).backgroundColor,
+                                                  color: Theme.of(context).colorScheme.background,
                                                 ),
                                               ),
                                               SizedBox(
@@ -357,7 +363,7 @@ class _ProfileState extends State<Profile> {
                                                 height: 11.1.w,
                                                 decoration: BoxDecoration(
                                                   borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                  color: Theme.of(context).backgroundColor,
+                                                  color: Theme.of(context).colorScheme.background,
                                                 ),
                                               ),
                                               SizedBox(
@@ -677,6 +683,127 @@ class _ProfileState extends State<Profile> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
+                                              'Bunda yakin ingin menghapus akun ini?',
+                                              style: TextStyle(
+                                                fontSize: 13.0.sp,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.7.w,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                prefs.setIsSignIn(false);
+                                                await auth.signOut();
+                                                delAccount();
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                                              },
+                                              child: Container(
+                                                width: 55.6.w,
+                                                height: 20.8.w,
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context).colorScheme.background,
+                                                  borderRadius: const BorderRadius.only(
+                                                    topLeft: Radius.circular(40),
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    'Hapus',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 13.0.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Hapus Akun',
+                                    style: TextStyle(
+                                      fontSize: 13.0.sp,
+                                      color: Theme.of(context).colorScheme.background,
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox(),),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 2.5.h,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2.5.h,),
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40),
+                                      topRight: Radius.circular(40),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  builder: (context) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          child: Container(
+                                            width: 19.0.w,
+                                            height: 14.6.h,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).primaryColor,
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(40),
+                                                bottomRight: Radius.circular(40),
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              alignment: AlignmentDirectional.bottomCenter,
+                                              children: [
+                                                SizedBox(
+                                                  width: 19.0.w,
+                                                  height: 19.0.w,
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 7.0.w,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          onTap: () => Navigator.pop(context),
+                                        ),
+                                        SizedBox(height: 6.7.w,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
                                               'Bunda yakin ingin keluar?',
                                               style: TextStyle(
                                                 fontSize: 13.0.sp,
@@ -700,7 +827,7 @@ class _ProfileState extends State<Profile> {
                                                 width: 55.6.w,
                                                 height: 20.8.w,
                                                 decoration: BoxDecoration(
-                                                  color: Theme.of(context).backgroundColor,
+                                                  color: Theme.of(context).colorScheme.background,
                                                   borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(40),
                                                   ),
@@ -730,7 +857,7 @@ class _ProfileState extends State<Profile> {
                                     'Keluar',
                                     style: TextStyle(
                                       fontSize: 13.0.sp,
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                   ),
                                   const Expanded(child: SizedBox(),),
@@ -848,7 +975,7 @@ class _ProfileState extends State<Profile> {
                                           width: 2.2.w,
                                           height: 2.2.w,
                                           decoration: BoxDecoration(
-                                              color: Theme.of(context).errorColor,
+                                              color: Theme.of(context).colorScheme.error,
                                               borderRadius: const BorderRadius.all(
                                                 Radius.circular(50),
                                               )

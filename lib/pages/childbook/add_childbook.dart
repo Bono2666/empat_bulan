@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
 
 class AddChildBook extends StatefulWidget {
-  const AddChildBook({Key key}) : super(key: key);
+  const AddChildBook({Key? key}) : super(key: key);
 
   @override
   State<AddChildBook> createState() => _AddChildBookState();
@@ -18,15 +17,15 @@ class AddChildBook extends StatefulWidget {
 
 class _AddChildBookState extends State<AddChildBook> {
   final growthDate = TextEditingController();
-  String formattedDate;
-  DateTime pickDate;
+  late String formattedDate;
+  late DateTime pickDate;
   double weight = 3.0;
   double height = 50;
-  List dbChildBook, dbProfile, dbChildMonth;
+  late List dbChildBook, dbProfile, dbChildMonth;
   bool firstLoad = true;
-  int ageMonth;
-  DateTime birthDate;
-  Duration duration;
+  late int ageMonth;
+  late DateTime birthDate;
+  late Duration duration;
 
   Future getAllChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_all_childbook.php?phone=${prefs.getPhone}');
@@ -178,7 +177,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                           width: 1.7.w,
                                           height: 1.7.w,
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                             borderRadius: const BorderRadius.all(Radius.circular(30)),
                                           ),
                                         ),
@@ -205,11 +204,11 @@ class _AddChildBookState extends State<AddChildBook> {
                                             itemStyle: TextStyle(
                                               fontFamily: 'Josefin Sans',
                                               fontSize: 15.0.sp,
-                                              color: Theme.of(context).backgroundColor,
+                                              color: Theme.of(context).colorScheme.background,
                                             ),
                                             doneStyle: TextStyle(
                                               fontFamily: 'Josefin Sans',
-                                              color: Theme.of(context).backgroundColor,
+                                              color: Theme.of(context).colorScheme.background,
                                             ),
                                             cancelStyle: const TextStyle(
                                               fontFamily: 'Josefin Sans',
@@ -251,7 +250,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                           width: 1.7.w,
                                           height: 1.7.w,
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                             borderRadius: const BorderRadius.all(Radius.circular(30)),
                                           ),
                                         ),
@@ -313,7 +312,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                           width: 1.7.w,
                                           height: 1.7.w,
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                             borderRadius: const BorderRadius.all(Radius.circular(30)),
                                           ),
                                         ),

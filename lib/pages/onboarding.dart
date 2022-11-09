@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
@@ -10,17 +9,17 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key key}) : super(key: key);
+  const Onboarding({Key? key}) : super(key: key);
 
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
 
 class _OnboardingState extends State<Onboarding> {
-  List dbOnboarding;
-  PageController pageController = new PageController();
+  late List dbOnboarding;
+  PageController pageController = PageController();
   int currentPage = 0, prevPage = 0;
-  int totRec;
+  late int totRec;
 
   Future getOnboarding() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
@@ -34,7 +33,7 @@ class _OnboardingState extends State<Onboarding> {
 
     totRec = prefs.getTotOnboard;
 
-    Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(const Duration(seconds: 10), (timer) {
       prevPage = currentPage;
 
       if (totRec != null) {
@@ -47,7 +46,7 @@ class _OnboardingState extends State<Onboarding> {
 
       pageController.animateToPage(
         currentPage,
-        duration: Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 400),
         curve: Curves.easeInSine,
       );
     });
@@ -69,7 +68,7 @@ class _OnboardingState extends State<Onboarding> {
             children: [
               Container(
                 height: 86.0.h,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(58),
@@ -81,11 +80,10 @@ class _OnboardingState extends State<Onboarding> {
                 future: getOnboarding(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                    return
-                      SizedBox(
+                    return SizedBox(
                           width: 100.0.w,
                           height: 86.0.h,
-                          child: Center(
+                          child: const Center(
                               child: SpinKitDoubleBounce(
                                 color: Colors.white,
                               )
@@ -102,12 +100,12 @@ class _OnboardingState extends State<Onboarding> {
                         width: 100.0.w,
                         height: 86.0.h,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomRight: Radius.circular(58),
                             bottomLeft: Radius.circular(58),
                           ),
                           child: PageView.builder(
-                            itemCount: dbOnboarding?.length,
+                            itemCount: dbOnboarding.length,
                             controller: pageController,
                             onPageChanged: (index) {
                               setState(() {
@@ -123,29 +121,29 @@ class _OnboardingState extends State<Onboarding> {
                       Column(
                         children: [
                           SizedBox(height: 18.0.h,),
-                          Container(
+                          SizedBox(
                             width: 20.0.w,
                             height: 37.5.w,
                             child: Image.asset(
                               'images/logo_magenta.png',
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fit: BoxFit.cover,
                             ),
                           ),
                           SizedBox(height: 5.0.h,),
                           AnimatedCrossFade(
                             crossFadeState: CrossFadeState.showSecond,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             firstChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.0.w),
                               child: Html(
                                 data: dbOnboarding[currentPage]['title'],
                                 style: {
                                   'body': Style(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: FontSize(24.0.sp),
                                     fontWeight: FontWeight.w600,
-                                    padding: EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
                                     textAlign: TextAlign.center,
                                     letterSpacing: 0.5,
                                   ),
@@ -158,10 +156,10 @@ class _OnboardingState extends State<Onboarding> {
                                 data: dbOnboarding[currentPage]['title'],
                                 style: {
                                   'body': Style(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: FontSize(24.0.sp),
                                     fontWeight: FontWeight.w600,
-                                    padding: EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
                                     textAlign: TextAlign.center,
                                     letterSpacing: 0.5,
                                   ),
@@ -174,17 +172,17 @@ class _OnboardingState extends State<Onboarding> {
                           SizedBox(height: 1.0.h,),
                           AnimatedCrossFade(
                             crossFadeState: CrossFadeState.showSecond,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             firstChild: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14.0.w),
                               child: Html(
                                 data: dbOnboarding[currentPage]['description'],
                                 style: {
                                   'body': Style(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: FontSize(10.0.sp),
                                     fontWeight: FontWeight.w400,
-                                    padding: EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
                                     textAlign: TextAlign.center,
                                     // letterSpacing: 1,
                                   ),
@@ -197,10 +195,10 @@ class _OnboardingState extends State<Onboarding> {
                                 data: dbOnboarding[currentPage]['description'],
                                 style: {
                                   'body': Style(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: FontSize(10.0.sp),
                                     fontWeight: FontWeight.w400,
-                                    padding: EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
                                     textAlign: TextAlign.center,
                                     // letterSpacing: 1,
                                   ),
@@ -223,7 +221,7 @@ class _OnboardingState extends State<Onboarding> {
                             dotWidth: 1.5.w,
                             spacing: 3.0.w,
                             dotColor: Theme.of(context).primaryColor,
-                            activeDotColor: Theme.of(context).backgroundColor,
+                            activeDotColor: Theme.of(context).colorScheme.background,
                           ),
                         ),
                       ),
@@ -237,7 +235,7 @@ class _OnboardingState extends State<Onboarding> {
             onTap: () {
               Navigator.pushReplacementNamed(context, '/home');
             },
-            child: Container(
+            child: SizedBox(
               height: 14.0.h,
               child: Center(
                 child: Text(
@@ -262,14 +260,14 @@ class _OnboardingState extends State<Onboarding> {
 class SlideItem extends StatelessWidget {
   String imageUrl = '';
 
-  SlideItem({this.imageUrl});
+  SlideItem({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
       imageUrl,
       fit: BoxFit.cover,
-      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
         if (loadingProgress == null) return child;
         return Stack(
           alignment: AlignmentDirectional.bottomCenter,

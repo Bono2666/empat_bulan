@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +6,17 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key key}) : super(key: key);
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-  var name = TextEditingController();
   String phone = '', isoCode = 'ID', dialCode = '+62';
-  bool isNameError = false;
   bool isPhoneError = false;
+  bool is17 = false;
+  bool is17Error = false;
 
   @override
   Widget build(BuildContext context) => KeyboardDismisser(
@@ -63,7 +62,7 @@ class _RegisterState extends State<Register> {
                         width: 1.7.w,
                         height: 1.7.w,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                           borderRadius: const BorderRadius.all(Radius.circular(30)),
                         ),
                       ),
@@ -72,9 +71,9 @@ class _RegisterState extends State<Register> {
                   SizedBox(height: 1.3.h,),
                   InternationalPhoneNumberInput(
                     onInputChanged: (value) {
-                      phone = value.phoneNumber;
-                      isoCode = value.isoCode;
-                      dialCode = value.dialCode;
+                      phone = value.phoneNumber!;
+                      isoCode = value.isoCode!;
+                      dialCode = value.dialCode!;
                       if (isPhoneError) {
                         setState(() {
                           isPhoneError = false;
@@ -115,17 +114,78 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                       SizedBox(width: 1.0.w,),
-                      Text(
-                        'Nomor Ponsel minimal harus memiliki 9 angka',
-                        style: TextStyle(
-                          color: Theme.of(context).errorColor,
-                          fontSize: 10.0.sp,
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.0.w),
+                        child: Text(
+                          'Nomor Ponsel minimal harus memiliki 9 angka',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                            fontSize: 10.0.sp,
+                          ),
                         ),
                       ),
                     ],
                   )
                       : Container(),
                   SizedBox(height: 3.2.h,),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (is17) {
+                              is17 = false;
+                            } else {
+                              is17 = true;
+                            }
+                            is17Error = false;
+                          });
+                        },
+                        child: Image.asset(
+                          is17 ? 'images/ic_picked.png' : 'images/ic_unpicked.png',
+                          height: 5.6.w,
+                        ),
+                      ),
+                      SizedBox(width: 2.2.w,),
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.0.w),
+                        child: Text(
+                          'Saya berusia 17 tahun ke atas',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10.0.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  is17Error ? SizedBox(height: 1.0.h,) : Container(),
+                  is17Error
+                      ? Row(
+                    children: [
+                      SizedBox(
+                        width: 4.0.w,
+                        height: 4.0.w,
+                        child: Image.asset(
+                          'images/ic_error.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 1.0.w,),
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.0.w),
+                        child: Text(
+                          'Usia anda harus di atas 17 tahun',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                            fontSize: 10.0.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                      : Container(),
+                  SizedBox(height: 1.9.h,),
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
@@ -143,7 +203,7 @@ class _RegisterState extends State<Register> {
                         TextSpan(
                           text: 'Aturan Penggunaan',
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                           ),
                           recognizer: TapGestureRecognizer()..onTap = () {
                             Navigator.pushNamed(context, '/rules');
@@ -158,7 +218,7 @@ class _RegisterState extends State<Register> {
                         TextSpan(
                           text: 'Kebijakan Privasi',
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                           ),
                           recognizer: TapGestureRecognizer()..onTap = () {
                             Navigator.pushNamed(context, '/privacy');
@@ -216,10 +276,13 @@ class _RegisterState extends State<Register> {
                     onTap: () {
                       if (phone.length < 12) {
                         setState(() {
-                          if (phone.length < 12) isPhoneError = true;
+                          isPhoneError = true;
+                        });
+                      } else if (!is17) {
+                        setState(() {
+                          is17Error = true;
                         });
                       } else {
-                        prefs.setName(name.text);
                         prefs.setIsoCode(isoCode);
                         prefs.setDialCode(dialCode);
                         prefs.setPhone(phone);

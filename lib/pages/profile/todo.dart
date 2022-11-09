@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class ToDo extends StatefulWidget {
-  const ToDo({Key key}) : super(key: key);
+  const ToDo({Key? key}) : super(key: key);
 
   @override
   State<ToDo> createState() => _ToDoState();
 }
 
 class _ToDoState extends State<ToDo> {
-  List dbTodo;
+  late List dbTodo;
   String _id = '';
   int isDone = 0;
 
@@ -75,7 +74,7 @@ class _ToDoState extends State<ToDo> {
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.done) {
-                        dbTodo = snapshot.data;
+                        dbTodo = snapshot.data as List;
                       }
                       return dbTodo.isNotEmpty
                           ? SizedBox(
@@ -176,7 +175,7 @@ class _ToDoState extends State<ToDo> {
                           Text(
                             "Buat 'to do list' pertama Bunda",
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontWeight: FontWeight.w700,
                               fontSize: 12.0.sp,
                             ),

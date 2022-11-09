@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +9,7 @@ import '../../main.dart';
 import 'package:email_validator/email_validator.dart';
 
 class UpdProfile extends StatefulWidget {
-  const UpdProfile({Key key}) : super(key: key);
+  const UpdProfile({Key? key}) : super(key: key);
 
   @override
   State<UpdProfile> createState() => _UpdProfileState();
@@ -20,14 +19,14 @@ class _UpdProfileState extends State<UpdProfile> {
   final _name = TextEditingController();
   final _phone = TextEditingController();
   final _email = TextEditingController();
-  List dbProfile;
+  late List dbProfile;
   bool isInvalid = false;
   bool firstLoad = true;
   bool emailOk = true;
   FirebaseAuth auth = FirebaseAuth.instance;
-  User user;
-  Timer timer;
-  int _verified;
+  late User user;
+  late Timer timer;
+  late int _verified;
 
   Future getProfile() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
@@ -174,7 +173,7 @@ class _UpdProfileState extends State<UpdProfile> {
                           Text(
                             'Alamat email tidak benar',
                             style: TextStyle(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).colorScheme.error,
                               fontSize: 10.0.sp,
                             ),
                           ),
@@ -200,7 +199,7 @@ class _UpdProfileState extends State<UpdProfile> {
                                 Text(
                                   'Email belum diverifikasi',
                                   style: TextStyle(
-                                    color: Theme.of(context).errorColor,
+                                    color: Theme.of(context).colorScheme.error,
                                     fontSize: 10.0.sp,
                                   ),
                                 ),
@@ -228,7 +227,7 @@ class _UpdProfileState extends State<UpdProfile> {
                                 Text(
                                   'Email terverifikasi.',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: 10.0.sp,
                                   ),
                                 ),
@@ -253,7 +252,7 @@ class _UpdProfileState extends State<UpdProfile> {
                                       auth.createUserWithEmailAndPassword(email: _email
                                           .text, password: '123456').then((value) {
                                         updProfile();
-                                        user = auth.currentUser;
+                                        user = auth.currentUser!;
                                         user.sendEmailVerification();
                                         timer = Timer.periodic(
                                             const Duration(seconds: 5), (timer) {
@@ -262,14 +261,14 @@ class _UpdProfileState extends State<UpdProfile> {
                                       });
                                     }
 
-                                    if (auth.currentUser.uid != null) {
+                                    // if (auth.currentUser!.uid != null) {
                                       auth.signOut();
                                       updProfile();
                                       _verified = 1;
                                       updVerified();
                                       // ignore: use_build_context_synchronously
                                       await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const UpdProfile(),));
-                                    }
+                                    // }
                                   } else {
                                     setState(() {
                                       isInvalid = true;
@@ -282,7 +281,7 @@ class _UpdProfileState extends State<UpdProfile> {
                                 'Verifikasi Email',
                                 style: TextStyle(
                                   fontSize: 15.0.sp,
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                 ),
                               ),
                             ),
@@ -360,7 +359,7 @@ class _UpdProfileState extends State<UpdProfile> {
                           auth.createUserWithEmailAndPassword(email: _email
                               .text, password: '123456').then((value) {
                             updProfile();
-                            user = auth.currentUser;
+                            user = auth.currentUser!;
                             user.sendEmailVerification();
                             timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
                               checkEmailVerified();
@@ -370,14 +369,14 @@ class _UpdProfileState extends State<UpdProfile> {
                           });
                         }
 
-                        if (auth.currentUser.uid != null) {
+                        // if (auth.currentUser!.uid != null) {
                           auth.signOut();
                           updProfile();
                           _verified = 1;
                           updVerified();
                           // ignore: use_build_context_synchronously
                           await Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => true);
-                        }
+                        // }
                       } else {
                         if (_email.text == '') {
                           updProfile();

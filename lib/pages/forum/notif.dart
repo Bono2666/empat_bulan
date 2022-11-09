@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Notifications extends StatefulWidget {
-  const Notifications({Key key}) : super(key: key);
+  const Notifications({Key? key}) : super(key: key);
 
   @override
   State<Notifications> createState() => _NotificationsState();
 }
 
 class _NotificationsState extends State<Notifications> {
-  List dbNotifications;
+  late List dbNotifications;
 
   Future getNotifications() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
@@ -190,7 +189,7 @@ class _NotificationsState extends State<Notifications> {
                         Text(
                           "Tidak ada notifikasi saat ini",
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                             fontWeight: FontWeight.w700,
                             fontSize: 12.0.sp,
                           ),

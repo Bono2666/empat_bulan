@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import '../../main.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewQuestions extends StatefulWidget {
-  const NewQuestions({Key key}) : super(key: key);
+  const NewQuestions({Key? key}) : super(key: key);
 
   @override
   State<NewQuestions> createState() => _NewQuestionsState();
@@ -21,8 +20,11 @@ class _NewQuestionsState extends State<NewQuestions> {
   String title = '';
   var questions = TextEditingController();
   final picker = ImagePicker();
-  File img;
-  List dbNotifications;
+  File? img;
+  late List dbNotifications;
+  bool isError = false;
+  bool isSensitive = false;
+  int sensitif = 0;
 
   Future pickImg() async {
     var picked = await picker.pickImage(
@@ -32,7 +34,7 @@ class _NewQuestionsState extends State<NewQuestions> {
       imageQuality: 50,
     );
     setState(() {
-      img = File(picked.path);
+      img = File(picked!.path);
     });
   }
 
@@ -42,9 +44,10 @@ class _NewQuestionsState extends State<NewQuestions> {
     req.fields['phone'] = prefs.getPhone;
     req.fields['title'] = title;
     req.fields['description'] = questions.text;
+    req.fields['sensitif'] = sensitif.toString();
     req.fields['date'] = DateFormat('d MMM yyyy HH:mm', 'id_ID').format(DateTime.now());
     if (img != null) {
-      var pic = await http.MultipartFile.fromPath('image', img.path);
+      var pic = await http.MultipartFile.fromPath('image', img!.path);
       req.files.add(pic);
     }
     var response = await req.send();
@@ -120,21 +123,58 @@ class _NewQuestionsState extends State<NewQuestions> {
                                   height: 3.3.w,
                                 ),
                                 SizedBox(width: 1.4.w,),
-                                Text(
-                                  'Tanyakan persoalan Anda di forum',
-                                  style: TextStyle(
-                                    fontSize: 10.0.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
+                                Padding(
+                                  padding: EdgeInsets.only(top: 1.0.w,),
+                                  child: Text(
+                                    'Tanyakan persoalan Anda di forum',
+                                    style: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ],
+                            ),
+                            SizedBox(height: 3.8.h,),
+                            Visibility(
+                              visible: isError ? true : false,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 5.2.w,
+                                    height: 5.2.w,
+                                    child: Image.asset(
+                                      'images/ic_error.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(width: 2.0.w,),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 1.0.w),
+                                      child: Text(
+                                        'Bunda belum melengkapi Judul Pertanyaan dan Persoalan Bunda, mohon dilengkapi ya...',
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.error,
+                                          fontSize: 10.0.sp,
+                                          height: 1.4,
+                                        ),
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(height: 4.4.h,),
                             TextField(
                               onChanged: (String str) {
                                 setState(() {
                                   title = str;
+                                  if (isError) {
+                                    isError = false;
+                                  }
                                 });
                               },
                               cursorColor: Colors.black,
@@ -169,6 +209,13 @@ class _NewQuestionsState extends State<NewQuestions> {
                                 fontSize: 13.0.sp,
                                 height: 1.5,
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  if (isError) {
+                                    isError = false;
+                                  }
+                                });
+                              },
                             ),
                             SizedBox(height: 4.4.w,),
                             img != null
@@ -184,7 +231,7 @@ class _NewQuestionsState extends State<NewQuestions> {
                                   ),
                                 ),
                                 child: Image.file(
-                                  img,
+                                  img!,
                                   height: 46.7.w,
                                   width: 86.7.w,
                                   fit: BoxFit.cover,
@@ -192,6 +239,55 @@ class _NewQuestionsState extends State<NewQuestions> {
                               ),
                             )
                                 : Container(),
+                            img != null ? SizedBox(height: 3.8.h,) : Container(),
+                            img != null ? Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (isSensitive) {
+                                        isSensitive = false;
+                                        sensitif = 0;
+                                      } else {
+                                        isSensitive = true;
+                                        sensitif = 1;
+                                      }
+                                    });
+                                  },
+                                  child: Image.asset(
+                                    isSensitive ? 'images/ic_picked.png' : 'images/ic_unpicked.png',
+                                    height: 5.6.w,
+                                  ),
+                                ),
+                                SizedBox(width: 2.2.w,),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 1.0.w),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(
+                                        fontSize: 10.0.sp,
+                                        fontFamily: 'Josefin Sans',
+                                      ),
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Tandai sebagai ',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'Konten-Sensitif',
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.background,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ) : Container(),
                             SizedBox(height: 25.6.h,),
                           ],
                         ),
@@ -277,7 +373,13 @@ class _NewQuestionsState extends State<NewQuestions> {
                         ),
                         InkWell(
                           onTap: () {
-                            addQuestion();
+                            if (title != '' && questions.text != '') {
+                              addQuestion();
+                            } else {
+                              setState(() {
+                                isError = true;
+                              });
+                            }
                           },
                           child: Stack(
                             alignment: AlignmentDirectional.centerEnd,
@@ -313,7 +415,7 @@ class _NewQuestionsState extends State<NewQuestions> {
                               width: 48.9.w,
                               height: 20.8.w,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   bottomRight: Radius.circular(40),
@@ -389,7 +491,7 @@ class _NewQuestionsState extends State<NewQuestions> {
                                       width: 2.2.w,
                                       height: 2.2.w,
                                       decoration: BoxDecoration(
-                                          color: Theme.of(context).errorColor,
+                                          color: Theme.of(context).colorScheme.error,
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(50),
                                           )

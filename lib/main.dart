@@ -1,5 +1,5 @@
-// @dart=2.9
 import 'dart:convert';
+import 'dart:ui';
 import 'package:empat_bulan/pages/childbook/add_childbook.dart';
 import 'package:empat_bulan/pages/childbook/child_chart.dart';
 import 'package:empat_bulan/pages/childbook/child_profile.dart';
@@ -49,14 +49,14 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  List dbOnboarding;
+  late List dbOnboarding;
 
   Future getOnboarding() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_onboarding.php');
@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           dbOnboarding = snapshot.data as List;
-          prefs.setTotOnboard(dbOnboarding?.length);
+          prefs.setTotOnboard(dbOnboarding.length);
         }
         return Sizer(
           builder: (context, orientation, deviceType) {
@@ -87,11 +87,7 @@ class _MyAppState extends State<MyApp> {
               title: 'EmpatBulan',
               theme: ThemeData(
                 fontFamily: 'Josefin Sans',
-                colorScheme: ColorScheme.fromSwatch().copyWith(
-                  secondary: const Color(0xffC09AC7),
-                ),
                 primaryColor: const Color(0xffC09AC7),
-                backgroundColor: const Color(0xffA34C88),
                 primaryColorDark: const Color(0xff484848),
                 primaryColorLight: const Color(0xffF2F2F2),
                 shadowColor: const Color(0x32000000),
@@ -99,7 +95,6 @@ class _MyAppState extends State<MyApp> {
                 unselectedWidgetColor: const Color(0xff757575),
                 dividerColor: const Color(0xffD1D3D4),
                 hintColor: const Color(0xffCDCDCD),
-                errorColor: const Color(0xffE4572E),
                 toggleableActiveColor: const Color(0x38000000),
                 bottomAppBarColor: const Color(0xff5299D3),
                 indicatorColor: const Color(0xffFCB800),
@@ -127,7 +122,9 @@ class _MyAppState extends State<MyApp> {
                   cursorColor: Color(0xff9B9B9B),
                   selectionColor: Color(0xffC09AC7),
                   selectionHandleColor: Color(0xffA34C88),
-                ),
+                ), colorScheme: ColorScheme.fromSwatch().copyWith(
+                  secondary: const Color(0xffC09AC7),
+                ).copyWith(background: const Color(0xffA34C88)).copyWith(error: const Color(0xffE4572E)),
               ),
 
               initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
@@ -285,7 +282,7 @@ class SharedPrefs {
 class SlideUpRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideUpRoute({this.page})
+  SlideUpRoute({required this.page})
       : super(
             transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
@@ -311,7 +308,7 @@ class SlideUpRoute extends PageRouteBuilder {
 class SlideLeftRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideLeftRoute({this.page})
+  SlideLeftRoute({required this.page})
       : super(
             transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
@@ -337,7 +334,7 @@ class SlideLeftRoute extends PageRouteBuilder {
 class SlideDownRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideDownRoute({this.page})
+  SlideDownRoute({required this.page})
       : super(
             transitionDuration: const Duration(seconds: 1),
             transitionsBuilder: (BuildContext context,
@@ -359,3 +356,119 @@ class SlideDownRoute extends PageRouteBuilder {
               return page;
             });
 }
+
+class Blur extends StatefulWidget {
+  const Blur({Key? key}) : super(key: key);
+
+  @override
+  State<Blur> createState() => _BlurState();
+}
+
+class _BlurState extends State<Blur> {
+  bool open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return open
+        ? Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 2.4.w, top: 2.4.w,),
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                open = false;
+              });
+            },
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                  width: 11.1.w,
+                  height: 11.1.w,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                SizedBox(
+                  width: 5.6.w,
+                  child: FittedBox(
+                    child: Image.asset(
+                      'images/ic_sensitive.png',
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    )
+        : BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: 10,
+        sigmaY: 10,
+      ),
+      child: Container(
+        color: Theme.of(context).colorScheme.background.withOpacity(0.8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 8.0.w,
+              child: FittedBox(
+                child: Image.asset(
+                  'images/ic_sensitive.png',
+                ),
+              ),
+            ),
+            SizedBox(height: 2.4.w,),
+            const Text(
+              'Konten-Sensitif',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 2.4.w,),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  open = true;
+                });
+              },
+              child: Container(
+                width: 28.0.w,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.4.w,),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(height: 2.4.w,),
+                      const Text(
+                        'Lihat',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 2.4.w,),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

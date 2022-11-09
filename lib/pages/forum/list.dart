@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class QuestionsList extends StatefulWidget {
-  const QuestionsList({Key key}) : super(key: key);
+  const QuestionsList({Key? key}) : super(key: key);
 
   @override
   State<QuestionsList> createState() => _QuestionsListState();
 }
 
 class _QuestionsListState extends State<QuestionsList> {
-  List dbQuestions, dbReply;
+  late List dbQuestions, dbReply;
 
   Future getQuestion() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_questions.php?phone=${prefs.getPhone}');
@@ -273,7 +272,7 @@ class _QuestionsListState extends State<QuestionsList> {
                         Text(
                           "Buat pertanyaan pertama Bunda",
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                             fontWeight: FontWeight.w700,
                             fontSize: 12.0.sp,
                           ),

@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -9,14 +8,14 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class Privacy extends StatefulWidget {
-  const Privacy({Key key}) : super(key: key);
+  const Privacy({Key? key}) : super(key: key);
 
   @override
   State<Privacy> createState() => _PrivacyState();
 }
 
 class _PrivacyState extends State<Privacy> {
-  List dbPrivacy;
+  late List dbPrivacy;
 
   Future getPrivacy() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_privacy.php');
@@ -86,12 +85,12 @@ class _PrivacyState extends State<Privacy> {
                           ),
                           'h1': Style(
                             color:
-                            Theme.of(context).backgroundColor,
+                            Theme.of(context).colorScheme.background,
                             fontSize: FontSize.rem(1.5),
                             lineHeight: LineHeight.rem(1),
                           ),
                           'h2': Style(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                             lineHeight: LineHeight.rem(1),
                           ),
                           'h3': Style(
@@ -102,13 +101,13 @@ class _PrivacyState extends State<Privacy> {
                             padding: const EdgeInsets.only(left: 0),
                           ),
                           'a': Style(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                           ),
                         },
                         onLinkTap: (url, context, attributes,
                             element) async {
                           // ignore: deprecated_member_use
-                          if (await canLaunch(url)) {
+                          if (await canLaunch(url!)) {
                             // ignore: deprecated_member_use
                             await launch(
                               url,

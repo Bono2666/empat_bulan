@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../main.dart';
 
 class Hpl extends StatefulWidget {
-  const Hpl({Key key}) : super(key: key);
+  const Hpl({Key? key}) : super(key: key);
 
   @override
   State<Hpl> createState() => _HplState();
@@ -21,10 +20,10 @@ class _HplState extends State<Hpl> {
   final hplText = TextEditingController();
   final hphtText = TextEditingController();
   final hplResult = TextEditingController();
-  List dbProfile;
+  late List dbProfile;
   bool firstLoad = true;
-  String sextype, basecount, hplStr, hphtStr;
-  DateTime hpl, hpht;
+  late String sextype, basecount, hplStr, hphtStr;
+  late DateTime hpl, hpht;
 
   Future getProfile() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
@@ -150,11 +149,11 @@ class _HplState extends State<Hpl> {
                                     itemStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
                                       fontSize: 15.0.sp,
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     doneStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     cancelStyle: const TextStyle(
                                       fontFamily: 'Josefin Sans',
@@ -202,7 +201,7 @@ class _HplState extends State<Hpl> {
                                       'HPL : Hari Perkiraan Lahir',
                                       style: TextStyle(
                                         fontSize: 10.0.sp,
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
                                   ],
@@ -235,11 +234,11 @@ class _HplState extends State<Hpl> {
                                     itemStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
                                       fontSize: 15.0.sp,
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     doneStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                     cancelStyle: const TextStyle(
                                       fontFamily: 'Josefin Sans',
@@ -302,7 +301,7 @@ class _HplState extends State<Hpl> {
                                       'HPHT : Hari Pertama Haid Terakhir',
                                       style: TextStyle(
                                         fontSize: 10.0.sp,
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
                                   ],
@@ -331,7 +330,7 @@ class _HplState extends State<Hpl> {
                           SizedBox(height: 3.0.h,),
                           Container(
                             height: 10.0.h,
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                             padding: EdgeInsets.symmetric(horizontal: 7.0.w),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

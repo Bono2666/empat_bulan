@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:empat_bulan/main.dart';
@@ -10,19 +9,20 @@ import 'package:http/http.dart' as http;
 import 'package:empat_bulan/pages/db/kick_db.dart';
 
 class KickCounter extends StatefulWidget {
-  const KickCounter({Key key}) : super(key: key);
+  const KickCounter({Key? key}) : super(key: key);
 
   @override
   State<KickCounter> createState() => _KickCounterState();
 }
 
 class _KickCounterState extends State<KickCounter> {
-  List dbNotifications, dbList, dbGroup;
+  late List dbNotifications, dbList;
+  List? dbGroup;
   String selectedTab = 'kick';
   var dbKick = KickDb();
-  int lastDay;
+  late int lastDay;
   int selectedIndex = 0;
-  String selectedDay;
+  late String selectedDay;
 
   Future getNotifications() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
@@ -57,7 +57,7 @@ class _KickCounterState extends State<KickCounter> {
               dbNotifications = snapshot.data as List;
             }
             return FutureBuilder(
-              future: dbKick.list(DateFormat('d MMM yyyy', 'id_ID').format(DateTime.now())),
+              future: dbKick.list(DateFormat('d MMM yyyy HH:mm:ss', 'id_ID').format(DateTime.now()).substring(0, 11)),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                   return
@@ -198,7 +198,7 @@ class _KickCounterState extends State<KickCounter> {
                                               border: Border.all(
                                                 width: 1.0,
                                                 style: BorderStyle.solid,
-                                                color: Theme.of(context).backgroundColor,
+                                                color: Theme.of(context).colorScheme.background,
                                               ),
                                               borderRadius: const BorderRadius.all(Radius.circular(100)),
                                             ),
@@ -474,9 +474,9 @@ class _KickCounterState extends State<KickCounter> {
                                         );
                                       }
                                       if (snapshot.connectionState == ConnectionState.done) {
-                                        dbGroup = snapshot.data;
+                                        dbGroup = snapshot.data as List?;
                                       }
-                                      return dbGroup.isNotEmpty ? Column(
+                                      return dbGroup!.isNotEmpty ? Column(
                                         children: [
                                           SizedBox(height: 6.7.h,),
                                           Padding(
@@ -517,7 +517,7 @@ class _KickCounterState extends State<KickCounter> {
                                           SizedBox(
                                             child: ListView.builder(
                                               shrinkWrap: true,
-                                              itemCount: dbGroup.length,
+                                              itemCount: dbGroup!.length,
                                               physics: const NeverScrollableScrollPhysics(),
                                               padding: const EdgeInsets.only(top: 0),
                                               itemBuilder: (context, index) {
@@ -525,7 +525,7 @@ class _KickCounterState extends State<KickCounter> {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        prefs.setKickDay(dbGroup[index]['kickDay']);
+                                                        prefs.setKickDay(dbGroup![index]['kickDay']);
                                                         Navigator.pushNamed(context, '/kickDetail');
                                                       },
                                                       child: Container(
@@ -543,7 +543,7 @@ class _KickCounterState extends State<KickCounter> {
                                                               SizedBox(
                                                                 width: 27.8.w,
                                                                 child: Text(
-                                                                  dbGroup[index]['kickDay'],
+                                                                  dbGroup![index]['kickDay'],
                                                                   style: TextStyle(
                                                                     color: Colors.black,
                                                                     fontSize: 12.0.sp,
@@ -553,7 +553,7 @@ class _KickCounterState extends State<KickCounter> {
                                                               SizedBox(
                                                                 width: 23.3.w,
                                                                 child: Text(
-                                                                  dbGroup[index]['kickCount'].toString(),
+                                                                  dbGroup![index]['kickCount'] > 10 ? '10' : dbGroup![index]['kickCount'].toString(),
                                                                   style: TextStyle(
                                                                     color: Colors.black,
                                                                     fontSize: 12.0.sp,
@@ -568,7 +568,7 @@ class _KickCounterState extends State<KickCounter> {
                                                                   width: 1.7.w,
                                                                   height: 1.7.w,
                                                                   decoration: BoxDecoration(
-                                                                    color: Color(int.parse(dbGroup[index]['color'])),
+                                                                    color: Color(int.parse(dbGroup![index]['color'])),
                                                                     borderRadius: const BorderRadius.all(Radius.circular(100)),
                                                                   ),
                                                                 ),
@@ -724,7 +724,7 @@ class _KickCounterState extends State<KickCounter> {
                                           width: 2.2.w,
                                           height: 2.2.w,
                                           decoration: BoxDecoration(
-                                              color: Theme.of(context).errorColor,
+                                              color: Theme.of(context).colorScheme.error,
                                               borderRadius: const BorderRadius.all(
                                                 Radius.circular(50),
                                               )
@@ -799,7 +799,7 @@ class _KickCounterState extends State<KickCounter> {
 }
 
 class Kick extends StatefulWidget {
-  const Kick({Key key}) : super(key: key);
+  const Kick({Key? key}) : super(key: key);
 
   @override
   State<Kick> createState() => _KickState();
@@ -807,8 +807,8 @@ class Kick extends StatefulWidget {
 
 class _KickState extends State<Kick>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
   var dbKick = KickDb();
 
   @override
@@ -892,6 +892,7 @@ class _KickState extends State<Kick>
                                         width: 16.7.w,
                                         height: 16.7.w,
                                         decoration: BoxDecoration(
+                                          // ignore: deprecated_member_use
                                           color: Theme.of(context).bottomAppBarColor,
                                           borderRadius: const BorderRadius.all(Radius.circular(100)),
                                         ),
@@ -1010,7 +1011,7 @@ class _KickState extends State<Kick>
                                         width: 16.7.w,
                                         height: 16.7.w,
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).errorColor,
+                                          color: Theme.of(context).colorScheme.error,
                                           borderRadius: const BorderRadius.all(Radius.circular(100)),
                                         ),
                                         child: Center(
