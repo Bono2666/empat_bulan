@@ -67,6 +67,7 @@ class _FeaturesState extends State<Features> {
                               if (!prefs.getIsSignIn) {
                                 Navigator.pushReplacementNamed(context, '/register');
                               } else {
+                                prefs.setBackRoute('/home');
                                 Navigator.pushReplacementNamed(context, '/questionsList');
                               }
                             },

@@ -18,8 +18,15 @@ class Classes extends StatefulWidget {
 }
 
 class _ClassesState extends State<Classes> {
-  late List dbClasses;
+  late List dbClasses, dbPrivate;
   late DateTime classDate;
+  String selectedTab = 'classical';
+
+  Future getPrivate() async {
+    var url = Uri.parse('https://app.empatbulan.com/api/get_private.php');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
 
   Future getClasses() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_classes.php');
@@ -36,7 +43,7 @@ class _ClassesState extends State<Classes> {
           return false;
         },
         child: FutureBuilder(
-          future: getClasses(),
+          future: getPrivate(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
               return Column(
@@ -49,332 +56,584 @@ class _ClassesState extends State<Classes> {
               );
             }
             if (snapshot.connectionState == ConnectionState.done) {
-              dbClasses = snapshot.data as List;
+              dbPrivate = snapshot.data as List;
             }
-            return Stack(
-              children: [
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            return FutureBuilder(
+              future: getClasses(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 6.6.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 19.0.h,),
-                            Text(
-                              'Kelas',
-                              style: TextStyle(
-                                fontSize: 24.0.sp,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: 1.1.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                      SpinKitDoubleBounce(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  dbClasses = snapshot.data as List;
+                }
+                return Stack(
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 6.6.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset(
-                                  'images/ic_classes.png',
-                                  height: 3.3.w,
-                                ),
-                                SizedBox(width: 1.4.w,),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 1.6.w),
-                                  child: Text(
-                                    'Kelas-kelas yang telah terjadwal',
-                                    style: TextStyle(
-                                      fontSize: 10.0.sp,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                SizedBox(height: 19.0.h,),
+                                Text(
+                                  'Layanan',
+                                  style: TextStyle(
+                                    fontSize: 24.0.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
                                   ),
                                 ),
+                                SizedBox(height: 2.5.h,),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedTab = 'classical';
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                            border: Border.all(
+                                                color: selectedTab == 'classical'
+                                                    ? Colors.transparent : Theme.of(context).primaryColor
+                                            ),
+                                            color: selectedTab == 'classical'
+                                                ? Theme.of(context).primaryColor : Colors.transparent
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                          child: Text(
+                                            'Class',
+                                            style: TextStyle(
+                                              fontSize: 12.0.sp,
+                                              color: selectedTab == 'classical'
+                                                  ? Colors.white : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 2.2.w,),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedTab = 'private';
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                            border: Border.all(
+                                                color: selectedTab == 'private'
+                                                    ? Colors.transparent : Theme.of(context).primaryColor
+                                            ),
+                                            color: selectedTab == 'private'
+                                                ? Theme.of(context).primaryColor : Colors.transparent
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                          child: Text(
+                                            'Private',
+                                            style: TextStyle(
+                                              fontSize: 12.0.sp,
+                                              color: selectedTab == 'private'
+                                                  ? Colors.white : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 3.8.h,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_classes.png',
+                                      height: 3.3.w,
+                                    ),
+                                    SizedBox(width: 1.4.w,),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.8.w),
+                                      child: Text(
+                                        selectedTab == 'classical'
+                                            ? 'Kelas-kelas yang telah terjadwal'
+                                            : 'Layanan private yang tersedia',
+                                        style: TextStyle(
+                                          fontSize: 10.0.sp,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.2.h,),
                               ],
                             ),
-                            SizedBox(height: 4.2.h,),
-                          ],
-                        ),
-                      ),
-                      dbClasses.isNotEmpty ? SizedBox(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: dbClasses.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.only(top: 0, left: 6.7.w, right: 6.7.w),
-                          itemBuilder: (context, index) {
-                            classDate = DateTime(
-                                int.parse(dbClasses[index]['date'].substring(0, 4)),
-                                int.parse(dbClasses[index]['date'].substring(5, 7)),
-                                int.parse(dbClasses[index]['date'].substring(8, 10))
-                            );
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 1.0.w),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      classId = int.parse(dbClasses[index]['id']);
-                                      showModalBottomSheet(
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(40),
-                                            topRight: Radius.circular(40),
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                        constraints: BoxConstraints(
-                                          minHeight: 165.0.w,
-                                          maxHeight: 165.0.w,
-                                        ),
-                                        isScrollControlled: true,
-                                        context: context,
-                                        builder: (context) {
-                                          return const ViewClass();
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: 86.6.w,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                          const BorderRadius.all(
-                                            Radius.circular(12),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Theme.of(context)
-                                                  .shadowColor,
-                                              blurRadius: 6.0,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ]),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          dbClasses[index]['image'] == '' ? Container() : ClipRRect(
-                                            borderRadius:
-                                            const BorderRadius.only(
-                                              topLeft: Radius.circular(12),
-                                              topRight: Radius.circular(12),
-                                            ),
-                                            child: Container(
-                                              color: Theme.of(context).primaryColor,
-                                              child: Image.network(
-                                                dbClasses[index]['image'],
-                                                height: 43.1.w,
-                                                width: 86.7.w,
-                                                fit: BoxFit.cover,
-                                                loadingBuilder: (context, child, loadingProgress) {
-                                                  if (loadingProgress == null) {
-                                                    return child;
-                                                  }
-                                                  return SizedBox(
-                                                    height: 43.0.w,
-                                                    child: const Center(
-                                                      child: SpinKitDoubleBounce(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
+                          ),
+                          Visibility(
+                            visible: selectedTab == 'classical' ? true : false,
+                            child: dbClasses.isNotEmpty ? SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: dbClasses.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(top: 0, left: 6.7.w, right: 6.7.w),
+                                itemBuilder: (context, index) {
+                                  classDate = DateTime(
+                                      int.parse(dbClasses[index]['date'].substring(0, 4)),
+                                      int.parse(dbClasses[index]['date'].substring(5, 7)),
+                                      int.parse(dbClasses[index]['date'].substring(8, 10))
+                                  );
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 1.0.w),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            classId = int.parse(dbClasses[index]['id']);
+                                            showModalBottomSheet(
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(40),
+                                                  topRight: Radius.circular(40),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(4.4.w, 5.6.w, 4.4.w, 6.1.w),
+                                              backgroundColor: Colors.white,
+                                              constraints: BoxConstraints(
+                                                minHeight: 165.0.w,
+                                                maxHeight: 165.0.w,
+                                              ),
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return const ViewClass();
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 86.6.w,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                const BorderRadius.all(
+                                                  Radius.circular(12),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Theme.of(context)
+                                                        .shadowColor,
+                                                    blurRadius: 6.0,
+                                                    offset: const Offset(0, 3),
+                                                  ),
+                                                ]),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Stack(
-                                                      alignment: AlignmentDirectional.center,
-                                                      children: [
-                                                        Container(
-                                                          width: 6.7.w,
-                                                          height: 6.7.w,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                                            color: Theme.of(context).primaryColor,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 3.1.w,
-                                                          height: 3.1.w,
-                                                          child: FittedBox(
-                                                            child: Image.asset(
-                                                              'images/ic_book_white.png',
+                                                dbClasses[index]['image'] == '' ? Container() : ClipRRect(
+                                                  borderRadius:
+                                                  const BorderRadius.only(
+                                                    topLeft: Radius.circular(12),
+                                                    topRight: Radius.circular(12),
+                                                  ),
+                                                  child: Container(
+                                                    color: Theme.of(context).primaryColor,
+                                                    child: Image.network(
+                                                      dbClasses[index]['image'],
+                                                      height: 43.1.w,
+                                                      width: 86.7.w,
+                                                      fit: BoxFit.cover,
+                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                        if (loadingProgress == null) {
+                                                          return child;
+                                                        }
+                                                        return SizedBox(
+                                                          height: 43.0.w,
+                                                          child: const Center(
+                                                            child: SpinKitDoubleBounce(
+                                                              color: Colors.white,
                                                             ),
                                                           ),
-                                                        )
-                                                      ],
+                                                        );
+                                                      },
                                                     ),
-                                                    SizedBox(width: 1.4.w,),
-                                                    Column(
-                                                      children: [
-                                                        SizedBox(height: 0.8.w,),
-                                                        Text(
-                                                          dbClasses[index]['title'],
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 10.0.sp,
-                                                            fontWeight: FontWeight.w700,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 2.8.w,),
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '${DateFormat('d MMM yyyy', 'id_ID').format(classDate)} ${dbClasses[index]['time']}',
-                                                      style: TextStyle(
-                                                        color: Theme.of(context).unselectedWidgetColor,
-                                                        fontSize: 8.0.sp,
-                                                      ),
-                                                    ),
-                                                    const Expanded(child: SizedBox()),
-                                                    Text(
-                                                      dbClasses[index]['type'],
-                                                      style: TextStyle(
-                                                        color: Theme.of(context).colorScheme.background,
-                                                        fontSize: 8.0.sp,
-                                                        fontWeight: FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 2.2.w,),
-                                                Text(
-                                                  dbClasses[index]['description'],
-                                                  style: TextStyle(
-                                                    color: Theme.of(context).primaryColorDark,
-                                                    fontSize: 13.0.sp,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  maxLines: 4,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(4.4.w, 5.6.w, 4.4.w, 6.1.w),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Stack(
+                                                            alignment: AlignmentDirectional.center,
+                                                            children: [
+                                                              Container(
+                                                                width: 6.7.w,
+                                                                height: 6.7.w,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                                                  color: Theme.of(context).primaryColor,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 3.1.w,
+                                                                height: 3.1.w,
+                                                                child: FittedBox(
+                                                                  child: Image.asset(
+                                                                    'images/ic_book_white.png',
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          SizedBox(width: 1.4.w,),
+                                                          Column(
+                                                            children: [
+                                                              SizedBox(height: 0.8.w,),
+                                                              Text(
+                                                                dbClasses[index]['title'],
+                                                                style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontSize: 10.0.sp,
+                                                                  fontWeight: FontWeight.w700,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 2.8.w,),
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Text(
+                                                            '${DateFormat('d MMM yyyy', 'id_ID').format(classDate)} ${dbClasses[index]['time']}',
+                                                            style: TextStyle(
+                                                              color: Theme.of(context).unselectedWidgetColor,
+                                                              fontSize: 8.0.sp,
+                                                            ),
+                                                          ),
+                                                          const Expanded(child: SizedBox()),
+                                                          Text(
+                                                            dbClasses[index]['type'],
+                                                            style: TextStyle(
+                                                              color: Theme.of(context).colorScheme.background,
+                                                              fontSize: 8.0.sp,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 2.2.w,),
+                                                      Text(
+                                                        dbClasses[index]['description'],
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).primaryColorDark,
+                                                          fontSize: 13.0.sp,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 4,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
+                                      SizedBox(height: 3.1.h,),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ) : Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'images/no_class.png',
+                                  height: 28.0.w,
+                                ),
+                                SizedBox(height: 3.4.h,),
+                                Text(
+                                  "Tidak ada kelas saat ini",
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.background,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12.0.sp,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 1.3.h,),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 12.4.w),
+                                  child: Text(
+                                    'Coba kembali beberapa waktu ke depan untuk mendapatkan '
+                                        "informasi terbaru kelas-kelas selanjutnya",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10.0.sp,
+                                      height: 1.2,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                SizedBox(height: 3.1.h,),
+                                SizedBox(height: 24.4.h,),
                               ],
-                            );
-                          },
-                        ),
-                      ) : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'images/no_class.png',
-                            height: 28.0.w,
-                          ),
-                          SizedBox(height: 3.4.h,),
-                          Text(
-                            "Tidak ada kelas saat ini",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.background,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.0.sp,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 1.3.h,),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.4.w),
-                            child: Text(
-                              'Coba kembali beberapa waktu ke depan untuk mendapatkan '
-                                  "informasi terbaru kelas-kelas selanjutnya",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10.0.sp,
-                                height: 1.2,
+                          Visibility(
+                            visible: selectedTab == 'private' ? true : false,
+                            child: SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: dbPrivate.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(top: 0, left: 6.7.w, right: 6.7.w),
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 1.0.w),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            classId = int.parse(dbPrivate[index]['id']);
+                                            showModalBottomSheet(
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(40),
+                                                  topRight: Radius.circular(40),
+                                                ),
+                                              ),
+                                              backgroundColor: Colors.white,
+                                              constraints: BoxConstraints(
+                                                minHeight: 165.0.w,
+                                                maxHeight: 165.0.w,
+                                              ),
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return const ViewClass();
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 86.6.w,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                const BorderRadius.all(
+                                                  Radius.circular(12),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Theme.of(context)
+                                                        .shadowColor,
+                                                    blurRadius: 6.0,
+                                                    offset: const Offset(0, 3),
+                                                  ),
+                                                ]),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                dbPrivate[index]['image'] == '' ? Container() : ClipRRect(
+                                                  borderRadius:
+                                                  const BorderRadius.only(
+                                                    topLeft: Radius.circular(12),
+                                                    topRight: Radius.circular(12),
+                                                  ),
+                                                  child: Container(
+                                                    color: Theme.of(context).primaryColor,
+                                                    child: Image.network(
+                                                      dbPrivate[index]['image'],
+                                                      height: 43.1.w,
+                                                      width: 86.7.w,
+                                                      fit: BoxFit.cover,
+                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                        if (loadingProgress == null) {
+                                                          return child;
+                                                        }
+                                                        return SizedBox(
+                                                          height: 43.0.w,
+                                                          child: const Center(
+                                                            child: SpinKitDoubleBounce(
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(4.4.w, 5.6.w, 4.4.w, 6.1.w),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        dbPrivate[index]['type'],
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).colorScheme.background,
+                                                          fontSize: 8.0.sp,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 2.2.w,),
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Stack(
+                                                            alignment: AlignmentDirectional.center,
+                                                            children: [
+                                                              Container(
+                                                                width: 6.7.w,
+                                                                height: 6.7.w,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                                                  color: Theme.of(context).primaryColor,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 3.1.w,
+                                                                height: 3.1.w,
+                                                                child: FittedBox(
+                                                                  child: Image.asset(
+                                                                    'images/ic_book_white.png',
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          SizedBox(width: 1.4.w,),
+                                                          Column(
+                                                            children: [
+                                                              SizedBox(height: 0.8.w,),
+                                                              Text(
+                                                                dbPrivate[index]['title'],
+                                                                style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontSize: 10.0.sp,
+                                                                  fontWeight: FontWeight.w700,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 2.8.w,),
+                                                      Text(
+                                                        dbPrivate[index]['description'],
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).primaryColorDark,
+                                                          fontSize: 13.0.sp,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 4,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.1.h,),
+                                    ],
+                                  );
+                                },
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
-                          SizedBox(height: 24.4.h,),
+                          SizedBox(height: 12.5.h,),
                         ],
                       ),
-                      SizedBox(height: 12.5.h,),
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
+                        Stack(
                           children: [
-                            Container(
-                              height: 4.0.h,
-                              color: Colors.white,
+                            Column(
+                              children: [
+                                Container(
+                                  height: 4.0.h,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  height: 11.0.h,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.white, Colors.white.withOpacity(0.0),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              ],
                             ),
-                            Container(
-                              height: 11.0.h,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.white, Colors.white.withOpacity(0.0),
-                                    ],
-                                  )
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamedAndRemoveUntil(context, '/homeServices', (route) => true);
+                              },
+                              child: Container(
+                                width: 19.0.w,
+                                height: 15.0.h,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomRight: Radius.circular(40),
+                                  ),
+                                ),
+                                child: Stack(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  children: [
+                                    SizedBox(
+                                      width: 19.0.w,
+                                      height: 19.0.w,
+                                      child: Icon(
+                                        Icons.arrow_back_ios_new_rounded,
+                                        color: Colors.white,
+                                        size: 5.2.w,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamedAndRemoveUntil(context, '/homeServices', (route) => true);
-                          },
-                          child: Container(
-                            width: 19.0.w,
-                            height: 15.0.h,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: const BorderRadius.only(
-                                bottomRight: Radius.circular(40),
-                              ),
-                            ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                SizedBox(
-                                  width: 19.0.w,
-                                  height: 19.0.w,
-                                  child: Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    color: Colors.white,
-                                    size: 5.2.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
-                ),
-              ],
+                );
+              },
             );
           },
         ),
@@ -432,11 +691,13 @@ class _ViewClassState extends State<ViewClass> {
         if (snapshot.connectionState == ConnectionState.done) {
           dbSingle = snapshot.data as List;
 
-          classDate = DateTime(
-              int.parse(dbSingle[0]['date'].substring(0, 4)),
-              int.parse(dbSingle[0]['date'].substring(5, 7)),
-              int.parse(dbSingle[0]['date'].substring(8, 10))
-          );
+          if (!dbSingle[0]['type'].toString().contains('Private')) {
+            classDate = DateTime(
+                int.parse(dbSingle[0]['date'].substring(0, 4)),
+                int.parse(dbSingle[0]['date'].substring(5, 7)),
+                int.parse(dbSingle[0]['date'].substring(8, 10))
+            );
+          }
         }
         return FutureBuilder(
           future: getSingleCart(),
@@ -445,7 +706,7 @@ class _ViewClassState extends State<ViewClass> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  SpinKitPulse(
+                  SpinKitDoubleBounce(
                     color: Colors.white,
                   ),
                 ],
@@ -531,7 +792,16 @@ class _ViewClassState extends State<ViewClass> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 11.7.w,),
-                              Text(
+                              dbSingle[0]['type'].toString().contains('Private')
+                                  ? Text(
+                                dbSingle[0]['duration'],
+                                style: TextStyle(
+                                  fontSize: 10.0.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.background,
+                                ),
+                              )
+                                  : Text(
                                 '${DateFormat('d MMM yyyy', 'id_ID').format(classDate)} ${dbSingle[0]['time']}',
                                 style: TextStyle(
                                   fontSize: 10.0.sp,
@@ -550,58 +820,61 @@ class _ViewClassState extends State<ViewClass> {
                                 ),
                               ),
                               SizedBox(height: 2.2.w,),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Stack(
-                                    alignment: AlignmentDirectional.center,
-                                    children: [
-                                      Container(
-                                        width: 6.7.w,
-                                        height: 6.7.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 3.1.w,
-                                        height: 3.1.w,
-                                        child: FittedBox(
-                                          child: Image.asset(
-                                            'images/ic_profile.png',
+                              Visibility(
+                                visible: dbSingle[0]['instructur'] == '' ? false : true,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Container(
+                                          width: 6.7.w,
+                                          height: 6.7.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                            color: Theme.of(context).primaryColor,
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(width: 1.4.w,),
-                                  Column(
-                                    children: [
-                                      SizedBox(height: 0.8.w,),
-                                      RichText(
-                                        text: TextSpan(
-                                          style: TextStyle(
-                                            fontFamily: 'Josefin Sans',
-                                            color: Colors.black,
-                                            fontSize: 10.0.sp,
+                                        SizedBox(
+                                          width: 3.1.w,
+                                          height: 3.1.w,
+                                          child: FittedBox(
+                                            child: Image.asset(
+                                              'images/ic_profile.png',
+                                            ),
                                           ),
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Instruktur',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(width: 1.4.w,),
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 0.8.w,),
+                                        RichText(
+                                          text: TextSpan(
+                                            style: TextStyle(
+                                              fontFamily: 'Josefin Sans',
+                                              color: Colors.black,
+                                              fontSize: 9.6.sp,
+                                            ),
+                                            children: [
+                                              const TextSpan(
+                                                text: 'Instruktur',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: ' | ${dbSingle[0]['instructur']}',
-                                            ),
-                                          ],
+                                              TextSpan(
+                                                text: ' | ${dbSingle[0]['instructur']}',
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(height: 2.2.w,),
                               Row(

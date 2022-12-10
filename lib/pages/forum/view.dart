@@ -449,19 +449,14 @@ class _QuestionViewState extends State<QuestionView> {
                                             builder: (context) {
                                               return Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment
-                                                    .end,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 7.8.w,),
+                                                    padding: EdgeInsets.symmetric(horizontal: 7.8.w,),
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment
-                                                          .start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        SizedBox(
-                                                          height: 11.1.w,),
+                                                        SizedBox(height: 11.1.w,),
                                                         Text(
                                                           'Hapus komentar ini?',
                                                           style: TextStyle(
@@ -497,8 +492,7 @@ class _QuestionViewState extends State<QuestionView> {
                                                           setState(() {});
                                                         },
                                                         child: Stack(
-                                                          alignment: AlignmentDirectional
-                                                              .centerEnd,
+                                                          alignment: AlignmentDirectional.centerEnd,
                                                           children: [
                                                             Container(
                                                               width: 45.0.w,
@@ -532,8 +526,7 @@ class _QuestionViewState extends State<QuestionView> {
                                                             right: 34.4.w),
                                                         child: InkWell(
                                                           onTap: () {
-                                                            Navigator.pop(
-                                                                context);
+                                                            Navigator.pop(context);
                                                           },
                                                           child: Container(
                                                             width: 40.0.w,

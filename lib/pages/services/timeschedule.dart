@@ -1,47 +1,35 @@
 import 'dart:convert';
 import 'dart:core';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
 
-class Checkout extends StatefulWidget {
-  const Checkout({Key? key}) : super(key: key);
+class TimeSchedule extends StatefulWidget {
+  const TimeSchedule({Key? key}) : super(key: key);
 
   @override
-  State<Checkout> createState() => _CheckoutState();
+  State<TimeSchedule> createState() => _TimeScheduleState();
 }
 
-class _CheckoutState extends State<Checkout> {
-  final _email = TextEditingController();
-  final _igAccount = TextEditingController();
-  final _health = TextEditingController();
-  final _complaint = TextEditingController();
-  int pregnantNo = 0, pregnantWeek = 0;
-  bool isInvalid = false;
-  bool error = false;
-  bool firstLoad = true;
-  int currentAge = 0;
-  late List dbProfile, dbTimeline;
+class _TimeScheduleState extends State<TimeSchedule> {
+  final _date = TextEditingController();
+  final _time = TextEditingController();
+  String _scheduleDate = '';
+  String _scheduleTime = '';
+  late List dbProfile, dbSelectedPrivate;
+
+  Future getSelectedPrivate() async {
+    var url = Uri.parse('https://app.empatbulan.com/api/get_selected_private.php?phone=${prefs.getPhone}');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
 
   Future getProfile() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_profile.php?phone=${prefs.getPhone}');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
-
-  Future updCustomerProfile() async {
-    var url = Uri.parse('https://app.empatbulan.com/api/upd_customer_profile.php?phone=${prefs.getPhone}'
-        '&email=${_email.text}&ig_account=${_igAccount.text}&pregnant_no=$pregnantNo'
-        '&pregnant_week=$pregnantWeek&health_history=${_health.text}');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
-
-  Future getTimeline() async {
-    var url = Uri.parse('https://app.empatbulan.com/api/get_timeline.php?id=$currentAge');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -171,7 +159,7 @@ class _CheckoutState extends State<Checkout> {
         body: Stack(
           children: [
             FutureBuilder(
-              future: getProfile(),
+              future: getSelectedPrivate(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                   return
@@ -185,28 +173,10 @@ class _CheckoutState extends State<Checkout> {
                     );
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  dbProfile = snapshot.data as List;
-
-                  if (firstLoad) {
-                    _email.text = dbProfile[0]['email'];
-                    _igAccount.text = dbProfile[0]['ig_account'];
-                    pregnantNo = int.parse(dbProfile[0]['pregnant_no']);
-                    pregnantWeek = int.parse(dbProfile[0]['pregnant_week']);
-                    _health.text = dbProfile[0]['health_history'];
-                    _complaint.text = prefs.getComplaint;
-
-                    if (dbProfile[0]['basecount'] != '') {
-                      DateTime hpht = DateTime(
-                          int.parse(dbProfile[0]['hpht'].substring(0, 4)),
-                          int.parse(dbProfile[0]['hpht'].substring(5, 7)),
-                          int.parse(dbProfile[0]['hpht'].substring(8, 10))
-                      );
-                      currentAge = (DateTime.now().difference(hpht).inDays);
-                    }
-                  }
+                  dbSelectedPrivate = snapshot.data as List;
                 }
                 return FutureBuilder(
-                  future: getTimeline(),
+                  future: getProfile(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                       return
@@ -220,14 +190,7 @@ class _CheckoutState extends State<Checkout> {
                         );
                     }
                     if (snapshot.connectionState == ConnectionState.done) {
-                      dbTimeline = snapshot.data as List;
-
-                      if (firstLoad) {
-                        if (dbProfile[0]['basecount'] != '') {
-                          pregnantWeek = int.parse(dbTimeline[0]['week']);
-                        }
-                        firstLoad = false;
-                      }
+                      dbProfile = snapshot.data as List;
                     }
                     return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -240,286 +203,262 @@ class _CheckoutState extends State<Checkout> {
                               children: [
                                 SizedBox(height: 19.0.h,),
                                 Text(
-                                  'Informasi Pemesan',
+                                  'Jadwal Pertemuan',
                                   style: TextStyle(
                                     fontSize: 24.0.sp,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                SizedBox(height: 5.3.h,),
-                                Visibility(
-                                  visible: error ? true : false,
-                                  child: Column(
-                                    children: [
-                                      Row(
+                                SizedBox(height: 0.2.h,),
+                                SizedBox(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: dbSelectedPrivate.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(0),
+                                    itemBuilder: (context, index) {
+                                      return Column(
                                         children: [
-                                          Container(
-                                            width: 2.8.w,
-                                            height: 15.6.w,
-                                            color: Theme.of(context).colorScheme.error,
-                                          ),
-                                          SizedBox(width: 4.0.w,),
-                                          Expanded(
-                                            child: Text(
-                                              'Bunda belum melengkapi email Bunda. Pastikan semua data '
-                                                  'pemessan telah terisi dengan benar.',
-                                              style: TextStyle(
-                                                fontSize: 13.0.sp,
-                                                color: Theme.of(context).colorScheme.error,
-                                                height: 1.16,
+                                          SizedBox(height: 4.4.h,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              SizedBox(width: 2.2.w,),
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    dbSelectedPrivate[index]['title'],
+                                                    textAlign: TextAlign.right,
+                                                    style: TextStyle(
+                                                      fontSize: 13.0.sp,
+                                                      fontWeight: FontWeight.w700,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 1.7.w,),
+                                                  Text(
+                                                    dbSelectedPrivate[index]['instructur'],
+                                                    textAlign: TextAlign.right,
+                                                    style: TextStyle(
+                                                      fontSize: 8.0.sp,
+                                                      color: Theme.of(context).colorScheme.background,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 5.6.w,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: 24.4.w,
+                                                        height: 5.8.w,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                                          color: Theme.of(context).colorScheme.background,
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            dbSelectedPrivate[index]['type'],
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 8.0.sp,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 12.0.w,),
+                                                      Text(
+                                                        NumberFormat.currency(
+                                                          locale: 'id',
+                                                          symbol: 'Rp ',
+                                                          decimalDigits: 0,
+                                                        ).format(int.parse(dbSelectedPrivate[index]['total_price'])),
+                                                        style: TextStyle(
+                                                          fontSize: 9.0.sp,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                              maxLines: 3,
-                                              overflow: TextOverflow.visible,
-                                              softWrap: true,
+                                              SizedBox(width: 3.4.w,),
+                                              Container(
+                                                width: 28.5.w,
+                                                height: 29.0.w,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Theme.of(context).shadowColor,
+                                                        blurRadius: 6.0,
+                                                        offset: const Offset(0, 3),
+                                                      ),
+                                                    ]
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius: const BorderRadius.all(
+                                                    Radius.circular(12),
+                                                  ),
+                                                  child: SizedBox(
+                                                    width: 28.5.w,
+                                                    height: 29.0.w,
+                                                    child: Image.network(
+                                                      dbSelectedPrivate[index]['image'],
+                                                      fit: BoxFit.cover,
+                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                        if (loadingProgress == null) return child;
+                                                        return SizedBox(
+                                                          height: 29.0.w,
+                                                          child: const Center(
+                                                            child: SpinKitDoubleBounce(
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 2.2.h,),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Theme.of(context).dividerColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
-                                      ),
-                                      SizedBox(height: 3.8.h,),
-                                    ],
+                                      );
+                                    },
                                   ),
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 0.8.w),
-                                      child: Text(
-                                        'Email',
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
+                                SizedBox(height: 4.1.h,),
+                                Text(
+                                  'Tanggal Pertemuan',
+                                  style: TextStyle(
+                                    fontSize: 13.0.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextField(
+                                  controller: _date,
+                                  readOnly: true,
+                                  onTap: () {
+                                    DatePicker.showDatePicker(
+                                      context,
+                                      minTime: DateTime.now().add(const Duration(hours: 24)),
+                                      onConfirm: (date) {
+                                        setState(() {
+                                          _date.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(date);
+                                          _scheduleDate = DateFormat('yyyy-MM-dd').format(date);
+                                        });
+                                      },
+                                      theme: DatePickerTheme(
+                                        itemStyle: TextStyle(
+                                          fontFamily: 'Josefin Sans',
+                                          fontSize: 15.0.sp,
+                                          color: Theme.of(context).colorScheme.background,
+                                        ),
+                                        doneStyle: TextStyle(
+                                          fontFamily: 'Josefin Sans',
+                                          color: Theme.of(context).colorScheme.background,
+                                        ),
+                                        cancelStyle: const TextStyle(
+                                          fontFamily: 'Josefin Sans',
                                           color: Colors.black,
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 1.1.w,),
-                                    Container(
-                                      width: 1.7.w,
-                                      height: 1.7.w,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.background,
-                                        borderRadius: const BorderRadius.all(Radius.circular(30)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                TextField(
-                                  controller: _email,
-                                  style: TextStyle(
-                                    fontSize: 15.0.sp,
-                                  ),
-                                  onChanged: (str) {
-                                    if (isInvalid) {
-                                      setState(() {
-                                        isInvalid = false;
-                                      });
-                                    }
+                                      locale: LocaleType.id,
+                                    );
                                   },
-                                  keyboardType: TextInputType.emailAddress,
-                                ),
-                                Visibility(
-                                    visible: isInvalid ? true : false,
-                                    child: SizedBox(height: 1.0.h,)
-                                ),
-                                isInvalid ? Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 4.0.w,
-                                      height: 4.0.w,
+                                  decoration: InputDecoration(
+                                    suffixIcon: Container(
+                                      margin: EdgeInsets.fromLTRB(4.4.w, 2.2.w, 2.2.w, 4.4.w),
+                                      height: 3.0.h,
                                       child: Image.asset(
-                                        'images/ic_error.png',
+                                        'images/ic_date.png',
                                         fit: BoxFit.cover,
                                       ),
                                     ),
-                                    SizedBox(width: 1.0.w,),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 0.8.w),
-                                      child: Text(
-                                        'Alamat email tidak benar',
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.error,
-                                          fontSize: 10.0.sp,
-                                        ),
-                                      ),
+                                    hintText: 'Pilih tanggal',
+                                    hintStyle: TextStyle(
+                                      color: Theme.of(context).hintColor,
+                                      fontSize: 15.0.sp,
                                     ),
-                                  ],
-                                ) : Container(),
-                                SizedBox(height: 3.8.h,),
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 15.0.sp,
+                                  ),
+                                ),
+                                SizedBox(height: 3.0.h,),
                                 Text(
-                                  'Akun IG',
+                                  'Jam Pertemuan (WIB)',
                                   style: TextStyle(
                                     fontSize: 13.0.sp,
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextField(
-                                  controller: _igAccount,
+                                  controller: _time,
+                                  readOnly: true,
+                                  onTap: () {
+                                    DatePicker.showTimePicker(
+                                      context,
+                                      onConfirm: (time) {
+                                        setState(() {
+                                          _time.text = DateFormat('HH.mm', 'id_ID').format(time);
+                                          _scheduleTime = DateFormat('HH:mm', 'id_ID').format(time);
+                                        });
+                                      },
+                                      showSecondsColumn: false,
+                                      locale: LocaleType.id,
+                                      theme: DatePickerTheme(
+                                        itemStyle: TextStyle(
+                                          fontSize: 15.0.sp,
+                                          color: Theme.of(context).colorScheme.background,
+                                          fontFamily: 'Josefin Sans',
+                                        ),
+                                        cancelStyle: const TextStyle(
+                                          fontFamily: 'Josefin Sans',
+                                          color: Colors.black,
+                                        ),
+                                        doneStyle: TextStyle(
+                                          color: Theme.of(context).colorScheme.background,
+                                          fontFamily: 'Josefin Sans',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  decoration: InputDecoration(
+                                    suffixIcon: Container(
+                                      margin: EdgeInsets.fromLTRB(4.4.w, 2.2.w, 2.2.w, 4.4.w),
+                                      height: 3.0.h,
+                                      child: Image.asset(
+                                        'images/ic_schedule_color.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    hintText: 'Pilih waktu',
+                                    hintStyle: TextStyle(
+                                      color: Theme.of(context).hintColor,
+                                      fontSize: 15.0.sp,
+                                    ),
+                                  ),
                                   style: TextStyle(
                                     fontSize: 15.0.sp,
                                   ),
                                 ),
-                                SizedBox(height: 3.8.h,),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 0.8.w),
-                                      child: Text(
-                                        'Hamil Ke',
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    const Expanded(child: SizedBox(),),
-                                    InkWell(
-                                      onTap: () {
-                                        if (pregnantNo > 0) {
-                                          setState(() {
-                                            pregnantNo -= 1;
-                                          });
-                                        }
-                                      },
-                                      child: Image.asset(
-                                        pregnantNo == 0
-                                            ? 'images/ic_decrement_inactive.png'
-                                            : 'images/ic_decrement.png',
-                                        width: 9.4.w,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 16.9.w,
-                                      child: Text(
-                                        pregnantNo.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          pregnantNo += 1;
-                                        });
-                                      },
-                                      child: Image.asset(
-                                        'images/ic_increment.png',
-                                        width: 9.4.w,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 3.8.h,),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 0.8.w),
-                                      child: Text(
-                                        'Usia Kehamilan\n(Pekan)',
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
-                                          color: Colors.black,
-                                          height: 1.2,
-                                        ),
-                                      ),
-                                    ),
-                                    const Expanded(child: SizedBox(),),
-                                    InkWell(
-                                      onTap: () {
-                                        if (pregnantWeek > 0) {
-                                          setState(() {
-                                            pregnantWeek -= 1;
-                                          });
-                                        }
-                                      },
-                                      child: Image.asset(
-                                        pregnantWeek == 0
-                                            ? 'images/ic_decrement_inactive.png'
-                                            : 'images/ic_decrement.png',
-                                        width: 9.4.w,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 16.9.w,
-                                      child: Text(
-                                        pregnantWeek.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 13.0.sp,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        if (pregnantWeek < 45) {
-                                          setState(() {
-                                            pregnantWeek += 1;
-                                          });
-                                        }
-                                      },
-                                      child: Image.asset(
-                                        pregnantWeek == 44
-                                            ? 'images/ic_increment_inactive.png'
-                                            : 'images/ic_increment.png',
-                                        width: 9.4.w,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 3.8.h,),
-                                Text(
-                                  'Riwayat Sakit',
-                                  style: TextStyle(
-                                    fontSize: 13.0.sp,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Container(
-                                  constraints: const BoxConstraints(
-                                    maxHeight: double.infinity,
-                                  ),
-                                  child: TextField(
-                                    controller: _health,
-                                    minLines: 1,
-                                    maxLines: 6,
-                                    keyboardType: TextInputType.multiline,
-                                    textCapitalization: TextCapitalization.sentences,
-                                    cursorColor: Colors.black,
-                                    style: TextStyle(
-                                      fontSize: 15.0.sp,
-                                      height: 1.2,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 3.8.h,),
-                                Text(
-                                  'Keluhan',
-                                  style: TextStyle(
-                                    fontSize: 13.0.sp,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Container(
-                                  constraints: const BoxConstraints(
-                                    maxHeight: double.infinity,
-                                  ),
-                                  child: TextField(
-                                    controller: _complaint,
-                                    minLines: 1,
-                                    maxLines: 6,
-                                    keyboardType: TextInputType.multiline,
-                                    textCapitalization: TextCapitalization.sentences,
-                                    cursorColor: Colors.black,
-                                    style: TextStyle(
-                                      fontSize: 15.0.sp,
-                                      height: 1.2,
-                                    ),
-                                  ),
-                                ),
+                                SizedBox(height: 3.0.h,),
                               ],
                             ),
                           ),
@@ -613,9 +552,7 @@ class _CheckoutState extends State<Checkout> {
                                         Container(
                                           width: 45.0.w,
                                           height: 20.8.w,
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                         SizedBox(
                                           width: 34.4.w,
@@ -723,24 +660,46 @@ class _CheckoutState extends State<Checkout> {
                       ),
                       InkWell(
                         onTap: () async {
-                          if (_email.text != '') {
-                            if (EmailValidator.validate(_email.text)) {
-                              updCustomerProfile();
-                              prefs.setComplaint(_complaint.text);
-                              if (prefs.getBackRoute == '/cart') {
-                                await Navigator.pushNamedAndRemoveUntil(context, '/confirm', (route) => true);
+                          if (_scheduleDate != '' && _scheduleTime != '') {
+                            Duration difference = DateTime.parse('$_scheduleDate $_scheduleTime').difference(DateTime.now());
+                            if (difference.inHours + 1 > 24) {
+                              prefs.setPrivateDate(_scheduleDate);
+                              prefs.setPrivateTime(_time.text);
+                              if (dbProfile[0]['email'] == '') {
+                                Navigator.pushNamed(context, '/checkout');
                               } else {
-                                await Navigator.pushNamed(context, '/confirm');
+                                prefs.setBackRoute('/cart');
+                                Navigator.pushReplacementNamed(
+                                    context, '/confirm');
                               }
                             } else {
-                              setState(() {
-                                isInvalid = true;
-                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    'Waktu pertemuan paling cepat 24 jam ke depan.',
+                                    style: TextStyle(
+                                      fontFamily: 'Josefin Sans',
+                                    ),
+                                  ),
+                                  backgroundColor: Theme
+                                      .of(context)
+                                      .colorScheme
+                                      .background,
+                                ),
+                              );
                             }
                           } else {
-                            setState(() {
-                              error = false;
-                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                  'Bunda belum melengkapi Jadwal Pertemuan.',
+                                  style: TextStyle(
+                                    fontFamily: 'Josefin Sans',
+                                  ),
+                                ),
+                                backgroundColor: Theme.of(context).colorScheme.background,
+                              ),
+                            );
                           }
                         },
                         child: Container(

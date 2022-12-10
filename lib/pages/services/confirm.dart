@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:core';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:empat_bulan/api/google_auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:mailer/smtp_server.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:sizer/sizer.dart';
 import 'package:empat_bulan/main.dart';
 import 'package:http/http.dart' as http;
-import 'package:mailer/mailer.dart';
 
 late String imgUrl, classTitle;
 
@@ -23,6 +20,13 @@ class Confirm extends StatefulWidget {
 
 class _ConfirmState extends State<Confirm> {
   late List dbSelectedCart, dbProfile, dbGroupCart;
+  late DateTime classDate;
+  String phone = '';
+  RegionInfo region = RegionInfo(
+    name: prefs.getIsoCode,
+    code: prefs.getIsoCode,
+    prefix: int.parse(prefs.getDialCode.substring(1, prefs.getDialCode.length)),
+  );
 
   Future getSelectedCart() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_selected_cart.php?phone=${prefs.getPhone}');
@@ -73,42 +77,44 @@ class _ConfirmState extends State<Confirm> {
     return json.decode(response.body);
   }
 
-  Future sendEmail(String mailTo) async {
-    // GoogleAuthApi.signOut();
-    // return;
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final GoogleSignInAccount? user = await GoogleAuthApi.signIn();
+  // Future sendEmail(String mailTo) async {
+  //   // GoogleAuthApi.signOut();
+  //   // return;
+  //   // ignore: unnecessary_nullable_for_final_variable_declarations
+  //   final GoogleSignInAccount? user = await GoogleAuthApi.signIn();
+  //
+  //   if (user == null) return;
+  //
+  //   final email = user.email;
+  //   final auth = await user.authentication;
+  //   final token = auth.accessToken;
+  //
+  //   final smtpServer = gmailSaslXoauth2(email, token!);
+  //   final message = Message()
+  //     ..from = Address(email, 'EmpatBulan')
+  //     ..recipients = [mailTo]
+  //     ..subject = 'Registrasi Layanan Bunda'
+  //     ..html = 'Dear Bunda,<br><br>'
+  //         'Terima kasih Bunda telah melakukan registrasi layanan melalui aplikasi <span style="color: #C09AC7;"><b>EmpatBulan</b></span>.<br><br>'
+  //         'Pastikan ponsel Bunda selalu dalam keadaan aktif. Insya Allah kami akan segera menghubungi Bunda.<br><br>'
+  //         'Mohon untuk tidak membalas email ini. Terima kasih.<br><br>'
+  //         'Salam,<br><b>Tim <span style="color: #C09AC7;">EmpatBulan</b></span>';
+  //
+  //   try {
+  //     await send(message, smtpServer);
+  //     showDialog(
+  //       context: context,
+  //       builder: (_) => const Info(),
+  //       barrierDismissible: false,
+  //     );
+  //   } on MailerException {
+  //     // print(e);
+  //   }
+  // }
 
-    if (user == null) return;
-
-    final email = user.email;
-    final auth = await user.authentication;
-    final token = auth.accessToken;
-
-    final smtpServer = gmailSaslXoauth2(email, token!);
-    final message = Message()
-      ..from = Address(email, 'EmpatBulan')
-      ..recipients = [mailTo]
-      ..subject = 'Registrasi Layanan Bunda'
-      ..html = 'Dear Bunda,<br><br>'
-          'Terima kasih Bunda telah melakukan registrasi layanan melalui aplikasi <span style="color: #C09AC7;"><b>EmpatBulan</b></span>.<br><br>'
-          'Pastikan ponsel Bunda selalu dalam keadaan aktif. Insya Allah kami akan segera menghubungi Bunda.<br><br>'
-          'Mohon untuk tidak membalas email ini. Terima kasih.<br><br>'
-          'Salam,<br><b>Tim <span style="color: #C09AC7;">EmpatBulan</b></span>';
-
-    try {
-      await send(message, smtpServer);
-      showDialog(
-        context: context,
-        builder: (_) => const Info(),
-        barrierDismissible: false,
-      );
-    } on MailerException {
-      // print(e);
-    }
-  }
-
-  Future sendEmailJS(String email) async {
+  Future sendMailConfirmation(String email, String title, String type, String price,
+      String phone, String instructur, String igAcc, String pregnantNo, String pregnantAge,
+      String health, String complaint, String date, String time, String name) async {
     const serviceId = 'service_m0ba253';
     const templateId = 'template_77rgate';
     const userId = 'DNTUlAAVJc9Ax1HeJ';
@@ -126,6 +132,19 @@ class _ConfirmState extends State<Confirm> {
         'user_id': userId,
         'template_params': {
           'to_email': email,
+          'title': title,
+          'type': type,
+          'price': price,
+          'phone': phone,
+          'instructur': instructur,
+          'ig_acc': igAcc,
+          'pregnant_no': pregnantNo,
+          'pregnant_age': pregnantAge,
+          'health': health,
+          'complaint': complaint,
+          'date': date,
+          'time': time,
+          'name': name,
         }
       }),
     );
@@ -271,6 +290,20 @@ class _ConfirmState extends State<Confirm> {
             }
             if (snapshot.connectionState == ConnectionState.done) {
               dbSelectedCart = snapshot.data as List;
+
+              if (dbSelectedCart[0]['type'].toString().contains('Private')) {
+                classDate = DateTime(
+                    int.parse(prefs.getPrivateDate.substring(0, 4)),
+                    int.parse(prefs.getPrivateDate.substring(5, 7)),
+                    int.parse(prefs.getPrivateDate.substring(8, 10))
+                );
+              } else {
+                classDate = DateTime(
+                    int.parse(dbSelectedCart[0]['date'].substring(0, 4)),
+                    int.parse(dbSelectedCart[0]['date'].substring(5, 7)),
+                    int.parse(dbSelectedCart[0]['date'].substring(8, 10))
+                );
+              }
             }
             return FutureBuilder(
               future: getProfile(),
@@ -288,6 +321,9 @@ class _ConfirmState extends State<Confirm> {
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
                   dbProfile = snapshot.data as List;
+                  PhoneNumberUtil().format(prefs.getPhone, region.code).then((value) {
+                    phone = value;
+                  });
                 }
                 return FutureBuilder(
                   future: getGroupCart(),
@@ -368,16 +404,38 @@ class _ConfirmState extends State<Confirm> {
                                                             ),
                                                           ),
                                                           SizedBox(height: 5.6.w,),
-                                                          Text(
-                                                            NumberFormat.currency(
-                                                              locale: 'id',
-                                                              symbol: 'Rp ',
-                                                              decimalDigits: 0,
-                                                            ).format(int.parse(dbSelectedCart[index]['total_price'])),
-                                                            style: TextStyle(
-                                                              fontSize: 9.0.sp,
-                                                              color: Colors.black,
-                                                            ),
+                                                          Row(
+                                                            children: [
+                                                              Container(
+                                                                width: 24.4.w,
+                                                                height: 5.8.w,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                                                  color: Theme.of(context).colorScheme.background,
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    dbSelectedCart[index]['type'],
+                                                                    style: TextStyle(
+                                                                      color: Colors.white,
+                                                                      fontSize: 8.0.sp,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              const Expanded(child: SizedBox()),
+                                                              Text(
+                                                                NumberFormat.currency(
+                                                                  locale: 'id',
+                                                                  symbol: 'Rp ',
+                                                                  decimalDigits: 0,
+                                                                ).format(int.parse(dbSelectedCart[index]['total_price'])),
+                                                                style: TextStyle(
+                                                                  fontSize: 9.0.sp,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                           SizedBox(height: 2.4.w,),
                                                         ],
@@ -442,6 +500,33 @@ class _ConfirmState extends State<Confirm> {
                                       ),
                                     ),
                                     SizedBox(height: 4.1.h,),
+                                    Visibility(
+                                      visible: dbSelectedCart[0]['type'].toString().contains('Private') ? true : false,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'JADWAL LAYANAN',
+                                                style: TextStyle(
+                                                  fontSize: 10.0.sp,
+                                                  color: Theme.of(context).colorScheme.background,
+                                                ),
+                                              ),
+                                              const Expanded(child: SizedBox()),
+                                              Text(
+                                                '${DateFormat('EEEE, d MMM yyyy', 'id_ID').format(classDate)} ${prefs.getPrivateTime}',
+                                                style: TextStyle(
+                                                  fontSize: 12.0.sp,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4.7.h,),
+                                        ],
+                                      ),
+                                    ),
                                     Row(
                                       children: [
                                         Text(
@@ -604,7 +689,7 @@ class _ConfirmState extends State<Confirm> {
                                     Row(
                                       children: [
                                         Text(
-                                          'Total (IDR)',
+                                          'Total',
                                           style: TextStyle(
                                             fontSize: 17.0.sp,
                                             color: Colors.black,
@@ -831,7 +916,29 @@ class _ConfirmState extends State<Confirm> {
                                       classTitle = dbSelectedCart[0]['title'];
                                       // sendEmail(dbProfile[0]['email']);
 
-                                      sendEmailJS(dbProfile[0]['email']);
+                                      sendMailConfirmation(dbProfile[0]['email'], classTitle,
+                                          dbSelectedCart[0]['type'], NumberFormat.currency(
+                                            locale: 'id',
+                                            symbol: 'Rp ',
+                                            decimalDigits: 0,
+                                          ).format(int.parse(dbGroupCart[0]['price'])),
+                                          phone, dbSelectedCart[0]['instructur'],
+                                          dbProfile[0]['ig_account'], dbProfile[0]['pregnant_no'],
+                                          dbProfile[0]['pregnant_week'], dbProfile[0]['health_history'],
+                                          prefs.getComplaint, DateFormat('EEEE, d MMM yyyy', 'id_ID').format(classDate),
+                                          dbSelectedCart[0]['type'].toString().contains('Private') ? prefs.getPrivateTime : dbSelectedCart[0]['time'], dbProfile[0]['name']);
+
+                                      // sendMailOrder(dbProfile[0]['email'], classTitle,
+                                      //     dbSelectedCart[0]['type'], NumberFormat.currency(
+                                      //       locale: 'id',
+                                      //       symbol: 'Rp ',
+                                      //       decimalDigits: 0,
+                                      //     ).format(int.parse(dbGroupCart[0]['price'])),
+                                      //     phone, dbSelectedCart[0]['instructur'],
+                                      //     dbProfile[0]['ig_account'], dbProfile[0]['pregnant_no'],
+                                      //     dbProfile[0]['pregnant_week'], dbProfile[0]['health_history'],
+                                      //     prefs.getComplaint, DateFormat('EEEE, d MMM yyyy', 'id_ID').format(classDate),
+                                      //     prefs.getPrivateTime, dbProfile[0]['name']);
                                     },
                                     child: Container(
                                       width: 74.4.w,

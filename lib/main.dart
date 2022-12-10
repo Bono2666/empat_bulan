@@ -30,6 +30,7 @@ import 'package:empat_bulan/pages/services/checkout.dart';
 import 'package:empat_bulan/pages/services/classes.dart';
 import 'package:empat_bulan/pages/services/confirm.dart';
 import 'package:empat_bulan/pages/services/homeservices.dart';
+import 'package:empat_bulan/pages/services/timeschedule.dart';
 import 'package:empat_bulan/pages/verification.dart';
 import 'package:empat_bulan/pages/articles.dart';
 import 'package:empat_bulan/pages/viewarticle.dart';
@@ -108,7 +109,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                       color: Theme.of(context).dividerColor,
+                      color: Theme.of(context).dividerColor,
                     ),
                   ),
                   focusedBorder: const UnderlineInputBorder(
@@ -123,8 +124,8 @@ class _MyAppState extends State<MyApp> {
                   selectionColor: Color(0xffC09AC7),
                   selectionHandleColor: Color(0xffA34C88),
                 ), colorScheme: ColorScheme.fromSwatch().copyWith(
-                  secondary: const Color(0xffC09AC7),
-                ).copyWith(background: const Color(0xffA34C88)).copyWith(error: const Color(0xffE4572E)),
+                secondary: const Color(0xffC09AC7),
+              ).copyWith(background: const Color(0xffA34C88)).copyWith(error: const Color(0xffE4572E)),
               ),
 
               initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
@@ -193,6 +194,8 @@ class _MyAppState extends State<MyApp> {
                     return SlideLeftRoute(page: const Classes());
                   case '/cart':
                     return SlideLeftRoute(page: const Cart());
+                  case '/timeSchedule':
+                    return SlideLeftRoute(page: const TimeSchedule());
                   case '/checkout':
                     return SlideLeftRoute(page: const Checkout());
                   case '/confirm':
@@ -247,6 +250,8 @@ class SharedPrefs {
   bool get getWarning => _prefs.getBool('warning') ?? false;
   String get getKickDay => _prefs.getString('kickDay') ?? '';
   String get getComplaint => _prefs.getString('complaint') ?? '';
+  String get getPrivateDate => _prefs.getString('privateDate') ?? '';
+  String get getPrivateTime => _prefs.getString('privateTime') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setTotOnboard(int value) => _prefs.setInt('totOnboard', value);
@@ -277,6 +282,8 @@ class SharedPrefs {
   setWarning(bool value) => _prefs.setBool('warning', value);
   setKickDay(String value) => _prefs.setString('kickDay', value);
   setComplaint(String value) => _prefs.setString('complaint', value);
+  setPrivateDate(String value) => _prefs.setString('privateDate', value);
+  setPrivateTime(String value) => _prefs.setString('privateTime', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
@@ -284,25 +291,25 @@ class SlideUpRoute extends PageRouteBuilder {
 
   SlideUpRoute({required this.page})
       : super(
-            transitionDuration: const Duration(seconds: 1),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secAnimation,
-                Widget child) {
-              animation = CurvedAnimation(
-                  parent: animation, curve: Curves.elasticInOut);
-              return SlideTransition(
-                position: Tween(
-                  begin: const Offset(0, 1.2),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              );
-            },
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secAnimation) {
-              return page;
-            });
+      transitionDuration: const Duration(seconds: 1),
+      transitionsBuilder: (BuildContext context,
+          Animation<double> animation,
+          Animation<double> secAnimation,
+          Widget child) {
+        animation = CurvedAnimation(
+            parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1.2),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secAnimation) {
+        return page;
+      });
 }
 
 class SlideLeftRoute extends PageRouteBuilder {
@@ -310,25 +317,25 @@ class SlideLeftRoute extends PageRouteBuilder {
 
   SlideLeftRoute({required this.page})
       : super(
-            transitionDuration: const Duration(seconds: 1),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secAnimation,
-                Widget child) {
-              animation = CurvedAnimation(
-                  parent: animation, curve: Curves.elasticInOut);
-              return SlideTransition(
-                position: Tween(
-                  begin: const Offset(1.2, 0),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              );
-            },
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secAnimation) {
-              return page;
-            });
+      transitionDuration: const Duration(seconds: 1),
+      transitionsBuilder: (BuildContext context,
+          Animation<double> animation,
+          Animation<double> secAnimation,
+          Widget child) {
+        animation = CurvedAnimation(
+            parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(1.2, 0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secAnimation) {
+        return page;
+      });
 }
 
 class SlideDownRoute extends PageRouteBuilder {
@@ -336,25 +343,25 @@ class SlideDownRoute extends PageRouteBuilder {
 
   SlideDownRoute({required this.page})
       : super(
-            transitionDuration: const Duration(seconds: 1),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secAnimation,
-                Widget child) {
-              animation = CurvedAnimation(
-                  parent: animation, curve: Curves.elasticInOut);
-              return SlideTransition(
-                position: Tween(
-                  begin: const Offset(0, -1.2),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              );
-            },
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secAnimation) {
-              return page;
-            });
+      transitionDuration: const Duration(seconds: 1),
+      transitionsBuilder: (BuildContext context,
+          Animation<double> animation,
+          Animation<double> secAnimation,
+          Widget child) {
+        animation = CurvedAnimation(
+            parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0, -1.2),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secAnimation) {
+        return page;
+      });
 }
 
 class Blur extends StatefulWidget {
@@ -471,4 +478,3 @@ class _BlurState extends State<Blur> {
     );
   }
 }
-

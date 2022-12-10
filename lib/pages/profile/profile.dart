@@ -255,6 +255,7 @@ class _ProfileState extends State<Profile> {
                                 children: [
                                   InkWell(
                                     onTap: () {
+                                      prefs.setBackRoute('/profile');
                                       Navigator.pushNamed(context, '/questionsList');
                                     },
                                     child: SizedBox(

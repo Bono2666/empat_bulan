@@ -79,6 +79,7 @@ class _NotificationsState extends State<Notifications> {
                               children: [
                                 InkWell(
                                   onTap: () {
+                                    prefs.setBackRoute('/home');
                                     prefs.setQuestionId(dbNotifications[index]['question']);
                                     Navigator.pushReplacementNamed(context, '/questionView');
                                   },

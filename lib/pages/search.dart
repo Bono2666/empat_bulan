@@ -127,7 +127,7 @@ class _SearchState extends State<Search> {
                                 serviceNotEmpty == 0 ? Container() : Padding(
                                   padding: EdgeInsets.only(left: 6.7.w),
                                   child: Text(
-                                    'KELAS',
+                                    'LAYANAN',
                                     style: TextStyle(
                                       fontSize: 12.0.sp,
                                       color: Theme.of(context).unselectedWidgetColor,
@@ -280,48 +280,48 @@ class _SearchState extends State<Search> {
                                                         fit: BoxFit.cover,
                                                       )
                                                           : SizedBox(
-                                                            height: 13.3.w,
-                                                            width: 13.3.w,
-                                                            child: Stack(
-                                                              fit: StackFit.expand,
-                                                              children: [
-                                                                Image.network(
-                                                                  dbForum[index]['photo'],
-                                                                  fit: BoxFit.cover,
-                                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                                      if (loadingProgress == null) return child;
-                                                                      return SizedBox(
-                                                                        height: 13.3.w,
-                                                                        child: const Center(
-                                                                          child: SpinKitDoubleBounce(
-                                                                            color: Colors.white,
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                  },
-                                                                ),
-                                                                dbForum[index]['sensitif'] == '0' ? Container() : BackdropFilter(
-                                                                  filter: ImageFilter.blur(
-                                                                    sigmaX: 10,
-                                                                    sigmaY: 10,
+                                                        height: 13.3.w,
+                                                        width: 13.3.w,
+                                                        child: Stack(
+                                                          fit: StackFit.expand,
+                                                          children: [
+                                                            Image.network(
+                                                              dbForum[index]['photo'],
+                                                              fit: BoxFit.cover,
+                                                              loadingBuilder: (context, child, loadingProgress) {
+                                                                if (loadingProgress == null) return child;
+                                                                return SizedBox(
+                                                                  height: 13.3.w,
+                                                                  child: const Center(
+                                                                    child: SpinKitDoubleBounce(
+                                                                      color: Colors.white,
+                                                                    ),
                                                                   ),
-                                                                  child: Container(
-                                                                    color: Theme.of(context).colorScheme.background.withOpacity(0.8),
-                                                                    child: Center(
-                                                                      child: SizedBox(
-                                                                        width: 5.2.w,
-                                                                        child: FittedBox(
-                                                                          child: Image.asset(
-                                                                            'images/ic_sensitive.png',
-                                                                          ),
-                                                                        ),
+                                                                );
+                                                              },
+                                                            ),
+                                                            dbForum[index]['sensitif'] == '0' ? Container() : BackdropFilter(
+                                                              filter: ImageFilter.blur(
+                                                                sigmaX: 10,
+                                                                sigmaY: 10,
+                                                              ),
+                                                              child: Container(
+                                                                color: Theme.of(context).colorScheme.background.withOpacity(0.8),
+                                                                child: Center(
+                                                                  child: SizedBox(
+                                                                    width: 5.2.w,
+                                                                    child: FittedBox(
+                                                                      child: Image.asset(
+                                                                        'images/ic_sensitive.png',
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ],
+                                                              ),
                                                             ),
-                                                          ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(width: 4.4.w,),
@@ -340,6 +340,7 @@ class _SearchState extends State<Search> {
                                               ),
                                             ),
                                             onTap: () {
+                                              prefs.setBackRoute('/home');
                                               prefs.setQuestionId(dbForum[index]['id']);
                                               Navigator.pushNamed(context, '/questionView');
                                             },
@@ -610,7 +611,13 @@ class _SearchState extends State<Search> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
-                                onTap: () => Navigator.pop(context),
+                                onTap: () {
+                                  if (prefs.getBackRoute == '/homeServices') {
+                                    Navigator.pushNamedAndRemoveUntil(context, prefs.getBackRoute, (route) => true);
+                                  } else {
+                                    Navigator.pop(context);
+                                  }
+                                },
                                 child: Container(
                                   width: 19.0.w,
                                   height: 15.0.h,
@@ -681,6 +688,12 @@ class _ViewClassState extends State<ViewClass> {
       'phone' : prefs.getPhone,
       'class_id' : classId.toString(),
     });
+  }
+
+  Future updSelectedClass(int id, int selected) async {
+    var url = Uri.parse('https://app.empatbulan.com/api/upd_selected_class.php?id=$id&selected=$selected');
+    var response = await http.get(url);
+    return json.decode(response.body);
   }
 
   @override
@@ -853,7 +866,7 @@ class _ViewClassState extends State<ViewClass> {
                                           style: TextStyle(
                                             fontFamily: 'Josefin Sans',
                                             color: Colors.black,
-                                            fontSize: 10.0.sp,
+                                            fontSize: 9.6.sp,
                                           ),
                                           children: [
                                             const TextSpan(
@@ -961,67 +974,24 @@ class _ViewClassState extends State<ViewClass> {
                           ),
                         ),
                         SizedBox(height: 47.5.w,),
-                        Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            Container(
-                              height: 34.4.w,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white, Colors.white.withOpacity(0.0),
-                                    ],
-                                  )
+                        Visibility(
+                          visible: classDate.compareTo(DateTime.now()) <= 0 ? false : true,
+                          child: Stack(
+                            alignment: AlignmentDirectional.bottomEnd,
+                            children: [
+                              Container(
+                                height: 34.4.w,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.white, Colors.white.withOpacity(0.0),
+                                      ],
+                                    )
+                                ),
                               ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                if (dbSingleCart.isEmpty) {
-                                  addCart();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text(
-                                        'Kelas telah dimasukkan ke Keranjang.',
-                                        style: TextStyle(
-                                          fontFamily: 'Josefin Sans',
-                                        ),
-                                      ),
-                                      backgroundColor: Theme.of(context).colorScheme.background,
-                                    ),
-                                  );
-                                }
-                                prefs.setBackRoute('/classes');
-                                await Navigator.pushNamed(context, '/cart');
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.centerEnd,
-                                children: [
-                                  Container(
-                                    width: 38.6.w,
-                                    height: 20.8.w,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 27.8.w,
-                                    child: Center(
-                                      child: Text(
-                                        'Pesan',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13.0.sp,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 27.8.w),
-                              child: InkWell(
+                              InkWell(
                                 onTap: () async {
                                   if (dbSingleCart.isEmpty) {
                                     addCart();
@@ -1037,32 +1007,78 @@ class _ViewClassState extends State<ViewClass> {
                                       ),
                                     );
                                   }
-                                  Navigator.pop(context);
+                                  prefs.setBackRoute('/classes');
+                                  await Navigator.pushNamed(context, '/cart');
                                 },
-                                child: Container(
-                                  width: 55.6.w,
-                                  height: 20.8.w,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.background,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(40),
-                                      bottomRight: Radius.circular(40),
+                                child: Stack(
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  children: [
+                                    Container(
+                                      width: 38.6.w,
+                                      height: 20.8.w,
+                                      color: Theme.of(context).primaryColor,
                                     ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tambah ke Keranjang',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13.0.sp,
+                                    SizedBox(
+                                      width: 27.8.w,
+                                      child: Center(
+                                        child: Text(
+                                          'Pesan',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13.0.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 27.8.w),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (dbSingleCart.isEmpty) {
+                                      addCart();
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: const Text(
+                                            'Kelas telah dimasukkan ke Keranjang.',
+                                            style: TextStyle(
+                                              fontFamily: 'Josefin Sans',
+                                            ),
+                                          ),
+                                          backgroundColor: Theme.of(context).colorScheme.background,
+                                        ),
+                                      );
+                                    }
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    width: 55.6.w,
+                                    height: 20.8.w,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.background,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        bottomRight: Radius.circular(40),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Tambah ke Keranjang',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13.0.sp,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
