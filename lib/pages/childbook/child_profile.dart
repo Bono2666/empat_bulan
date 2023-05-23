@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as date_picker;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -25,6 +25,7 @@ class _ChildProfileState extends State<ChildProfile> {
   late DateTime currentDate;
   double weight = 3.0;
   double height = 50;
+  double circle = 34.0;
   double prematureWeek = 37;
   late List dbProfile, dbChildBook;
   bool firstLoad = true;
@@ -52,7 +53,7 @@ class _ChildProfileState extends State<ChildProfile> {
 
   Future updChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/upd_childbook.php?phone=${prefs.getPhone}'
-        '&birth_date=$formattedDate&weight=$weight&height=$height');
+        '&birth_date=$formattedDate&weight=$weight&height=$height&circle=$circle');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -65,6 +66,7 @@ class _ChildProfileState extends State<ChildProfile> {
       'growth_date' : formattedDate,
       'weight' : weight.toStringAsFixed(1),
       'height' : height.toString(),
+      'circle' : circle.toStringAsFixed(1),
     });
   }
 
@@ -255,7 +257,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                   controller: birthDate,
                                   readOnly: true,
                                   onTap: () {
-                                    DatePicker.showDatePicker(
+                                    date_picker.DatePicker.showDatePicker(
                                       context,
                                       minTime: DateTime.now().subtract(const Duration(days: 1825)),
                                       maxTime: DateTime.now(),
@@ -267,7 +269,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                           error = false;
                                         });
                                       },
-                                      theme: DatePickerTheme(
+                                      theme: date_picker.DatePickerTheme(
                                         itemStyle: TextStyle(
                                           fontFamily: 'Josefin Sans',
                                           fontSize: 15.0.sp,
@@ -282,7 +284,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      locale: LocaleType.id,
+                                      locale: date_picker.LocaleType.id,
                                     );
                                   },
                                   decoration: InputDecoration(
@@ -819,6 +821,71 @@ class _ChildProfileState extends State<ChildProfile> {
                                       onTap: () {
                                         setState(() {
                                           height += 1;
+                                        });
+                                      },
+                                      child: Image.asset(
+                                        'images/ic_increment.png',
+                                        width: 9.4.w,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 3.8.h,),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 30.0.w,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top: 0.8.w),
+                                        child: Text(
+                                          'Lingkar Kepala saat lahir (cm)',
+                                          style: TextStyle(
+                                            fontSize: 13.0.sp,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 1.1.w,),
+                                    Container(
+                                      width: 1.7.w,
+                                      height: 1.7.w,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.background,
+                                        borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                      ),
+                                    ),
+                                    const Expanded(child: SizedBox(),),
+                                    InkWell(
+                                      onTap: () {
+                                        if (circle > 1) {
+                                          setState(() {
+                                            circle -= 0.1;
+                                          });
+                                        }
+                                      },
+                                      child: Image.asset(
+                                        circle == 1
+                                            ? 'images/ic_decrement_inactive.png'
+                                            : 'images/ic_decrement.png',
+                                        width: 9.4.w,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 16.9.w,
+                                      child: Text(
+                                        circle.toStringAsFixed(1),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 13.0.sp,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          circle += 0.1;
                                         });
                                       },
                                       child: Image.asset(

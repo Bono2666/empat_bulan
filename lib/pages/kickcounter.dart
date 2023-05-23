@@ -893,7 +893,7 @@ class _KickState extends State<Kick>
                                         height: 16.7.w,
                                         decoration: BoxDecoration(
                                           // ignore: deprecated_member_use
-                                          color: Theme.of(context).bottomAppBarColor,
+                                          color: Theme.of(context).splashColor,
                                           borderRadius: const BorderRadius.all(Radius.circular(100)),
                                         ),
                                         child: Center(

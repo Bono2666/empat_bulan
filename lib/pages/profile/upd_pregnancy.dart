@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as date_picker;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -281,39 +281,39 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                             controller: hplText,
                             readOnly: true,
                             onTap: () {
-                              DatePicker.showDatePicker(
-                                context,
-                                minTime: DateTime.now(),
-                                maxTime: DateTime.now().add(const Duration(days: 280)),
-                                onConfirm: (date) {
-                                  setState(() {
-                                    hpl = date;
-                                    hpht = date.subtract(const Duration(days: 280));
-                                    hplStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpl);
-                                    hphtStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpht);
-                                    basecount = 'hpl';
-                                    hplText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpl);
-                                    hphtText.text = '';
-                                    hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
-                                  });
-                                },
-                                theme: DatePickerTheme(
-                                  itemStyle: TextStyle(
-                                    fontFamily: 'Josefin Sans',
-                                    fontSize: 15.0.sp,
-                                    color: Theme.of(context).colorScheme.background,
-                                  ),
-                                  doneStyle: TextStyle(
-                                    fontFamily: 'Josefin Sans',
-                                    color: Theme.of(context).colorScheme.background,
-                                  ),
-                                  cancelStyle: const TextStyle(
-                                    fontFamily: 'Josefin Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                locale: LocaleType.id,
-                              );
+                              // date_picker.DatePicker.showDatePicker(
+                              //   context,
+                              //   minTime: DateTime.now(),
+                              //   maxTime: DateTime.now().add(const Duration(days: 280)),
+                              //   onConfirm: (date) {
+                              //     setState(() {
+                              //       hpl = date;
+                              //       hpht = date.subtract(const Duration(days: 280));
+                              //       hplStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpl);
+                              //       hphtStr = DateFormat('yyyy-MM-dd', 'id_ID').format(hpht);
+                              //       basecount = 'hpl';
+                              //       hplText.text = DateFormat('d MMMM yyyy', 'id_ID').format(hpl);
+                              //       hphtText.text = '';
+                              //       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
+                              //     });
+                              //   },
+                              //   theme: date_picker.DatePickerTheme(
+                              //     itemStyle: TextStyle(
+                              //       fontFamily: 'Josefin Sans',
+                              //       fontSize: 15.0.sp,
+                              //       color: Theme.of(context).colorScheme.background,
+                              //     ),
+                              //     doneStyle: TextStyle(
+                              //       fontFamily: 'Josefin Sans',
+                              //       color: Theme.of(context).colorScheme.background,
+                              //     ),
+                              //     cancelStyle: const TextStyle(
+                              //       fontFamily: 'Josefin Sans',
+                              //       color: Colors.black,
+                              //     ),
+                              //   ),
+                              //   locale: date_picker.LocaleType.id,
+                              // );
                             },
                             decoration: InputDecoration(
                               suffixIcon: Container(
@@ -380,9 +380,9 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                             controller: hphtText,
                             readOnly: true,
                             onTap: () {
-                              DatePicker.showDatePicker(
+                              date_picker.DatePicker.showDatePicker(
                                 context,
-                                theme: DatePickerTheme(
+                                theme: date_picker.DatePickerTheme(
                                   itemStyle: TextStyle(
                                     fontFamily: 'Josefin Sans',
                                     fontSize: 15.0.sp,
@@ -411,7 +411,7 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                                     hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                                   });
                                 },
-                                locale: LocaleType.id,
+                                locale: date_picker.LocaleType.id,
                               );
                             },
                             decoration: InputDecoration(

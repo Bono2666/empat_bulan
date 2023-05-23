@@ -64,8 +64,8 @@ class _NewQuestionsState extends State<NewQuestions> {
   @override
   Widget build(BuildContext context) => KeyboardDismisser(
     gestures: const [
-      // GestureType.onTap,
-      // GestureType.onVerticalDragDown,
+      GestureType.onTap,
+      GestureType.onVerticalDragDown,
     ],
     child: Scaffold(
       body: WillPopScope(

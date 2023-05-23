@@ -220,9 +220,9 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.background,
                           ),
-                          recognizer: TapGestureRecognizer()..onTap = () {
-                            Navigator.pushNamed(context, '/privacy');
-                          },
+                          // recognizer: TapGestureRecognizer()..onTap = () {
+                          //   Navigator.pushNamed(context, '/privacy');
+                          // },
                         ),
                         const TextSpan(
                           text: ' Aplikasi EmpatBulan.',

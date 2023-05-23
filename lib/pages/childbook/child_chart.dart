@@ -22,6 +22,12 @@ class _ChildChartState extends State<ChildChart> {
   late double weightUnder1, weightUnder6, weightUnder12;
   late String status, chartType, sex, chartTitle, statusDescription;
   late TooltipBehavior tooltipBehavior;
+  String selectedTab = 'berat';
+  List<_MenuItem> item = [
+    _MenuItem('Berat Badan', 'berat'),
+    _MenuItem('Tinggi Badan', 'tinggi'),
+    _MenuItem('Lingkar Kepala', 'lingkar'),
+  ];
 
   Future getNotifications() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');
@@ -149,6 +155,22 @@ class _ChildChartState extends State<ChildChart> {
                       chartType = '6mo_3yr';
                       chartTitle = '2,5 - 3 tahun';
                       startMonth = 30;
+                    } else if (ageMonth <= 42) {
+                      chartType = '3yr_6mo';
+                      chartTitle = '3 - 3,5 tahun';
+                      startMonth = 36;
+                    } else if (ageMonth <= 48) {
+                      chartType = '6mo_4yr';
+                      chartTitle = '3,5 - 4 tahun';
+                      startMonth = 42;
+                    } else if (ageMonth <= 54) {
+                      chartType = '4yr_6mo';
+                      chartTitle = '4 - 4,5 tahun';
+                      startMonth = 48;
+                    } else if (ageMonth <= 60) {
+                      chartType = '6mo_5yr';
+                      chartTitle = '4,5 - 5 tahun';
+                      startMonth = 54;
                     } else {
                       chartType = '';
                     }
@@ -230,18 +252,56 @@ class _ChildChartState extends State<ChildChart> {
                                   dbZScoreAge = snapshot.data as List;
 
                                   if (chartType != '') {
-                                    if (double.parse(dbChildBook[dbChildBook.length - 1]['weight']) < double.parse(dbZScoreAge[0]['weight_min2'])) {
-                                      status = "Kurang";
-                                      statusDescription =
-                                      'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang berat badannya secara berkala.';
-                                    } else if (double.parse(dbChildBook[dbChildBook.length - 1]['weight']) <= double.parse(dbZScoreAge[0]['weight_plus2'])) {
-                                      status = "Normal";
-                                      statusDescription =
-                                      'Berat badan anak sesuai umur. Pantau ulang berat badan secara berkala.';
-                                    } else {
-                                      status = "Obesitas";
-                                      statusDescription =
-                                      'Perhatikan aktivitas dan istirahat serta asupan si kecil. Pantau ulang berat badannya secara berkala.';
+                                    if (selectedTab == 'berat') {
+                                      if (double.parse(
+                                          dbChildBook[dbChildBook.length -
+                                              1]['weight']) < double.parse(
+                                          dbZScoreAge[0]['weight_min2'])) {
+                                        status = "Kurang";
+                                        statusDescription =
+                                        'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang berat badannya secara berkala.';
+                                      } else if (double.parse(
+                                          dbChildBook[dbChildBook.length -
+                                              1]['weight']) <= double.parse(
+                                          dbZScoreAge[0]['weight_plus2'])) {
+                                        status = "Normal";
+                                        statusDescription =
+                                        'Berat badan anak sesuai umur. Pantau ulang berat badan secara berkala.';
+                                      } else {
+                                        status = "Obesitas";
+                                        statusDescription =
+                                        'Perhatikan aktivitas dan istirahat serta asupan si kecil. Pantau ulang berat badannya secara berkala.';
+                                      }
+                                    }
+                                    if (selectedTab == 'tinggi') {
+                                      if (double.parse(dbChildBook[dbChildBook.length - 1]['height']) < double.parse(dbZScoreAge[0]['height_min2'])) {
+                                        status = "Kurang";
+                                        statusDescription =
+                                        'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang tinggi badannya secara berkala.';
+                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['height']) <= double.parse(dbZScoreAge[0]['height_plus3'])) {
+                                        status = "Normal";
+                                        statusDescription =
+                                        'Tinggi badan anak sesuai umur. Pantau ulang tinggi badan secara berkala.';
+                                      } else {
+                                        status = "Lebih";
+                                        statusDescription =
+                                        'Perhatikan aktivitas dan istirahat serta asupan si kecil. Pantau ulang tinggi badannya secara berkala.';
+                                      }
+                                    }
+                                    if (selectedTab == 'lingkar') {
+                                      if (double.parse(dbChildBook[dbChildBook.length - 1]['head']) < double.parse(dbZScoreAge[0]['head_min2'])) {
+                                        status = "Kecil";
+                                        statusDescription =
+                                        'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang lingkar kepalanya secara berkala.';
+                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['head']) <= double.parse(dbZScoreAge[0]['head_plus3'])) {
+                                        status = "Normal";
+                                        statusDescription =
+                                        'Lingkar kepala anak sesuai umur. Pantau ulang lingkar kepala secara berkala.';
+                                      } else {
+                                        status = "Besar";
+                                        statusDescription =
+                                        'Perhatikan aktivitas dan istirahat serta asupan si kecil. Pantau ulang lingkar kepalanya secara berkala.';
+                                      }
                                     }
                                   }
                                 }
@@ -249,705 +309,2659 @@ class _ChildChartState extends State<ChildChart> {
                                   children: [
                                     SingleChildScrollView(
                                       physics: const BouncingScrollPhysics(),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 19.0.h,),
-                                            Text(
-                                              'Pertumbuhan',
-                                              style: TextStyle(
-                                                fontSize: 24.0.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                            SizedBox(height: 2.5.h,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Image.asset(
-                                                  'images/ic_weight.png',
-                                                  height: 3.3.w,
-                                                ),
-                                                SizedBox(width: 1.4.w,),
-                                                Padding(
-                                                  padding: EdgeInsets.only(top: 0.8.w),
-                                                  child: Text(
-                                                    'Berat badan sesuai usia',
-                                                    style: TextStyle(
-                                                      fontSize: 10.0.sp,
-                                                      fontWeight: FontWeight.w700,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 1.3.h,),
-                                            chartType == '' ? Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                SizedBox(height: 5.6.h,),
-                                                Image.asset(
-                                                  'images/chart.png',
-                                                  height: 52.0.w,
-                                                ),
-                                                SizedBox(height: 3.4.h,),
+                                                SizedBox(height: 19.0.h,),
                                                 Text(
-                                                  "Tidak ada grafik",
+                                                  'Pertumbuhan',
                                                   style: TextStyle(
-                                                    color: Theme.of(context).colorScheme.background,
+                                                    fontSize: 24.0.sp,
+                                                    color: Colors.black,
                                                     fontWeight: FontWeight.w700,
-                                                    fontSize: 12.0.sp,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                SizedBox(height: 1.3.h,),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 6.7.w),
-                                                  child: Text(
-                                                    'Kurva pertumbuhan WHO hanya tersedia sampai dengan anak '
-                                                        'berusia 3 tahun',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 10.0.sp,
-                                                      height: 1.2,
-                                                    ),
-                                                    textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                                SizedBox(height: 2.8.h,),
+                                                SizedBox(height: 2.5.h,),
+                                                // Row(
+                                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                                //   children: [
+                                                //     InkWell(
+                                                //       onTap: () {
+                                                //         setState(() {
+                                                //           selectedTab = 'berat';
+                                                //         });
+                                                //       },
+                                                //       child: Container(
+                                                //         decoration: BoxDecoration(
+                                                //             borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                                //             border: Border.all(
+                                                //                 color: selectedTab == 'berat'
+                                                //                     ? Colors.transparent : Theme.of(context).primaryColor
+                                                //             ),
+                                                //             color: selectedTab == 'berat'
+                                                //                 ? Theme.of(context).primaryColor : Colors.transparent
+                                                //         ),
+                                                //         child: Padding(
+                                                //           padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                                //           child: Text(
+                                                //             'Berat Badan',
+                                                //             style: TextStyle(
+                                                //               fontSize: 12.0.sp,
+                                                //               color: selectedTab == 'berat'
+                                                //                   ? Colors.white : Colors.black,
+                                                //             ),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     SizedBox(width: 2.2.w,),
+                                                //     InkWell(
+                                                //       onTap: () {
+                                                //         setState(() {
+                                                //           selectedTab = 'tinggi';
+                                                //         });
+                                                //       },
+                                                //       child: Container(
+                                                //         decoration: BoxDecoration(
+                                                //             borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                                //             border: Border.all(
+                                                //                 color: selectedTab == 'tinggi'
+                                                //                     ? Colors.transparent : Theme.of(context).primaryColor
+                                                //             ),
+                                                //             color: selectedTab == 'tinggi'
+                                                //                 ? Theme.of(context).primaryColor : Colors.transparent
+                                                //         ),
+                                                //         child: Padding(
+                                                //           padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                                //           child: Text(
+                                                //             'Tinggi Badan',
+                                                //             style: TextStyle(
+                                                //               fontSize: 12.0.sp,
+                                                //               color: selectedTab == 'tinggi'
+                                                //                   ? Colors.white : Colors.black,
+                                                //             ),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     SizedBox(width: 2.2.w,),
+                                                //     InkWell(
+                                                //       onTap: () {
+                                                //         setState(() {
+                                                //           selectedTab = 'lingkar';
+                                                //         });
+                                                //       },
+                                                //       child: Container(
+                                                //         decoration: BoxDecoration(
+                                                //             borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                                //             border: Border.all(
+                                                //                 color: selectedTab == 'lingkar'
+                                                //                     ? Colors.transparent : Theme.of(context).primaryColor
+                                                //             ),
+                                                //             color: selectedTab == 'lingkar'
+                                                //                 ? Theme.of(context).primaryColor : Colors.transparent
+                                                //         ),
+                                                //         child: Padding(
+                                                //           padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                                //           child: Text(
+                                                //             'Lingkar Kepala',
+                                                //             style: TextStyle(
+                                                //               fontSize: 12.0.sp,
+                                                //               color: selectedTab == 'lingkar'
+                                                //                   ? Colors.white : Colors.black,
+                                                //             ),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
                                               ],
-                                            ) : Column(
-                                              children: [
-                                                Container(
-                                                  width: 100.0.w,
-                                                  constraints: BoxConstraints(minHeight: 10.0.h,),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Theme.of(context).shadowColor,
-                                                        blurRadius: 6,
-                                                        offset: const Offset(0, 3),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 16.0.w,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: item.length,
+                                              physics: const BouncingScrollPhysics(),
+                                              padding: EdgeInsets.fromLTRB(7.0.w, 0, 3.7.w, 3.1.w),
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                return Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTab = item[index].tab;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                                            border: Border.all(
+                                                                color: selectedTab == item[index].tab
+                                                                    ? Colors.transparent : Theme.of(context).primaryColor
+                                                            ),
+                                                            color: selectedTab == item[index].tab
+                                                                ? Theme.of(context).primaryColor : Colors.transparent
+                                                        ),
+                                                        child: Padding(
+                                                          padding: EdgeInsets.fromLTRB(4.4.w, 3.9.w, 4.4.w, 3.6.w),
+                                                          child: Text(
+                                                            item[index].title,
+                                                            style: TextStyle(
+                                                              fontSize: 12.0.sp,
+                                                              color: selectedTab == item[index].tab
+                                                                  ? Colors.white : Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ],
-                                                    borderRadius: const BorderRadius.all(
-                                                      Radius.circular(12),
                                                     ),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(vertical: 5.6.w),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    SizedBox(width: 3.3.w,)
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: selectedTab == 'berat' ? true : false,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 3.0.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: 4.4.w),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Container(
-                                                                  width: 6.6.w,
-                                                                  height: 6.6.w,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius: const BorderRadius.all(
-                                                                        Radius.circular(30),
-                                                                      ),
-                                                                      color: Theme.of(context).colorScheme.background
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: SizedBox(
-                                                                      width: 3.3.w,
-                                                                      height: 3.3.w,
-                                                                      child: FittedBox(
-                                                                        child: Image.asset(
-                                                                            'images/ic_child_book.png'
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 1.6.w,),
-                                                                Text(
-                                                                  '${dbChildBook[dbChildBook.length - 1]['weight']} kg',
-                                                                  style: TextStyle(
-                                                                    fontSize: 10.0.sp,
-                                                                    fontWeight: FontWeight.w700,
-                                                                    color: Colors.black,
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 10.0.w,),
-                                                                Container(
-                                                                  width: 6.6.w,
-                                                                  height: 6.6.w,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius: const BorderRadius.all(
-                                                                        Radius.circular(30),
-                                                                      ),
-                                                                      color: Theme.of(context).colorScheme.background
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: SizedBox(
-                                                                      width: 3.3.w,
-                                                                      child: FittedBox(
-                                                                        child: Image.asset(
-                                                                            'images/ic_ruler_white.png'
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 1.6.w,),
-                                                                Text(
-                                                                  '${dbChildBook[dbChildBook.length - 1]['height']} cm',
-                                                                  style: TextStyle(
-                                                                    fontSize: 10.0.sp,
-                                                                    fontWeight: FontWeight.w700,
-                                                                    color: Colors.black,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 3.3.w,),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                style: TextStyle(
-                                                                  fontSize: 13.0.sp,
-                                                                  fontFamily: 'Josefin Sans',
-                                                                  fontWeight: FontWeight.w700,
-                                                                ),
-                                                                children: [
-                                                                  const TextSpan(
-                                                                    text: 'Berat Badan ',
-                                                                    style: TextStyle(
-                                                                      color: Colors.black,
-                                                                    ),
-                                                                  ),
-                                                                  TextSpan(
-                                                                    text: status,
-                                                                    style: TextStyle(
-                                                                      color: Theme.of(context).colorScheme.background,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
+                                                      Image.asset(
+                                                        'images/ic_weight.png',
+                                                        height: 3.3.w,
                                                       ),
-                                                      SizedBox(height: 1.2.w,),
+                                                      SizedBox(width: 1.4.w,),
                                                       Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: 2.35.w),
-                                                        child: Html(
-                                                          data: statusDescription,
-                                                          style: {
-                                                            'body': Style(
-                                                              fontSize: FontSize.percent(112),
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black,
-                                                              padding: const EdgeInsets.all(0),
-                                                              lineHeight: LineHeight.percent(112),
-                                                            ),
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(height: 3.8.h,),
-                                                Container(
-                                                  width: 86.7.w,
-                                                  constraints: BoxConstraints(
-                                                    minHeight: 95.8.w,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                                                    border: Border.all(
-                                                      color: Theme.of(context).primaryColor,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(3.2.w, 6.7.w, 5.6.w, 8.8.w),
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          'Grafik Pertumbuhan',
+                                                        padding: EdgeInsets.only(top: 0.8.w),
+                                                        child: Text(
+                                                          'Berat badan sesuai usia',
                                                           style: TextStyle(
-                                                            fontSize: 17.0.sp,
+                                                            fontSize: 10.0.sp,
+                                                            fontWeight: FontWeight.w700,
                                                             color: Colors.black,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 1.1.w,),
-                                                        Text(
-                                                          'Grafik WHO digunakan untuk anak\nusia $chartTitle',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 1.3.h,),
+                                                  chartType == '' ? Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      SizedBox(height: 5.6.h,),
+                                                      Image.asset(
+                                                        'images/chart.png',
+                                                        height: 52.0.w,
+                                                      ),
+                                                      SizedBox(height: 3.4.h,),
+                                                      Text(
+                                                        "Tidak ada grafik",
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).colorScheme.background,
+                                                          fontWeight: FontWeight.w700,
+                                                          fontSize: 12.0.sp,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                      SizedBox(height: 1.3.h,),
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                                                        child: Text(
+                                                          'Kurva pertumbuhan WHO hanya tersedia sampai dengan anak '
+                                                              'berusia 5 tahun',
                                                           style: TextStyle(
-                                                            fontSize: 10.0.sp,
                                                             color: Colors.black,
+                                                            fontSize: 10.0.sp,
                                                             height: 1.2,
                                                           ),
                                                           textAlign: TextAlign.center,
                                                         ),
-                                                        SizedBox(height: 4.4.w,),
-                                                        SfCartesianChart(
-                                                          series: <ChartSeries> [
-                                                            SplineAreaSeries (
-                                                              dataSource: dbZScore,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbZScore[index]['age_mo'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbZScore[index]['age_mo'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_min3']),
-                                                              color: Colors.transparent,
-                                                              borderColor: Theme.of(context).colorScheme.background,
-                                                              borderWidth: 1,
-                                                              enableTooltip: false,
+                                                      ),
+                                                      SizedBox(height: 2.8.h,),
+                                                    ],
+                                                  ) : Column(
+                                                    children: [
+                                                      Container(
+                                                        width: 100.0.w,
+                                                        constraints: BoxConstraints(minHeight: 10.0.h,),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Theme.of(context).shadowColor,
+                                                              blurRadius: 6,
+                                                              offset: const Offset(0, 3),
                                                             ),
-                                                            SplineAreaSeries (
-                                                              dataSource: dbZScore,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbZScore[index]['age_mo'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbZScore[index]['age_mo'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_min2']),
-                                                              color: Colors.transparent,
-                                                              borderWidth: 1,
-                                                              borderColor: Theme.of(context).colorScheme.error,
-                                                              enableTooltip: false,
-                                                            ),
-                                                            SplineAreaSeries (
-                                                              dataSource: dbZScore,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbZScore[index]['age_mo'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbZScore[index]['age_mo'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbZScore[index]['weight0']),
-                                                              color: Colors.transparent,
-                                                              borderWidth: 1,
-                                                              borderColor: Theme.of(context).focusColor,
-                                                              enableTooltip: false,
-                                                            ),
-                                                            SplineAreaSeries (
-                                                              dataSource: dbZScore,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbZScore[index]['age_mo'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbZScore[index]['age_mo'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_plus2']),
-                                                              color: Colors.transparent,
-                                                              borderWidth: 1,
-                                                              borderColor: Theme.of(context).colorScheme.error,
-                                                              enableTooltip: false,
-                                                            ),
-                                                            SplineAreaSeries (
-                                                              dataSource: dbZScore,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbZScore[index]['age_mo'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbZScore[index]['age_mo'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_plus3']),
-                                                              color: Theme.of(context).colorScheme.background,
-                                                              gradient: const LinearGradient(
-                                                                begin: Alignment.topCenter,
-                                                                end: Alignment.bottomCenter,
-                                                                colors: [
-                                                                  Color(0x80C09AC7),
-                                                                  Color(0x00ffffff),
+                                                          ],
+                                                          borderRadius: const BorderRadius.all(
+                                                            Radius.circular(12),
+                                                          ),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(vertical: 5.6.w),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 4.4.w),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        width: 6.6.w,
+                                                                        height: 6.6.w,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.all(
+                                                                              Radius.circular(30),
+                                                                            ),
+                                                                            color: Theme.of(context).colorScheme.background
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: SizedBox(
+                                                                            width: 3.3.w,
+                                                                            height: 3.3.w,
+                                                                            child: FittedBox(
+                                                                              child: Image.asset(
+                                                                                  'images/ic_child_book.png'
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(width: 1.6.w,),
+                                                                      Text(
+                                                                        '${dbChildBook[dbChildBook.length - 1]['weight']} kg',
+                                                                        style: TextStyle(
+                                                                          fontSize: 10.0.sp,
+                                                                          fontWeight: FontWeight.w700,
+                                                                          color: Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 3.3.w,),
+                                                                  RichText(
+                                                                    text: TextSpan(
+                                                                      style: TextStyle(
+                                                                        fontSize: 13.0.sp,
+                                                                        fontFamily: 'Josefin Sans',
+                                                                        fontWeight: FontWeight.w700,
+                                                                      ),
+                                                                      children: [
+                                                                        const TextSpan(
+                                                                          text: 'Berat Badan ',
+                                                                          style: TextStyle(
+                                                                            color: Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        TextSpan(
+                                                                          text: status,
+                                                                          style: TextStyle(
+                                                                            color: Theme.of(context).colorScheme.background,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
-                                                              borderColor: Theme.of(context).colorScheme.background,
-                                                              borderWidth: 1,
-                                                              enableTooltip: false,
                                                             ),
-                                                            SplineAreaSeries (
-                                                              dataSource: dbRangeChildBook,
-                                                              xValueMapper: (data, index) {
-                                                                late String month;
-                                                                if (chartType == 'under6_mo') {
-                                                                  month = dbRangeChildBook[index]['age_month'];
-                                                                }
-                                                                if (chartType == '6mo_1yr') {
-                                                                  if (dbRangeChildBook[index]['age_month'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = dbRangeChildBook[index]['age_month'];
-                                                                  }
-                                                                }
-                                                                if (chartType == '1yr_6mo') {
-                                                                  if (dbRangeChildBook[index]['age_month'] == '12') {
-                                                                    month = '1 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_2yr')   {
-                                                                  if (dbRangeChildBook[index]['age_month'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '2yr_6mo') {
-                                                                  if (dbZScore[index]['age_mo'] == '24') {
-                                                                    month = '2 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                if (chartType == '6mo_3yr') {
-                                                                  if (dbZScore[index]['age_mo'] == '36') {
-                                                                    month = '3 th';
-                                                                  } else {
-                                                                    month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
-                                                                  }
-                                                                }
-                                                                return month;
-                                                              },
-                                                              yValueMapper: (data, index) => num.parse(dbRangeChildBook[index]['weight']),
-                                                              color: Colors.transparent,
-                                                              markerSettings: MarkerSettings(
-                                                                color: Theme.of(context).colorScheme.background,
-                                                                isVisible: true,
-                                                                height: 2.2.w,
-                                                                width: 2.2.w,
-                                                                borderWidth: 0,
+                                                            SizedBox(height: 1.2.w,),
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 2.35.w),
+                                                              child: Html(
+                                                                data: statusDescription,
+                                                                style: {
+                                                                  'body': Style(
+                                                                    fontSize: FontSize.percent(112),
+                                                                    fontWeight: FontWeight.w400,
+                                                                    color: Colors.black,
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    lineHeight: LineHeight.percent(112),
+                                                                  ),
+                                                                },
                                                               ),
-                                                              borderColor: Theme.of(context).colorScheme.background,
-                                                              borderWidth: 1,
-                                                              enableTooltip: true,
-                                                              name: 'Berat (kg)',
                                                             ),
                                                           ],
-                                                          primaryXAxis: CategoryAxis(
-                                                            title: AxisTitle(
-                                                              text: 'bulan',
-                                                              alignment: ChartAlignment.far,
-                                                              textStyle: TextStyle(
-                                                                fontSize: 7.0.sp,
-                                                                color: Colors.black,
-                                                                fontFamily: 'Josefin Sans',
-                                                              ),
-                                                            ),
-                                                            labelStyle: TextStyle(
-                                                              fontFamily: 'Josefin Sans',
-                                                              fontSize: 10.0.sp,
-                                                              color: Colors.black,
-                                                            ),
-                                                          ),
-                                                          primaryYAxis: NumericAxis(
-                                                            labelStyle: const TextStyle(
-                                                              fontFamily: 'Josefin Sans',
-                                                              color: Colors.black,
-                                                            ),
-                                                            title: AxisTitle(
-                                                              text: 'kg',
-                                                              textStyle: TextStyle(
-                                                                fontFamily: 'Josefin Sans',
-                                                                color: Colors.black,
-                                                                fontSize: 7.0.sp,
-                                                              ),
-                                                              alignment: ChartAlignment.far,
-                                                            ),
-                                                          ),
-                                                          tooltipBehavior: tooltipBehavior,
                                                         ),
-                                                        SizedBox(height: 2.2.w,),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(width: 8.0.w,),
-                                                            Container(
-                                                              width: 2.2.w,
-                                                              height: 2.2.w,
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                                                color: Theme.of(context).colorScheme.background,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 1.2.w,),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(top: 0.8.w),
-                                                              child: Text(
-                                                                'Data Pertumbuhan Si Kecil',
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Container(
+                                                        width: 86.7.w,
+                                                        constraints: BoxConstraints(
+                                                          minHeight: 95.8.w,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                                          border: Border.all(
+                                                            color: Theme.of(context).primaryColor,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding: EdgeInsets.fromLTRB(3.2.w, 6.7.w, 5.6.w, 8.8.w),
+                                                          child: Column(
+                                                            children: [
+                                                              Text(
+                                                                'Grafik Pertumbuhan',
                                                                 style: TextStyle(
-                                                                  fontSize: 7.0.sp,
+                                                                  fontSize: 17.0.sp,
                                                                   color: Colors.black,
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(width: 8.0.w,),
-                                                            Container(
-                                                              width: 2.2.w,
-                                                              height: 1.1.w,
-                                                              decoration: BoxDecoration(
-                                                                border: Border(
-                                                                  bottom: BorderSide(
-                                                                    color: Theme.of(context).focusColor,
-                                                                    width: 1.2,
+                                                              SizedBox(height: 1.1.w,),
+                                                              Text(
+                                                                'Grafik WHO digunakan untuk anak\nusia $chartTitle',
+                                                                style: TextStyle(
+                                                                  fontSize: 10.0.sp,
+                                                                  color: Colors.black,
+                                                                  height: 1.2,
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              SizedBox(height: 4.4.w,),
+                                                              SfCartesianChart(
+                                                                series: <ChartSeries> [
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_min3']),
+                                                                    color: Colors.transparent,
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_min2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['weight0']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).focusColor,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_plus2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['weight_plus3']),
+                                                                    color: Theme.of(context).colorScheme.background,
+                                                                    gradient: const LinearGradient(
+                                                                      begin: Alignment.topCenter,
+                                                                      end: Alignment.bottomCenter,
+                                                                      colors: [
+                                                                        Color(0x80C09AC7),
+                                                                        Color(0x00ffffff),
+                                                                      ],
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbRangeChildBook,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbRangeChildBook[index]['age_month'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbRangeChildBook[index]['age_month'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbRangeChildBook[index]['weight']),
+                                                                    color: Colors.transparent,
+                                                                    markerSettings: MarkerSettings(
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                      isVisible: true,
+                                                                      height: 2.2.w,
+                                                                      width: 2.2.w,
+                                                                      borderWidth: 0,
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: true,
+                                                                    name: 'Berat (kg)',
+                                                                  ),
+                                                                ],
+                                                                primaryXAxis: CategoryAxis(
+                                                                  title: AxisTitle(
+                                                                    text: 'bulan',
+                                                                    alignment: ChartAlignment.far,
+                                                                    textStyle: TextStyle(
+                                                                      fontSize: 7.0.sp,
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'Josefin Sans',
+                                                                    ),
+                                                                  ),
+                                                                  labelStyle: TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    fontSize: 10.0.sp,
+                                                                    color: Colors.black,
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 1.2.w,),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(top: 0.8.w),
-                                                              child: Text(
-                                                                'Berat Badan Ideal',
-                                                                style: TextStyle(
-                                                                  fontSize: 7.0.sp,
-                                                                  color: Colors.black,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(width: 8.0.w,),
-                                                            Container(
-                                                              width: 2.2.w,
-                                                              height: 1.1.w,
-                                                              decoration: BoxDecoration(
-                                                                border: Border(
-                                                                  bottom: BorderSide(
-                                                                    color: Theme.of(context).colorScheme.error,
-                                                                    width: 1.2,
+                                                                primaryYAxis: NumericAxis(
+                                                                  labelStyle: const TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                  title: AxisTitle(
+                                                                    text: 'kg',
+                                                                    textStyle: TextStyle(
+                                                                      fontFamily: 'Josefin Sans',
+                                                                      color: Colors.black,
+                                                                      fontSize: 7.0.sp,
+                                                                    ),
+                                                                    alignment: ChartAlignment.far,
                                                                   ),
                                                                 ),
+                                                                tooltipBehavior: tooltipBehavior,
                                                               ),
-                                                            ),
-                                                            SizedBox(width: 1.2.w,),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(top: 0.8.w),
-                                                              child: Text(
-                                                                'Batas Berat Badan Normal',
-                                                                style: TextStyle(
-                                                                  fontSize: 7.0.sp,
-                                                                  color: Colors.black,
-                                                                ),
+                                                              SizedBox(height: 2.2.w,),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 2.2.w,
+                                                                    decoration: BoxDecoration(
+                                                                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Data Pertumbuhan Si Kecil',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ),
-                                                          ],
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).focusColor,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Berat Badan Ideal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).colorScheme.error,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Batas Berat Badan Normal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Text(
+                                                        'Titik data pertumbuhan yang tercatat di EmpatBulan '
+                                                            'akan otomatis diplot ke kurva pertumbuhan yang tersedia. '
+                                                            'Secara umum, pertumbuhan yang baik ditandai dengan garis '
+                                                            'data anak yang sejajar dengan garis hijau (z-score 0) dan '
+                                                            'berada di antara 2 garis merah (z-score 2 dan -2)',
+                                                        style: TextStyle(
+                                                          fontSize: 10.0.sp,
+                                                          color: Colors.black,
+                                                          height: 1.2,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                SizedBox(height: 3.8.h,),
-                                                Text(
-                                                  'Titik data pertumbuhan yang tercatat di EmpatBulan '
-                                                      'akan otomatis diplot ke kurva pertumbuhan yang tersedia. '
-                                                      'Secara umum, pertumbuhan yang baik ditandai dengan garis '
-                                                      'data anak yang sejajar dengan garis hijau (z-score 0) dan '
-                                                      'berada di antara 2 garis merah (z-score 2 dan -2)',
-                                                  style: TextStyle(
-                                                    fontSize: 10.0.sp,
-                                                    color: Colors.black,
-                                                    height: 1.2,
-                                                  ),
-                                                ),
-                                              ],
+                                                  SizedBox(height: 11.3.h,),
+                                                ],
+                                              ),
                                             ),
-                                            SizedBox(height: 11.3.h,),
-                                          ],
-                                        ),
+                                          ),
+                                          Visibility(
+                                            visible: selectedTab == 'tinggi' ? true : false,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 3.0.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Image.asset(
+                                                        'images/ic_ruler_color.webp',
+                                                        width: 3.3.w,
+                                                      ),
+                                                      SizedBox(width: 1.4.w,),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 0.8.w),
+                                                        child: Text(
+                                                          'Tinggi badan sesuai usia',
+                                                          style: TextStyle(
+                                                            fontSize: 10.0.sp,
+                                                            fontWeight: FontWeight.w700,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 1.3.h,),
+                                                  chartType == '' ? Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      SizedBox(height: 5.6.h,),
+                                                      Image.asset(
+                                                        'images/chart.png',
+                                                        height: 52.0.w,
+                                                      ),
+                                                      SizedBox(height: 3.4.h,),
+                                                      Text(
+                                                        "Tidak ada grafik",
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).colorScheme.background,
+                                                          fontWeight: FontWeight.w700,
+                                                          fontSize: 12.0.sp,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                      SizedBox(height: 1.3.h,),
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                                                        child: Text(
+                                                          'Kurva pertumbuhan WHO hanya tersedia sampai dengan anak '
+                                                              'berusia 3 tahun',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 10.0.sp,
+                                                            height: 1.2,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 2.8.h,),
+                                                    ],
+                                                  ) : Column(
+                                                    children: [
+                                                      Container(
+                                                        width: 100.0.w,
+                                                        constraints: BoxConstraints(minHeight: 10.0.h,),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Theme.of(context).shadowColor,
+                                                              blurRadius: 6,
+                                                              offset: const Offset(0, 3),
+                                                            ),
+                                                          ],
+                                                          borderRadius: const BorderRadius.all(
+                                                            Radius.circular(12),
+                                                          ),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(vertical: 5.6.w),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 4.4.w),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        width: 6.6.w,
+                                                                        height: 6.6.w,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.all(
+                                                                              Radius.circular(30),
+                                                                            ),
+                                                                            color: Theme.of(context).colorScheme.background
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: SizedBox(
+                                                                            width: 3.3.w,
+                                                                            child: FittedBox(
+                                                                              child: Image.asset(
+                                                                                  'images/ic_ruler_white.png'
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(width: 1.6.w,),
+                                                                      Text(
+                                                                        '${dbChildBook[dbChildBook.length - 1]['height']} cm',
+                                                                        style: TextStyle(
+                                                                          fontSize: 10.0.sp,
+                                                                          fontWeight: FontWeight.w700,
+                                                                          color: Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 3.3.w,),
+                                                                  RichText(
+                                                                    text: TextSpan(
+                                                                      style: TextStyle(
+                                                                        fontSize: 13.0.sp,
+                                                                        fontFamily: 'Josefin Sans',
+                                                                        fontWeight: FontWeight.w700,
+                                                                      ),
+                                                                      children: [
+                                                                        const TextSpan(
+                                                                          text: 'Tinggi Badan ',
+                                                                          style: TextStyle(
+                                                                            color: Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        TextSpan(
+                                                                          text: status,
+                                                                          style: TextStyle(
+                                                                            color: Theme.of(context).colorScheme.background,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(height: 1.2.w,),
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 2.35.w),
+                                                              child: Html(
+                                                                data: statusDescription,
+                                                                style: {
+                                                                  'body': Style(
+                                                                    fontSize: FontSize.percent(112),
+                                                                    fontWeight: FontWeight.w400,
+                                                                    color: Colors.black,
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    lineHeight: LineHeight.percent(112),
+                                                                  ),
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Container(
+                                                        width: 86.7.w,
+                                                        constraints: BoxConstraints(
+                                                          minHeight: 95.8.w,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                                          border: Border.all(
+                                                            color: Theme.of(context).primaryColor,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding: EdgeInsets.fromLTRB(3.2.w, 6.7.w, 5.6.w, 8.8.w),
+                                                          child: Column(
+                                                            children: [
+                                                              Text(
+                                                                'Grafik Pertumbuhan',
+                                                                style: TextStyle(
+                                                                  fontSize: 17.0.sp,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: 1.1.w,),
+                                                              Text(
+                                                                'Grafik WHO digunakan untuk anak\nusia $chartTitle',
+                                                                style: TextStyle(
+                                                                  fontSize: 10.0.sp,
+                                                                  color: Colors.black,
+                                                                  height: 1.2,
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              SizedBox(height: 4.4.w,),
+                                                              SfCartesianChart(
+                                                                series: <ChartSeries> [
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['height_min3']),
+                                                                    color: Colors.transparent,
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['height_min2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['height0']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).focusColor,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['height_plus2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['height_plus3']),
+                                                                    color: Theme.of(context).colorScheme.background,
+                                                                    gradient: const LinearGradient(
+                                                                      begin: Alignment.topCenter,
+                                                                      end: Alignment.bottomCenter,
+                                                                      colors: [
+                                                                        Color(0x80C09AC7),
+                                                                        Color(0x00ffffff),
+                                                                      ],
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbRangeChildBook,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbRangeChildBook[index]['age_month'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbRangeChildBook[index]['age_month'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbRangeChildBook[index]['height']),
+                                                                    color: Colors.transparent,
+                                                                    markerSettings: MarkerSettings(
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                      isVisible: true,
+                                                                      height: 2.2.w,
+                                                                      width: 2.2.w,
+                                                                      borderWidth: 0,
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: true,
+                                                                    name: 'Tinggi (cm)',
+                                                                  ),
+                                                                ],
+                                                                primaryXAxis: CategoryAxis(
+                                                                  title: AxisTitle(
+                                                                    text: 'bulan',
+                                                                    alignment: ChartAlignment.far,
+                                                                    textStyle: TextStyle(
+                                                                      fontSize: 7.0.sp,
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'Josefin Sans',
+                                                                    ),
+                                                                  ),
+                                                                  labelStyle: TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    fontSize: 10.0.sp,
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                ),
+                                                                primaryYAxis: NumericAxis(
+                                                                  labelStyle: const TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                  title: AxisTitle(
+                                                                    text: 'cm',
+                                                                    textStyle: TextStyle(
+                                                                      fontFamily: 'Josefin Sans',
+                                                                      color: Colors.black,
+                                                                      fontSize: 7.0.sp,
+                                                                    ),
+                                                                    alignment: ChartAlignment.far,
+                                                                  ),
+                                                                ),
+                                                                tooltipBehavior: tooltipBehavior,
+                                                              ),
+                                                              SizedBox(height: 2.2.w,),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 2.2.w,
+                                                                    decoration: BoxDecoration(
+                                                                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Data Pertumbuhan Si Kecil',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).focusColor,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Tinggi Badan Ideal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).colorScheme.error,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Batas Tinggi Badan Normal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Text(
+                                                        'Titik data pertumbuhan yang tercatat di EmpatBulan '
+                                                            'akan otomatis diplot ke kurva pertumbuhan yang tersedia. '
+                                                            'Secara umum, pertumbuhan yang baik ditandai dengan garis '
+                                                            'data anak yang sejajar dengan garis hijau (z-score 0) dan '
+                                                            'berada di antara 2 garis merah (z-score 2 dan -2)',
+                                                        style: TextStyle(
+                                                          fontSize: 10.0.sp,
+                                                          color: Colors.black,
+                                                          height: 1.2,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 11.3.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: selectedTab == 'lingkar' ? true : false,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 7.0.w,),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 3.0.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Image.asset(
+                                                        'images/ic_ruler_color.webp',
+                                                        width: 3.3.w,
+                                                      ),
+                                                      SizedBox(width: 1.4.w,),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 0.8.w),
+                                                        child: Text(
+                                                          'Lingkar kepala sesuai usia',
+                                                          style: TextStyle(
+                                                            fontSize: 10.0.sp,
+                                                            fontWeight: FontWeight.w700,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 1.3.h,),
+                                                  chartType == '' ? Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      SizedBox(height: 5.6.h,),
+                                                      Image.asset(
+                                                        'images/chart.png',
+                                                        height: 52.0.w,
+                                                      ),
+                                                      SizedBox(height: 3.4.h,),
+                                                      Text(
+                                                        "Tidak ada grafik",
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).colorScheme.background,
+                                                          fontWeight: FontWeight.w700,
+                                                          fontSize: 12.0.sp,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                      SizedBox(height: 1.3.h,),
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                                                        child: Text(
+                                                          'Kurva pertumbuhan WHO hanya tersedia sampai dengan anak '
+                                                              'berusia 5 tahun',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 10.0.sp,
+                                                            height: 1.2,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 2.8.h,),
+                                                    ],
+                                                  ) : Column(
+                                                    children: [
+                                                      Container(
+                                                        width: 100.0.w,
+                                                        constraints: BoxConstraints(minHeight: 10.0.h,),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Theme.of(context).shadowColor,
+                                                              blurRadius: 6,
+                                                              offset: const Offset(0, 3),
+                                                            ),
+                                                          ],
+                                                          borderRadius: const BorderRadius.all(
+                                                            Radius.circular(12),
+                                                          ),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(vertical: 5.6.w),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 4.4.w),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        width: 6.6.w,
+                                                                        height: 6.6.w,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.all(
+                                                                              Radius.circular(30),
+                                                                            ),
+                                                                            color: Theme.of(context).colorScheme.background
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: SizedBox(
+                                                                            width: 3.3.w,
+                                                                            child: FittedBox(
+                                                                              child: Image.asset(
+                                                                                  'images/ic_ruler_white.png'
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(width: 1.6.w,),
+                                                                      Text(
+                                                                        '${dbChildBook[dbChildBook.length - 1]['head']} cm',
+                                                                        style: TextStyle(
+                                                                          fontSize: 10.0.sp,
+                                                                          fontWeight: FontWeight.w700,
+                                                                          color: Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 3.3.w,),
+                                                                  RichText(
+                                                                    text: TextSpan(
+                                                                      style: TextStyle(
+                                                                        fontSize: 13.0.sp,
+                                                                        fontFamily: 'Josefin Sans',
+                                                                        fontWeight: FontWeight.w700,
+                                                                      ),
+                                                                      children: [
+                                                                        const TextSpan(
+                                                                          text: 'Lingkar Kepala ',
+                                                                          style: TextStyle(
+                                                                            color: Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        TextSpan(
+                                                                          text: status,
+                                                                          style: TextStyle(
+                                                                            color: Theme.of(context).colorScheme.background,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(height: 1.2.w,),
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 2.35.w),
+                                                              child: Html(
+                                                                data: statusDescription,
+                                                                style: {
+                                                                  'body': Style(
+                                                                    fontSize: FontSize.percent(112),
+                                                                    fontWeight: FontWeight.w400,
+                                                                    color: Colors.black,
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    lineHeight: LineHeight.percent(112),
+                                                                  ),
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Container(
+                                                        width: 86.7.w,
+                                                        constraints: BoxConstraints(
+                                                          minHeight: 95.8.w,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                                          border: Border.all(
+                                                            color: Theme.of(context).primaryColor,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding: EdgeInsets.fromLTRB(3.2.w, 6.7.w, 5.6.w, 8.8.w),
+                                                          child: Column(
+                                                            children: [
+                                                              Text(
+                                                                'Grafik Pertumbuhan',
+                                                                style: TextStyle(
+                                                                  fontSize: 17.0.sp,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: 1.1.w,),
+                                                              Text(
+                                                                'Grafik WHO digunakan untuk anak\nusia $chartTitle',
+                                                                style: TextStyle(
+                                                                  fontSize: 10.0.sp,
+                                                                  color: Colors.black,
+                                                                  height: 1.2,
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              SizedBox(height: 4.4.w,),
+                                                              SfCartesianChart(
+                                                                series: <ChartSeries> [
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['head_min3']),
+                                                                    color: Colors.transparent,
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['head_min2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['head0']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).focusColor,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['head_plus2']),
+                                                                    color: Colors.transparent,
+                                                                    borderWidth: 1,
+                                                                    borderColor: Theme.of(context).colorScheme.error,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbZScore,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbZScore[index]['age_mo'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbZScore[index]['age_mo'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbZScore[index]['age_mo'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbZScore[index]['age_mo'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbZScore[index]['age_mo']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbZScore[index]['head_plus3']),
+                                                                    color: Theme.of(context).colorScheme.background,
+                                                                    gradient: const LinearGradient(
+                                                                      begin: Alignment.topCenter,
+                                                                      end: Alignment.bottomCenter,
+                                                                      colors: [
+                                                                        Color(0x80C09AC7),
+                                                                        Color(0x00ffffff),
+                                                                      ],
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: false,
+                                                                  ),
+                                                                  SplineAreaSeries (
+                                                                    dataSource: dbRangeChildBook,
+                                                                    xValueMapper: (data, index) {
+                                                                      late String month;
+                                                                      if (chartType == 'under6_mo') {
+                                                                        month = dbRangeChildBook[index]['age_month'];
+                                                                      }
+                                                                      if (chartType == '6mo_1yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = dbRangeChildBook[index]['age_month'];
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '1yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '12') {
+                                                                          month = '1 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_2yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 12).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '2yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '24') {
+                                                                          month = '2 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_3yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 24).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '3yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '36') {
+                                                                          month = '3 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_4yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 36).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '4yr_6mo') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '48') {
+                                                                          month = '4 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      if (chartType == '6mo_5yr') {
+                                                                        if (dbRangeChildBook[index]['age_month'] == '60') {
+                                                                          month = '5 th';
+                                                                        } else {
+                                                                          month = (int.parse(dbRangeChildBook[index]['age_month']) - 48).toString();
+                                                                        }
+                                                                      }
+                                                                      return month;
+                                                                    },
+                                                                    yValueMapper: (data, index) => num.parse(dbRangeChildBook[index]['head']),
+                                                                    color: Colors.transparent,
+                                                                    markerSettings: MarkerSettings(
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                      isVisible: true,
+                                                                      height: 2.2.w,
+                                                                      width: 2.2.w,
+                                                                      borderWidth: 0,
+                                                                    ),
+                                                                    borderColor: Theme.of(context).colorScheme.background,
+                                                                    borderWidth: 1,
+                                                                    enableTooltip: true,
+                                                                    name: 'Lingkar (cm)',
+                                                                  ),
+                                                                ],
+                                                                primaryXAxis: CategoryAxis(
+                                                                  title: AxisTitle(
+                                                                    text: 'bulan',
+                                                                    alignment: ChartAlignment.far,
+                                                                    textStyle: TextStyle(
+                                                                      fontSize: 7.0.sp,
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'Josefin Sans',
+                                                                    ),
+                                                                  ),
+                                                                  labelStyle: TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    fontSize: 10.0.sp,
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                ),
+                                                                primaryYAxis: NumericAxis(
+                                                                  labelStyle: const TextStyle(
+                                                                    fontFamily: 'Josefin Sans',
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                  title: AxisTitle(
+                                                                    text: 'cm',
+                                                                    textStyle: TextStyle(
+                                                                      fontFamily: 'Josefin Sans',
+                                                                      color: Colors.black,
+                                                                      fontSize: 7.0.sp,
+                                                                    ),
+                                                                    alignment: ChartAlignment.far,
+                                                                  ),
+                                                                ),
+                                                                tooltipBehavior: tooltipBehavior,
+                                                              ),
+                                                              SizedBox(height: 2.2.w,),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 2.2.w,
+                                                                    decoration: BoxDecoration(
+                                                                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                                                      color: Theme.of(context).colorScheme.background,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Data Pertumbuhan Si Kecil',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).focusColor,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Lingkar Kepala Ideal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(width: 8.0.w,),
+                                                                  Container(
+                                                                    width: 2.2.w,
+                                                                    height: 1.1.w,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                        bottom: BorderSide(
+                                                                          color: Theme.of(context).colorScheme.error,
+                                                                          width: 1.2,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 1.2.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 0.8.w),
+                                                                    child: Text(
+                                                                      'Batas Lingkar Kepala Normal',
+                                                                      style: TextStyle(
+                                                                        fontSize: 7.0.sp,
+                                                                        color: Colors.black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.8.h,),
+                                                      Text(
+                                                        'Titik data pertumbuhan yang tercatat di EmpatBulan '
+                                                            'akan otomatis diplot ke kurva pertumbuhan yang tersedia. '
+                                                            'Secara umum, pertumbuhan yang baik ditandai dengan garis '
+                                                            'data anak yang sejajar dengan garis hijau (z-score 0) dan '
+                                                            'berada di antara 2 garis merah (z-score 2 dan -2)',
+                                                        style: TextStyle(
+                                                          fontSize: 10.0.sp,
+                                                          color: Colors.black,
+                                                          height: 1.2,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 11.3.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Column(
@@ -1336,4 +3350,11 @@ class _ChildChartState extends State<ChildChart> {
       ),
     );
   }
+}
+
+class _MenuItem {
+  _MenuItem(this.title, this.tab);
+
+  final String title;
+  final String tab;
 }

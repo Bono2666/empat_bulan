@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as date_picker;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -129,7 +129,7 @@ class _HplState extends State<Hpl> {
                               controller: hplText,
                               readOnly: true,
                               onTap: () {
-                                DatePicker.showDatePicker(
+                                date_picker.DatePicker.showDatePicker(
                                   context,
                                   minTime: DateTime.now(),
                                   maxTime: DateTime.now().add(const Duration(days: 280)),
@@ -145,7 +145,7 @@ class _HplState extends State<Hpl> {
                                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                                     });
                                   },
-                                  theme: DatePickerTheme(
+                                  theme: date_picker.DatePickerTheme(
                                     itemStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
                                       fontSize: 15.0.sp,
@@ -160,7 +160,7 @@ class _HplState extends State<Hpl> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  locale: LocaleType.id,
+                                  locale: date_picker.LocaleType.id,
                                 );
                               },
                               decoration: InputDecoration(
@@ -228,9 +228,9 @@ class _HplState extends State<Hpl> {
                               controller: hphtText,
                               readOnly: true,
                               onTap: () {
-                                DatePicker.showDatePicker(
+                                date_picker.DatePicker.showDatePicker(
                                   context,
-                                  theme: DatePickerTheme(
+                                  theme: date_picker.DatePickerTheme(
                                     itemStyle: TextStyle(
                                       fontFamily: 'Josefin Sans',
                                       fontSize: 15.0.sp,
@@ -259,7 +259,7 @@ class _HplState extends State<Hpl> {
                                       hplResult.text = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(hpl);
                                     });
                                   },
-                                  locale: LocaleType.id,
+                                  locale: date_picker.LocaleType.id,
                                 );
                               },
                               decoration: InputDecoration(

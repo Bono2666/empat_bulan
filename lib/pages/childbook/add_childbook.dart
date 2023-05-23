@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as date_picker;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -187,7 +187,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                       controller: growthDate,
                                       readOnly: true,
                                       onTap: () {
-                                        DatePicker.showDatePicker(
+                                        date_picker.DatePicker.showDatePicker(
                                           context,
                                           minTime: birthDate.add(const Duration(days: 30)),
                                           maxTime: DateTime.now(),
@@ -200,7 +200,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                               growthDate.text = DateFormat('d MMM yyyy', 'id_ID').format(pickDate);
                                             });
                                           },
-                                          theme: DatePickerTheme(
+                                          theme: date_picker.DatePickerTheme(
                                             itemStyle: TextStyle(
                                               fontFamily: 'Josefin Sans',
                                               fontSize: 15.0.sp,
@@ -215,7 +215,7 @@ class _AddChildBookState extends State<AddChildBook> {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          locale: LocaleType.id,
+                                          locale: date_picker.LocaleType.id,
                                         );
                                       },
                                       decoration: InputDecoration(

@@ -1237,7 +1237,7 @@ class _QuestionViewState extends State<QuestionView> {
                                                       hintText: 'Aa',
                                                       hintStyle: TextStyle(
                                                         // ignore: deprecated_member_use
-                                                        color: Theme.of(context).toggleableActiveColor,
+                                                        color: Theme.of(context).cardColor,
                                                       ),
                                                     ),
                                                   ),

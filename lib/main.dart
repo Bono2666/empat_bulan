@@ -96,8 +96,8 @@ class _MyAppState extends State<MyApp> {
                 unselectedWidgetColor: const Color(0xff757575),
                 dividerColor: const Color(0xffD1D3D4),
                 hintColor: const Color(0xffCDCDCD),
-                toggleableActiveColor: const Color(0x38000000),
-                bottomAppBarColor: const Color(0xff5299D3),
+                cardColor: const Color(0x38000000),
+                splashColor: const Color(0xff5299D3),
                 indicatorColor: const Color(0xffFCB800),
                 focusColor: const Color(0xff669900),
 

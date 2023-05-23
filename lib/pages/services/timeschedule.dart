@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as date_picker;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -354,7 +354,7 @@ class _TimeScheduleState extends State<TimeSchedule> {
                                   controller: _date,
                                   readOnly: true,
                                   onTap: () {
-                                    DatePicker.showDatePicker(
+                                    date_picker.DatePicker.showDatePicker(
                                       context,
                                       minTime: DateTime.now().add(const Duration(hours: 24)),
                                       onConfirm: (date) {
@@ -363,7 +363,7 @@ class _TimeScheduleState extends State<TimeSchedule> {
                                           _scheduleDate = DateFormat('yyyy-MM-dd').format(date);
                                         });
                                       },
-                                      theme: DatePickerTheme(
+                                      theme: date_picker.DatePickerTheme(
                                         itemStyle: TextStyle(
                                           fontFamily: 'Josefin Sans',
                                           fontSize: 15.0.sp,
@@ -378,7 +378,7 @@ class _TimeScheduleState extends State<TimeSchedule> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      locale: LocaleType.id,
+                                      locale: date_picker.LocaleType.id,
                                     );
                                   },
                                   decoration: InputDecoration(
@@ -412,7 +412,7 @@ class _TimeScheduleState extends State<TimeSchedule> {
                                   controller: _time,
                                   readOnly: true,
                                   onTap: () {
-                                    DatePicker.showTimePicker(
+                                    date_picker.DatePicker.showTimePicker(
                                       context,
                                       onConfirm: (time) {
                                         setState(() {
@@ -421,8 +421,8 @@ class _TimeScheduleState extends State<TimeSchedule> {
                                         });
                                       },
                                       showSecondsColumn: false,
-                                      locale: LocaleType.id,
-                                      theme: DatePickerTheme(
+                                      locale: date_picker.LocaleType.id,
+                                      theme: date_picker.DatePickerTheme(
                                         itemStyle: TextStyle(
                                           fontSize: 15.0.sp,
                                           color: Theme.of(context).colorScheme.background,

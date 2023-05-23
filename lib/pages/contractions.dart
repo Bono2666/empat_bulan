@@ -22,7 +22,7 @@ class _ContractionsState extends State<Contractions> {
   var dbContractions = ContractionsDb();
   late int lastDay;
   int selectedIndex = 0;
-  late String selectedDay;
+  String selectedDay = '';
 
   Future getNotifications() async {
     var url = Uri.parse('https://app.empatbulan.com/api/get_notifications.php?phone=${prefs.getPhone}');

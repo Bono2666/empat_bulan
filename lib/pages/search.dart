@@ -554,7 +554,7 @@ class _SearchState extends State<Search> {
                                           hintText: _type == 'layanan' ? 'Layanan yang dicari?' : 'Cari pertanyaan, artikel',
                                           hintStyle: TextStyle(
                                             // ignore: deprecated_member_use
-                                            color: Theme.of(context).toggleableActiveColor,
+                                            color: Theme.of(context).cardColor,
                                           ),
                                         ),
                                       ),

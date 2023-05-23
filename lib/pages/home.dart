@@ -1123,7 +1123,7 @@ class _HomeState extends State<Home> {
                                                                                                       'Ketik komentar…',
                                                                                                       style: TextStyle(
                                                                                                         // ignore: deprecated_member_use
-                                                                                                        color: Theme.of(context).toggleableActiveColor,
+                                                                                                        color: Theme.of(context).cardColor,
                                                                                                         fontSize: 13.0.sp,
                                                                                                       ),
                                                                                                     ),
