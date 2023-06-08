@@ -21,6 +21,7 @@ class _AddChildBookState extends State<AddChildBook> {
   late DateTime pickDate;
   double weight = 3.0;
   double height = 50;
+  double circle = 34.0;
   late List dbChildBook, dbProfile, dbChildMonth;
   bool firstLoad = true;
   late int ageMonth;
@@ -54,12 +55,13 @@ class _AddChildBookState extends State<AddChildBook> {
       'age_month' : ageMonth.toString(),
       'weight' : weight.toStringAsFixed(1),
       'height' : height.toString(),
+      'circle' : circle.toStringAsFixed(1),
     });
   }
 
   Future updChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/upd_child_growth.php?phone=${prefs.getPhone}'
-        '&age_month=$ageMonth&weight=${weight.toStringAsFixed(1)}&height=$height');
+        '&age_month=$ageMonth&weight=${weight.toStringAsFixed(1)}&height=$height&circle=${circle.toStringAsFixed(1)}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -120,6 +122,7 @@ class _AddChildBookState extends State<AddChildBook> {
                         growthDate.text = DateFormat('d MMM yyyy', 'id_ID').format(DateTime.now());
                         weight = double.parse(dbChildBook[dbChildBook.length - 1]['weight']);
                         height = double.parse(dbChildBook[dbChildBook.length - 1]['height']);
+                        circle = double.parse(dbChildBook[dbChildBook.length - 1]['head']);
                         firstLoad = false;
                       }
                     }
@@ -347,6 +350,68 @@ class _AddChildBookState extends State<AddChildBook> {
                                           onTap: () {
                                             setState(() {
                                               height += 1;
+                                            });
+                                          },
+                                          child: Image.asset(
+                                            'images/ic_increment.png',
+                                            width: 9.4.w,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 3.8.h,),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 0.8.w),
+                                          child: Text(
+                                            'Lingkar Kepala (cm)',
+                                            style: TextStyle(
+                                              fontSize: 13.0.sp,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 1.1.w,),
+                                        Container(
+                                          width: 1.7.w,
+                                          height: 1.7.w,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.background,
+                                            borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                          ),
+                                        ),
+                                        const Expanded(child: SizedBox(),),
+                                        InkWell(
+                                          onTap: () {
+                                            if (circle > 1) {
+                                              setState(() {
+                                                circle -= 0.1;
+                                              });
+                                            }
+                                          },
+                                          child: Image.asset(
+                                            circle.toStringAsFixed(1) == '0.1'
+                                                ? 'images/ic_decrement_inactive.png'
+                                                : 'images/ic_decrement.png',
+                                            width: 9.4.w,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 16.9.w,
+                                          child: Text(
+                                            circle.toStringAsFixed(1),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 13.0.sp,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              circle += 0.1;
                                             });
                                           },
                                           child: Image.asset(

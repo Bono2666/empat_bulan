@@ -53,7 +53,7 @@ class _ChildProfileState extends State<ChildProfile> {
 
   Future updChildBook() async {
     var url = Uri.parse('https://app.empatbulan.com/api/upd_childbook.php?phone=${prefs.getPhone}'
-        '&birth_date=$formattedDate&weight=$weight&height=$height&circle=$circle');
+        '&birth_date=$formattedDate&weight=$weight&height=$height&circle=${circle.toStringAsFixed(1)}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -138,6 +138,7 @@ class _ChildProfileState extends State<ChildProfile> {
                         if (dbChildBook.isNotEmpty) {
                           weight = double.parse(dbChildBook[0]['weight']);
                           height = double.parse(dbChildBook[0]['height']);
+                          circle = double.parse(dbChildBook[0]['head']);
                         }
                         firstLoad = false;
                       }
@@ -485,7 +486,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 1.1.w,),
+                                    SizedBox(width: 1.2.w,),
                                     Container(
                                       width: 1.7.w,
                                       height: 1.7.w,
@@ -834,7 +835,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width: 30.0.w,
+                                      width: 28.0.w,
                                       child: Padding(
                                         padding: EdgeInsets.only(top: 0.8.w),
                                         child: Text(
@@ -846,7 +847,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 1.1.w,),
+                                    // SizedBox(width: 1.1.w,),
                                     Container(
                                       width: 1.7.w,
                                       height: 1.7.w,
@@ -865,7 +866,7 @@ class _ChildProfileState extends State<ChildProfile> {
                                         }
                                       },
                                       child: Image.asset(
-                                        circle == 1
+                                        circle.toStringAsFixed(1) == '0.1'
                                             ? 'images/ic_decrement_inactive.png'
                                             : 'images/ic_decrement.png',
                                         width: 9.4.w,

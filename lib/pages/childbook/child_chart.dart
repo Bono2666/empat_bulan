@@ -278,7 +278,7 @@ class _ChildChartState extends State<ChildChart> {
                                         status = "Kurang";
                                         statusDescription =
                                         'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang tinggi badannya secara berkala.';
-                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['height']) <= double.parse(dbZScoreAge[0]['height_plus3'])) {
+                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['height']) <= double.parse(dbZScoreAge[0]['height_plus2'])) {
                                         status = "Normal";
                                         statusDescription =
                                         'Tinggi badan anak sesuai umur. Pantau ulang tinggi badan secara berkala.';
@@ -293,7 +293,7 @@ class _ChildChartState extends State<ChildChart> {
                                         status = "Kecil";
                                         statusDescription =
                                         'Perhatikan asupan gizi si kecil untuk mendukung perkembangan tubuhnya. Pantau ulang lingkar kepalanya secara berkala.';
-                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['head']) <= double.parse(dbZScoreAge[0]['head_plus3'])) {
+                                      } else if (double.parse(dbChildBook[dbChildBook.length - 1]['head']) <= double.parse(dbZScoreAge[0]['head_plus2'])) {
                                         status = "Normal";
                                         statusDescription =
                                         'Lingkar kepala anak sesuai umur. Pantau ulang lingkar kepala secara berkala.';
